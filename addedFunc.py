@@ -4,15 +4,18 @@ from dotenv import load_dotenv
 import os
 
 # Отправляет запрос к YandexGPT и возвращает текстовый ответ модели.
-def sendMessageToYandexGPT(prompt: str, isPrint: bool = False, isSmartModel: bool = False) -> str:
+def sendMessageToYandexGPT(prompt: str, isPrint: bool = True, isSmartModel: bool = False) -> str:
     print("Посылаю запрос к YandexGPT:")
-    if isPrint:
-            print(f"\n💫 PROMPT:\n{prompt}\n")
+
     if isSmartModel:
         model = "yandexgpt"
+        print("Используем умную модель")
         # model = "yandexgpt-pro" # Не работает
     else:
         model = "yandexgpt-lite" # Используется по умолчанию
+
+    if isPrint:
+            print(f"\n💫 PROMPT:\n{prompt}\n")
 
     load_dotenv()  # Загружаем .env с токеном API
 

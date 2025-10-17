@@ -6,7 +6,7 @@ from addedFunc import clearAnswerCode
 # a_test_p1 = answer test prompt 1
 
 test_p1 = "Напиши код сортировки пузырьком на питоне"
-a_test_p1 = sendMessageToYandexGPT(test_p1, True, False)
+a_test_p1 = sendMessageToYandexGPT(test_p1)
 # print("Ответ от YandexGPT:")
 # print(answer)
 
