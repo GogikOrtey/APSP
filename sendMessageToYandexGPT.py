@@ -51,3 +51,7 @@ def formatted_json_prompt_and_answer(prompt, answer):
         "answer": answer
     }
     return json.dumps(data, ensure_ascii=False, indent=4)
+
+
+def clearAnswerCode(input_code):
+    return input_code
