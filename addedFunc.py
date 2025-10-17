@@ -72,3 +72,27 @@ def formatted_json_prompt_and_answer(prompt, answer):
 
 def clearAnswerCode(input_code):
     return input_code
+
+def get_html(url: str, headers: dict = None, timeout: int = 10) -> str:
+    """
+    Отправляет GET-запрос на указанный URL и возвращает HTML-ответ.
+
+    :param url: Ссылка на сайт
+    :param headers: Словарь с заголовками (по умолчанию None)
+    :param timeout: Время ожидания ответа сервера (секунды)
+    :return: HTML-строка
+    """
+    if headers is None:
+        # Некоторые сайты требуют User-Agent
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=timeout)
+        response.raise_for_status()  # Проверяем статус ответа (200 OK)
+        return response.text
+    except requests.RequestException as e:
+        print(f"Ошибка при запросе к {url}: {e}")
+        return ""
+    
