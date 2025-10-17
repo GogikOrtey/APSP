@@ -49,3 +49,9 @@ first_item_link = data_input_table["links"]["simple"][0]["link"]
 # print(first_item_link)
 html = get_html(first_item_link)
 print(html[:500])
+
+text_includes = data_input_table["links"]["simple"][0]["name"]
+if text_includes in html:
+    print("🟢 Подстрока найдена!")
+else:
+    print("🟠 Подстрока не найдена.")
