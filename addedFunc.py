@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 
 # Отправляет запрос к YandexGPT и возвращает текстовый ответ модели.
-def sendMessageToYandexGPT(prompt: str, isPrint: bool = True, isSmartModel: bool = False) -> str:
+def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: bool = True) -> str:
     print("Посылаю запрос к YandexGPT:")
 
     if isSmartModel:
@@ -33,7 +33,7 @@ def sendMessageToYandexGPT(prompt: str, isPrint: bool = True, isSmartModel: bool
         "completionOptions": {
             "stream": False,
             "temperature": 0.6,
-            "maxTokens": 200 ### Обратить внимание, на будущее
+            "maxTokens": 300 ### Обратить внимание, на будущее
         },
         "messages": [
             {"role": "user", "text": prompt}
