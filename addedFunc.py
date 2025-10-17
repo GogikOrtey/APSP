@@ -9,7 +9,7 @@ def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: boo
 
     if isSmartModel:
         model = "yandexgpt"
-        print("Используем умную модель")
+        print("🧠 Используем умную модель")
         # model = "yandexgpt-pro" # Не работает
     else:
         model = "yandexgpt-lite" # Используется по умолчанию
@@ -32,10 +32,16 @@ def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: boo
         "modelUri": f"gpt://{folder_id}/{model}/latest",
         "completionOptions": {
             "stream": False,
-            "temperature": 0.6,
-            "maxTokens": 300 ### Обратить внимание, на будущее
+            "temperature": 0.8, #0.6,
+            "maxTokens": 1024, #300
+
+            # Добавьте параметр разнообразия
+            "topP": 0.9,         
+            "frequencyPenalty": 0.2,
+            "presencePenalty": 0.2
         },
         "messages": [
+            # {"role": "system", "text": "Ты — умный и дружелюбный помощник, отвечай подробно и естественно."},
             {"role": "user", "text": prompt}
         ]
     }
