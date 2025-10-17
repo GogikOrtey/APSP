@@ -5,6 +5,6 @@ from sendMessageToYandexGPT import send_to_yandex_gpt
 # a_test_p1 = answer test prompt 1
 
 test_p1 = "Какой сегодня год?"
-a_test_p1 = send_to_yandex_gpt(test_p1, True)
+a_test_p1 = send_to_yandex_gpt(test_p1, True, True)
 # print("Ответ от YandexGPT:")
 # print(answer)

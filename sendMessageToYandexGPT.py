@@ -3,11 +3,15 @@ import json
 from dotenv import load_dotenv
 import os
 
-def send_to_yandex_gpt(prompt: str, isPrint: bool = False, model: str = "yandexgpt-lite") -> str:
-    """
-    Отправляет запрос к YandexGPT и возвращает текстовый ответ модели.
-    """
-    load_dotenv()  # Загружаем .env
+# Отправляет запрос к YandexGPT и возвращает текстовый ответ модели.
+def send_to_yandex_gpt(prompt: str, isPrint: bool = False, isSmartModel: bool = False) -> str:
+    if isSmartModel:
+        model = "yandexgpt"
+        # model = "yandexgpt-pro" # Не работает
+    else:
+        model = "yandexgpt-lite" # Используется по умолчанию
+
+    load_dotenv()  # Загружаем .env с токеном API
 
     api_key = os.getenv("API_KEY")
     folder_id = "b1gomnf0uf3ims6eha2v"
@@ -23,7 +27,7 @@ def send_to_yandex_gpt(prompt: str, isPrint: bool = False, model: str = "yandexg
         "completionOptions": {
             "stream": False,
             "temperature": 0.6,
-            "maxTokens": 200
+            "maxTokens": 200 ### Обратить внимание, на будущее
         },
         "messages": [
             {"role": "user", "text": prompt}
