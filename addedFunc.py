@@ -96,3 +96,23 @@ def get_html(url: str, headers: dict = None, timeout: int = 10) -> str:
         print(f"Ошибка при запросе к {url}: {e}")
         return ""
     
+
+class ErrorHandler(Exception):
+    """Моё кастомное исключение."""
+
+    def __init__(self, message, error_code=0):
+        self.message = message
+        self.error_code = error_code
+
+        full_msg = (
+            f"🔴 Агент завершил работу с ошибкой: {message}"
+            if error_code == 0
+            else f"🔴 Агент завершил работу с ошибкой: {message}. Стадия и шаг: {error_code}"
+        )
+        super().__init__(full_msg)
+
+
+# Примеры использования:
+# raise ErrorHandler("Кастомное исключение")           # без кода
+# raise ErrorHandler("Кастомное исключение", 1)      # с числовым кодом
+# raise ErrorHandler("Кастомное исключение", "2-1")    # с текстовым кодом
