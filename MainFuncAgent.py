@@ -117,4 +117,7 @@ print("_____________________________________")
 print("Посылаем запрос")
 print(prompt)
 
-response = sendMessageToYandexGPT(prompt)
+# response = sendMessageToYandexGPT(prompt)
+
+# Нужно сделать аналог, на внутреннем DOM полученной страницы
+# И прописать работу с библиотекой cheerio
