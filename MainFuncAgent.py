@@ -293,7 +293,13 @@ print("")
 print("🟢 Проверка селектора:")
 print(html_lx.tostring(element, encoding="unicode", pretty_print=True))
 
+"""
+Достать атрибут можно так:
 
+el = tree.cssselect('img[alt]')[0]
+value = el.get('alt')
+
+"""
 
 print("")
 print("🟡 Проверка значения селектора:")
