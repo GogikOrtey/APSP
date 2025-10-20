@@ -157,6 +157,57 @@ substring_name = data_input_table["links"]["simple"][0]["name"]
 
 
 # Работает
+# 2я версия, некорректно обрабатывает img
+
+# def get_css_path(element):
+#     """Построение CSS-селектора для данного элемента."""
+#     path = []
+#     while element and element.name:
+#         selector = element.name
+
+#         # Если у элемента есть ID — это уникально
+#         if element.has_attr("id"):
+#             selector = f"#{element['id']}"
+#             path.append(selector)
+#             break
+
+#         # Если есть класс(ы)
+#         elif element.has_attr("class"):
+#             selector += "." + ".".join(element["class"])
+
+#         # Проверяем порядок элемента среди сиблингов
+#         siblings = element.find_previous_siblings(element.name)
+#         if siblings:
+#             selector += f":nth-of-type({len(siblings) + 1})"
+
+#         path.append(selector)
+#         element = element.parent
+
+#     return " > ".join(reversed(path))
+
+
+# def find_text_selector(html: str, text: str, exact: bool = False):
+#     """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
+#     soup = BeautifulSoup(html, "html.parser")
+
+#     # Проходим по всем элементам в документе
+#     for el in soup.find_all(True):  # True — значит все теги
+#         # Проверяем текст внутри элемента
+#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
+#             return get_css_path(el)
+
+#         # Проверяем все атрибуты
+#         for attr_val in el.attrs.values():
+#             if isinstance(attr_val, list):
+#                 attr_val = " ".join(attr_val)
+#             if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
+#                 return get_css_path(el)
+
+#     return None
+
+
+
+
 
 def get_css_path(element):
     """Построение CSS-селектора для данного элемента."""
@@ -186,23 +237,34 @@ def get_css_path(element):
 
 
 def find_text_selector(html: str, text: str, exact: bool = False):
-    """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
+    """
+    Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах.
+    Если найдено в атрибуте (alt/title/value/placeholder и т.д.), возвращает путь с указанием атрибута: "селектор@@attr".
+    """
     soup = BeautifulSoup(html, "html.parser")
 
-    # Проходим по всем элементам в документе
-    for el in soup.find_all(True):  # True — значит все теги
+    for el in soup.find_all(True):
         # Проверяем текст внутри элемента
         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
             return get_css_path(el)
 
-        # Проверяем все атрибуты
-        for attr_val in el.attrs.values():
+        # Проверяем атрибуты
+        for attr_name, attr_val in el.attrs.items():
             if isinstance(attr_val, list):
                 attr_val = " ".join(attr_val)
-            if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
-                return get_css_path(el)
+            if isinstance(attr_val, str):
+                match = (text == attr_val.strip()) if exact else (text in attr_val)
+                if match:
+                    # Возвращаем селектор + указание на атрибут
+                    return get_css_path(el) + f"[{attr_name}]"
 
     return None
+
+
+
+
+
+
 
 finded_element = substring_brand
 print("")
