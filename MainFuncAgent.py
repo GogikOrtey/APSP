@@ -4,6 +4,7 @@ from addedFunc import sendMessageToYandexGPT
 from addedFunc import get_html
 from addedFunc import ErrorHandler
 from bs4 import BeautifulSoup
+from lxml import html as html_lx
 import requests
 import json
 import re
@@ -129,101 +130,76 @@ substring_name = data_input_table["links"]["simple"][0]["name"]
 
 
 
+# # Работает
 
 # def get_css_path(element):
 #     """Построение CSS-селектора для данного элемента."""
 #     path = []
 #     while element and element.name:
 #         selector = element.name
-#         # Если есть id — это уникально, можно остановиться
+
+#         # Если у элемента есть ID — это уникально
 #         if element.has_attr("id"):
 #             selector = f"#{element['id']}"
 #             path.append(selector)
 #             break
-#         # Если есть класс — добавляем
+
+#         # Если есть класс(ы)
 #         elif element.has_attr("class"):
 #             selector += "." + ".".join(element["class"])
-#         # Если есть несколько элементов с тем же тегом — добавляем nth-of-type
+
+#         # Проверяем порядок элемента среди сиблингов
 #         siblings = element.find_previous_siblings(element.name)
 #         if siblings:
-#             selector += f":nth-of-type({len(siblings)+1})"
+#             selector += f":nth-of-type({len(siblings) + 1})"
+
 #         path.append(selector)
 #         element = element.parent
+
 #     return " > ".join(reversed(path))
 
-# def find_text_selector(html: str, text: str, exact: bool = False):
-#     """Находит CSS-селектор элемента, содержащего заданный текст."""
-#     soup = BeautifulSoup(html, "html.parser")
-#     if exact:
-#         target = soup.find(lambda tag: tag.string and tag.string.strip() == text)
-#     else:
-#         target = soup.find(lambda tag: tag.string and text in tag.string)
-#     if not target:
-#         return None
-#     return get_css_path(target)
 
-# selector = find_text_selector(html, substring_name)
+# def find_text_selector(html: str, text: str, exact: bool = False):
+#     """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
+#     soup = BeautifulSoup(html, "html.parser")
+
+#     # Проходим по всем элементам в документе
+#     for el in soup.find_all(True):  # True — значит все теги
+#         # Проверяем текст внутри элемента
+#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
+#             return get_css_path(el)
+
+#         # Проверяем все атрибуты
+#         for attr_val in el.attrs.values():
+#             if isinstance(attr_val, list):
+#                 attr_val = " ".join(attr_val)
+#             if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
+#                 return get_css_path(el)
+
+#     return None
+
+# # selector = find_text_selector(html, substring_name)
+# selector = find_text_selector(html, substring_brand)
 # print(selector)
 
-# # a.catalog-element-brand img
+# ### Короче, это работает, но выводит мусорные css пути
+# ### В целом, на этом пока что можно остановиться
+# ### И чистить их уже позже (позже прописать, или позже в коде чистить)
 
 
 
 
+# Проверяем селектор: Получаем элемент из html по нему:
+
+# selector = "html > body > div.wrapper > img:nth-of-type(1)"
+selector = "a.catalog-element-brand img"
+
+tree = html_lx.fromstring(html)
+element = tree.cssselect(selector)[0]  # Возьмём первый найденный
+
+# Выводим HTML этого элемента
+print(html_lx.tostring(element, encoding="unicode", pretty_print=True))
 
 
-from bs4 import BeautifulSoup
 
-def get_css_path(element):
-    """Построение CSS-селектора для данного элемента."""
-    path = []
-    while element and element.name:
-        selector = element.name
-
-        # Если у элемента есть ID — это уникально
-        if element.has_attr("id"):
-            selector = f"#{element['id']}"
-            path.append(selector)
-            break
-
-        # Если есть класс(ы)
-        elif element.has_attr("class"):
-            selector += "." + ".".join(element["class"])
-
-        # Проверяем порядок элемента среди сиблингов
-        siblings = element.find_previous_siblings(element.name)
-        if siblings:
-            selector += f":nth-of-type({len(siblings) + 1})"
-
-        path.append(selector)
-        element = element.parent
-
-    return " > ".join(reversed(path))
-
-
-def find_text_selector(html: str, text: str, exact: bool = False):
-    """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
-    soup = BeautifulSoup(html, "html.parser")
-
-    # Проходим по всем элементам в документе
-    for el in soup.find_all(True):  # True — значит все теги
-        # Проверяем текст внутри элемента
-        if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-            return get_css_path(el)
-
-        # Проверяем все атрибуты
-        for attr_val in el.attrs.values():
-            if isinstance(attr_val, list):
-                attr_val = " ".join(attr_val)
-            if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
-                return get_css_path(el)
-
-    return None
-
-# selector = find_text_selector(html, substring_name)
-selector = find_text_selector(html, substring_brand)
-print(selector)
-
-### Короче, это работает, но выводит мусорные css пути
-### В целом, на этом пока что можно остановиться
-### И чистить их уже позже (позже прописать, или позже в коде чистить)
+#i-18-bitrix-catalog-element-catalog-default-1-qepX1RQfHh6Q > div.catalog-element-wrapper.intec-content.intec-content-visible > div.catalog-element-wrapper-2.intec-content-wrapper > div.catalog-element-information-wrap > div.catalog-element-information.intec-grid.intec-grid-nowrap.intec-grid-768-wrap.intec-grid-a-h-start.intec-grid-a-v-start.intec-grid-i-20:nth-of-type(3) > div.catalog-element-information-right.intec-grid-item.intec-grid-item-768-1:nth-of-type(2) > div.catalog-element-information-right-wrapper > div.catalog-element-information-part.intec-grid.intec-grid-wrap.intec-grid-a-v-center.intec-grid-i-10 > div.intec-grid-item-auto:nth-of-type(2) > a.catalog-element-brand.intec-ui-picture > img
