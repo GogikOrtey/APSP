@@ -39,6 +39,11 @@ import re
 
 # url_first_item = "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/"
 
+
+
+
+
+
 # Данные извлечённые из таблицы, например:
 data_input_table = {
     "links": {
@@ -48,7 +53,13 @@ data_input_table = {
                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
                 "price": "10 320",
                 "brand": "Аntika",
-                "inStock": True    
+                "inStock": True,
+                "_selectors": {
+                    "name": "",
+                    "price": "",
+                    "brand": "",
+                    "inStock": "",
+                }
             }
         ]
     },
@@ -68,6 +79,21 @@ if text_includes in html:
 else:
     print("🟠 Подстрока не найдена.")
     raise ErrorHandler("При открытии страницы 1 товара, на ней не было обнаружено названия товара", "4-1")
+
+
+
+### Здесь цикл for по всем объектам в словаре simple
+
+
+
+### Вот здесь, далее, нужно будет пройтись вторым циклом for по всем полям, и:
+# 1. Получить селектор
+# 2. Попробовать получить значение по этому селектору, и проверить что оно совпадает
+# 3. Сохранить этот селектор в JSON
+
+
+
+
 
 
 
@@ -130,61 +156,64 @@ substring_name = data_input_table["links"]["simple"][0]["name"]
 
 
 
-# # Работает
+# Работает
 
-# def get_css_path(element):
-#     """Построение CSS-селектора для данного элемента."""
-#     path = []
-#     while element and element.name:
-#         selector = element.name
+def get_css_path(element):
+    """Построение CSS-селектора для данного элемента."""
+    path = []
+    while element and element.name:
+        selector = element.name
 
-#         # Если у элемента есть ID — это уникально
-#         if element.has_attr("id"):
-#             selector = f"#{element['id']}"
-#             path.append(selector)
-#             break
+        # Если у элемента есть ID — это уникально
+        if element.has_attr("id"):
+            selector = f"#{element['id']}"
+            path.append(selector)
+            break
 
-#         # Если есть класс(ы)
-#         elif element.has_attr("class"):
-#             selector += "." + ".".join(element["class"])
+        # Если есть класс(ы)
+        elif element.has_attr("class"):
+            selector += "." + ".".join(element["class"])
 
-#         # Проверяем порядок элемента среди сиблингов
-#         siblings = element.find_previous_siblings(element.name)
-#         if siblings:
-#             selector += f":nth-of-type({len(siblings) + 1})"
+        # Проверяем порядок элемента среди сиблингов
+        siblings = element.find_previous_siblings(element.name)
+        if siblings:
+            selector += f":nth-of-type({len(siblings) + 1})"
 
-#         path.append(selector)
-#         element = element.parent
+        path.append(selector)
+        element = element.parent
 
-#     return " > ".join(reversed(path))
+    return " > ".join(reversed(path))
 
 
-# def find_text_selector(html: str, text: str, exact: bool = False):
-#     """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
-#     soup = BeautifulSoup(html, "html.parser")
+def find_text_selector(html: str, text: str, exact: bool = False):
+    """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
+    soup = BeautifulSoup(html, "html.parser")
 
-#     # Проходим по всем элементам в документе
-#     for el in soup.find_all(True):  # True — значит все теги
-#         # Проверяем текст внутри элемента
-#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-#             return get_css_path(el)
+    # Проходим по всем элементам в документе
+    for el in soup.find_all(True):  # True — значит все теги
+        # Проверяем текст внутри элемента
+        if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
+            return get_css_path(el)
 
-#         # Проверяем все атрибуты
-#         for attr_val in el.attrs.values():
-#             if isinstance(attr_val, list):
-#                 attr_val = " ".join(attr_val)
-#             if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
-#                 return get_css_path(el)
+        # Проверяем все атрибуты
+        for attr_val in el.attrs.values():
+            if isinstance(attr_val, list):
+                attr_val = " ".join(attr_val)
+            if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
+                return get_css_path(el)
 
-#     return None
+    return None
 
-# # selector = find_text_selector(html, substring_name)
-# selector = find_text_selector(html, substring_brand)
-# print(selector)
+finded_element = substring_brand
+print("")
+print(f"🟦 Извлекли такой селектор для поля {finded_element}:")
+# selector = find_text_selector(html, substring_name)
+selector = find_text_selector(html, finded_element)
+print(selector)
 
-# ### Короче, это работает, но выводит мусорные css пути
-# ### В целом, на этом пока что можно остановиться
-# ### И чистить их уже позже (позже прописать, или позже в коде чистить)
+### Короче, это работает, но выводит мусорные css пути
+### В целом, на этом пока что можно остановиться
+### И чистить их уже позже (позже прописать, или позже в коде чистить)
 
 
 
@@ -192,13 +221,20 @@ substring_name = data_input_table["links"]["simple"][0]["name"]
 # Проверяем селектор: Получаем элемент из html по нему:
 
 # selector = "html > body > div.wrapper > img:nth-of-type(1)"
-selector = "a.catalog-element-brand img"
+# selector = "a.catalog-element-brand img"
 
 tree = html_lx.fromstring(html)
 element = tree.cssselect(selector)[0]  # Возьмём первый найденный
 
 # Выводим HTML этого элемента
+print("")
+print("🟢 Проверка селектора:")
 print(html_lx.tostring(element, encoding="unicode", pretty_print=True))
+
+
+
+print("")
+print("🟡 Проверка значения селектора:")
 
 
 
