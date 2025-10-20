@@ -3,6 +3,7 @@
 from addedFunc import sendMessageToYandexGPT
 from addedFunc import get_html
 from addedFunc import ErrorHandler
+from bs4 import BeautifulSoup
 import requests
 import json
 import re
@@ -98,26 +99,70 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
 
 # substring = "Makita"
 substring = data_input_table["links"]["simple"][0]["brand"]
+substring_name = data_input_table["links"]["simple"][0]["name"]
 
-found = find_contexts(html, substring)
-# for i, ctx in enumerate(found, 1):
-#     print(f"\n=== Фрагмент {i} ===")
-#     print(ctx)
+# found = find_contexts(html, substring)
+# # for i, ctx in enumerate(found, 1):
+# #     print(f"\n=== Фрагмент {i} ===")
+# #     print(ctx)
 
-# print(found[0])
+# # print(found[0])
 
-prompt = f"""
-Отправляю тебе фрагмент html кода. Конкретно из этого примера мы извлекаем значение "{substring}", 
-но тебе нужно найти пример, что бы он работал и с другими значениями. 
-В ответе напиши только один путь селекторов, по которому можно извлечь такое значение из html страницы.
-{found[0]}
-"""
+# prompt = f"""
+# Отправляю тебе фрагмент html кода. Конкретно из этого примера мы извлекаем значение "{substring}", 
+# но тебе нужно найти пример, что бы он работал и с другими значениями. 
+# В ответе напиши только один путь селекторов, по которому можно извлечь такое значение из html страницы.
+# {found[0]}
+# """
 
-print("_____________________________________")
-print("Посылаем запрос")
-print(prompt)
+# print("_____________________________________")
+# print("Посылаем запрос")
+# print(prompt)
 
-# response = sendMessageToYandexGPT(prompt)
+# # response = sendMessageToYandexGPT(prompt)
 
-# Нужно сделать аналог, на внутреннем DOM полученной страницы
-# И прописать работу с библиотекой cheerio
+# # Нужно сделать аналог, на внутреннем DOM полученной страницы
+# # И прописать работу с библиотекой cheerio
+
+
+
+
+
+
+
+def get_css_path(element):
+    """Построение CSS-селектора для данного элемента."""
+    path = []
+    while element and element.name:
+        selector = element.name
+        # Если есть id — это уникально, можно остановиться
+        if element.has_attr("id"):
+            selector = f"#{element['id']}"
+            path.append(selector)
+            break
+        # Если есть класс — добавляем
+        elif element.has_attr("class"):
+            selector += "." + ".".join(element["class"])
+        # Если есть несколько элементов с тем же тегом — добавляем nth-of-type
+        siblings = element.find_previous_siblings(element.name)
+        if siblings:
+            selector += f":nth-of-type({len(siblings)+1})"
+        path.append(selector)
+        element = element.parent
+    return " > ".join(reversed(path))
+
+def find_text_selector(html: str, text: str, exact: bool = False):
+    """Находит CSS-селектор элемента, содержащего заданный текст."""
+    soup = BeautifulSoup(html, "html.parser")
+    if exact:
+        target = soup.find(lambda tag: tag.string and tag.string.strip() == text)
+    else:
+        target = soup.find(lambda tag: tag.string and text in tag.string)
+    if not target:
+        return None
+    return get_css_path(target)
+
+selector = find_text_selector(html, substring_name)
+print(selector)
+
+# a.catalog-element-brand img
