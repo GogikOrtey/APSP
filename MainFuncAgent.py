@@ -5,6 +5,7 @@ from addedFunc import get_html
 from addedFunc import ErrorHandler
 import requests
 import json
+import re
 
 
 
@@ -44,6 +45,7 @@ data_input_table = {
                 "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
                 "price": "10 320",
+                "brand": "Аntika",
                 "inStock": True    
             }
         ]
@@ -64,3 +66,52 @@ if text_includes in html:
 else:
     print("🟠 Подстрока не найдена.")
     raise ErrorHandler("При открытии страницы 1 товара, на ней не было обнаружено названия товара", "4-1")
+
+
+
+def find_contexts(text: str, substring: str, context_size: int = 300) -> list[str]:
+    """
+    Находит все вхождения `substring` в `text` и возвращает список
+    контекстов (по `context_size` символов до и после совпадения).
+    Если контексты перекрываются — объединяет их.
+    """
+    results = []
+    substring = re.escape(substring)  # экранируем спецсимволы
+    matches = list(re.finditer(substring, text, flags=re.IGNORECASE))
+
+    for match in matches:
+        start = max(0, match.start() - context_size)
+        end = min(len(text), match.end() + context_size)
+
+        # Проверяем, не пересекается ли с уже добавленным результатом
+        if results and start <= results[-1][1]:
+            # объединяем с предыдущим фрагментом
+            prev_start, prev_end = results[-1]
+            results[-1] = (prev_start, max(prev_end, end))
+        else:
+            results.append((start, end))
+
+    # формируем итоговые куски текста
+    contexts = [text[s:e] for s, e in results]
+    return contexts
+
+
+# substring = "Makita"
+substring = data_input_table["links"]["simple"][0]["brand"]
+
+found = find_contexts(html, substring)
+# for i, ctx in enumerate(found, 1):
+#     print(f"\n=== Фрагмент {i} ===")
+#     print(ctx)
+
+# print(found[0])
+
+prompt = """
+Отправляю тебе фрагмент html кода. Из него нужно извлечь значение "{substring}". 
+В ответе напиши только селекторы, по которым можно извлечь это значение из html страницы.
+{found[0]}
+"""
+
+print("_____________________________________")
+print("Посылаем запрос")
+print(prompt)

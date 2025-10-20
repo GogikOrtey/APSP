@@ -3,6 +3,8 @@ import json
 from dotenv import load_dotenv
 import os
 
+# TODO: Когда здесь наберётся достаточно функций, разбить их по категориям, и добавить оглавление
+
 # Отправляет запрос к YandexGPT и возвращает текстовый ответ модели.
 def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: bool = True) -> str:
     print("Посылаю запрос к YandexGPT:")
