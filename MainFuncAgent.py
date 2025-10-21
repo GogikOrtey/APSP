@@ -254,7 +254,7 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 def get_element_from_selector(html, selector):
     tree = html_lx.fromstring(html)
     search_elem = tree.cssselect(selector)
-    if(len(search_elem) == 0): 
+    if len(search_elem) == 0: 
         print("🟡 По селектору элемент не найден")
         return ""
     element = search_elem[0]
@@ -265,8 +265,9 @@ def get_element_from_selector(html, selector):
     if attr_match:
         attr_name = attr_match.group(1)
         result = element.get(attr_name)
-    else:        
-        result = html_lx.tostring(element, encoding="unicode", pretty_print=True)
+    else:
+        # Возвращаем только текст внутри элемента
+        result = element.text_content().strip()
     
     return result
 
