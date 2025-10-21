@@ -191,7 +191,7 @@ def get_element_from_selector(html, selector):
     tree = html_lx.fromstring(html)
     search_elem = tree.cssselect(selector)
     if len(search_elem) == 0: 
-        print("🟡 По селектору элемент не найден")
+        # print("🟡 По селектору элемент не найден")
         return ""
     element = search_elem[0]
 
@@ -335,12 +335,12 @@ def get_css_selector_from_text_value_element(html, finding_element):
             print("❌ Элемент по селектору не найден")
             continue
 
-        # Проверяем совпадение
-        if result_text.strip() == finding_element.strip():
-            match_score = 1.0  # строгое совпадение
-            print(f"✅ Совпадение 100%: [{result_text}]")
+        # Проверяем наличие подстроки — строгое совпадение по содержанию
+        if finding_element.strip() in result_text.strip():
+            match_score = 1.0
+            print(f"✅ Строгое совпадение: [{result_text}]")
         else:
-            # Вычисляем схожесть по длине и совпадению символов
+            # Если нет прямого вхождения — оцениваем схожесть
             match_score = compute_match_score(result_text, finding_element)
             print(f"⚪ Совпадение {match_score*100:.1f}%: [{result_text}]")
 
@@ -350,15 +350,16 @@ def get_css_selector_from_text_value_element(html, finding_element):
             "score": match_score
         })
 
-    # Если ни один селектор не подошёл
+    # Если ни один не подошёл
     if not valid_selectors:
         print("🔴 Не найдено корректных селекторов")
         return ""
 
-    # Сортируем по совпадению (от лучшего к худшему)
-    valid_selectors.sort(key=lambda x: x["score"], reverse=True)
+    # Сортируем:
+    # 1️⃣ по совпадению (по убыванию)
+    # 2️⃣ при равных — по длине селектора (по возрастанию)
+    valid_selectors.sort(key=lambda x: (-x["score"], len(x["selector"])))
 
-    # Берём лучший результат
     best = valid_selectors[0]
     print("")
     print(f"🏆 Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
@@ -368,9 +369,9 @@ def get_css_selector_from_text_value_element(html, finding_element):
     return result_distill_selector
 
 
-# --- Вспомогательная функция сравнения текста ---
+# --- Вспомогательная функция для оценки схожести ---
 def compute_match_score(found_text, target_text):
-    """Простая оценка схожести по количеству общих символов"""
+    """Оценка схожести строк по количеству совпадающих символов"""
     found_text = found_text.strip().lower()
     target_text = target_text.strip().lower()
 
@@ -391,7 +392,6 @@ def compute_match_score(found_text, target_text):
 
 
 
-
 ### Запаковать извлечение одного селектора в функцию
 # и проверить на другом поле, например name
 
@@ -400,8 +400,8 @@ def compute_match_score(found_text, target_text):
 substring_brand = data_input_table["links"]["simple"][0]["brand"]
 substring_name = data_input_table["links"]["simple"][0]["name"]
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+selector_result = get_css_selector_from_text_value_element(html, substring_brand)
 print("")
 print(f"🟩 selector_result = {selector_result}")
 
