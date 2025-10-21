@@ -328,6 +328,47 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
     return final_selector
 
 
+# Также плохо чистит этот большой селектор price
+"""
+def distill_selector(html, selector, get_element_from_selector, expected_value):
+    
+    Сокращает CSS селектор до минимально возможного, удаляя все ненужные звенья.
+    Проверяет каждое звено: если после его удаления результат сохраняется — удаляем.
+    Использует пробелы, чтобы не требовать строгой иерархии.
+    
+    # Разбиваем селектор на части
+    parts = [part.strip() for part in selector.replace(">", " ").split()]
+    if len(parts) < 2:
+        return selector
+
+    changed = True
+    while changed:
+        changed = False
+        i = 0
+        while i < len(parts):
+            test_parts = parts[:i] + parts[i+1:]
+            if not test_parts:
+                i += 1
+                continue
+
+            test_selector = " ".join(test_parts)
+            result = get_element_from_selector(html, test_selector)
+
+            if result == expected_value:
+                # Удаляем ненужное звено
+                parts.pop(i)
+                changed = True
+                # Не увеличиваем i, так как сдвинулись звенья
+            else:
+                i += 1
+
+    final_selector = " ".join(parts)
+    print("")
+    print("🔷 Выполнили дистилляцию селектора (минимальный путь)")
+    return final_selector
+"""
+
+
 
 
 # selector = "#i-18-bitrix-catalog-element-catalog-default-1-qepX1RQfHh6Q > div.catalog-element-wrapper.intec-content.intec-content-visible > div.catalog-element-wrapper-2.intec-content-wrapper > div.catalog-element-information-wrap > div.catalog-element-information.intec-grid.intec-grid-nowrap.intec-grid-768-wrap.intec-grid-a-h-start.intec-grid-a-v-start.intec-grid-i-20:nth-of-type(3) > div.catalog-element-information-right.intec-grid-item.intec-grid-item-768-1:nth-of-type(2) > div.catalog-element-information-right-wrapper > div.catalog-element-information-part.intec-grid.intec-grid-wrap.intec-grid-a-v-center.intec-grid-i-10 > div.intec-grid-item-auto:nth-of-type(2) > a.catalog-element-brand.intec-ui-picture > img[alt]"
