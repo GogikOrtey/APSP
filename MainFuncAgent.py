@@ -66,16 +66,17 @@ data_input_table = {
     "search_requests": []
 }
 # TODO: Потом добавить обработку, что бы он искал не полным сравнением подстроки названия товара при проверке, а частичным
-# Это когда напишу такую туку для price
+# Это когда напишу такую штуку для price
 
 first_item_link = data_input_table["links"]["simple"][0]["link"]
 # print(first_item_link)
 html = get_html(first_item_link)
-print(html[:500])
+# print(html[:500])
 
 text_includes = data_input_table["links"]["simple"][0]["name"]
 if text_includes in html:
-    print("🟢 Подстрока найдена!")
+    # print("🟢 Подстрока найдена!")
+    a = 1
 else:
     print("🟠 Подстрока не найдена.")
     raise ErrorHandler("При открытии страницы 1 товара, на ней не было обнаружено названия товара", "4-1")
@@ -124,12 +125,31 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
     return contexts
 
 
+result = find_contexts(html, "10&nbsp;320 руб.")
+print(result)
 
+
+
+# Умное сравнение строк (например, цен)
+def fuzzy_text_match(a: str, b: str) -> bool:
+    # Раскодируем HTML-сущности (&nbsp; → пробел и т.п.)
+    a = html_lx.unescape(a or "")
+    b = html_lx.unescape(b or "")
+
+    # Убираем "мусор": валюты, лишние символы
+    clean_a = re.sub(r"[\s\u00A0₽рруб.,]", "", a.lower())
+    clean_b = re.sub(r"[\s\u00A0₽рруб.,]", "", b.lower())
+
+    # Если обе строки содержат только цифры — сравниваем цифры
+    if clean_a.isdigit() and clean_b.isdigit():
+        return clean_a == clean_b
+
+    # Иначе — простое вхождение (на случай слов, брендов и т.п.)
+    return clean_a in clean_b or clean_b in clean_a
 
 
 # Находит и возвращает css селектор(ы) элемента(ов) по содержимому
-def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
-    # Построение пути css селектора для данного элемента
+def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False):
     def get_css_path(element):
         path = []
         while element and element.name:
@@ -159,31 +179,34 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
     selectors = []
 
     for el in soup.find_all(True):
-        # Проверяем текст внутри элемента
-        if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-            selector = get_css_path(el)
-            if return_all_selectors:
-                selectors.append(selector)
-            else:
+        # Текст внутри элемента
+        if el.string:
+            el_text = el.string.strip()
+            match = (text == el_text) if exact else fuzzy_text_match(text, el_text)
+            if match:
+                selector = get_css_path(el)
+                if return_all_selectors:
+                    selectors.append(selector)
+                    continue
                 return selector
 
-        # Проверяем атрибуты
+        # Проверка атрибутов
         for attr_name, attr_val in el.attrs.items():
             if isinstance(attr_val, list):
                 attr_val = " ".join(attr_val)
             if isinstance(attr_val, str):
-                match = (text == attr_val.strip()) if exact else (text in attr_val)
+                match = (text == attr_val.strip()) if exact else fuzzy_text_match(text, attr_val)
                 if match:
                     selector = get_css_path(el) + f"[{attr_name}]"
                     if return_all_selectors:
                         selectors.append(selector)
-                    else:
-                        return selector
+                        continue
+                    return selector
 
     if return_all_selectors:
         return selectors if selectors else None
-
     return None
+
 
 
 # Получает и возвращает значение элемента по селектору
@@ -311,7 +334,7 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
 
 
 
-
+# Основная функция: Получает css селектор, по текстовому соержанию элемента
 def get_css_selector_from_text_value_element(html, finding_element):
     print("")
     print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
@@ -369,7 +392,7 @@ def get_css_selector_from_text_value_element(html, finding_element):
     return result_distill_selector
 
 
-# --- Вспомогательная функция для оценки схожести ---
+# Вспомогательная функция для оценки схожести
 def compute_match_score(found_text, target_text):
     """Оценка схожести строк по количеству совпадающих символов"""
     found_text = found_text.strip().lower()
@@ -399,9 +422,12 @@ def compute_match_score(found_text, target_text):
 # substring = "Makita"
 substring_brand = data_input_table["links"]["simple"][0]["brand"]
 substring_name = data_input_table["links"]["simple"][0]["name"]
+# substring_price = data_input_table["links"]["simple"][0]["price"]
+substring_price = "10&nbsp;320 руб."
 
 # selector_result = get_css_selector_from_text_value_element(html, substring_name)
-selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+selector_result = get_css_selector_from_text_value_element(html, substring_price)
 print("")
 print(f"🟩 selector_result = {selector_result}")
 
