@@ -125,31 +125,96 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
     return contexts
 
 
-result = find_contexts(html, "10&nbsp;320 руб.")
-print(result)
+# result = find_contexts(html, "10&nbsp;320 руб.")
+# print(result)
 
 
 
-# Умное сравнение строк (например, цен)
-def fuzzy_text_match(a: str, b: str) -> bool:
-    # Раскодируем HTML-сущности (&nbsp; → пробел и т.п.)
-    a = html_lx.unescape(a or "")
-    b = html_lx.unescape(b or "")
+# # Умное сравнение строк (например, цен)
+# def fuzzy_text_match(a: str, b: str) -> bool:
+#     # Раскодируем HTML сущности (&nbsp;, &amp; и т.д.)
+#     a = html.unescape(a or "")
+#     b = html.unescape(b or "")
 
-    # Убираем "мусор": валюты, лишние символы
-    clean_a = re.sub(r"[\s\u00A0₽рруб.,]", "", a.lower())
-    clean_b = re.sub(r"[\s\u00A0₽рруб.,]", "", b.lower())
+#     # Убираем "мусор": валюты, пробелы, точки, запятые, 'руб', 'р', '₽'
+#     clean_a = re.sub(r"[\s\u00A0₽рруб.,]+", "", a.lower())
+#     clean_b = re.sub(r"[\s\u00A0₽рруб.,]+", "", b.lower())
 
-    # Если обе строки содержат только цифры — сравниваем цифры
-    if clean_a.isdigit() and clean_b.isdigit():
-        return clean_a == clean_b
+#     # Если обе строки числовые — сравниваем цифры
+#     if clean_a.isdigit() and clean_b.isdigit():
+#         return clean_a == clean_b
 
-    # Иначе — простое вхождение (на случай слов, брендов и т.п.)
-    return clean_a in clean_b or clean_b in clean_a
+#     # Иначе — частичное вхождение
+#     return clean_a in clean_b or clean_b in clean_a
+
+
+# # Находит и возвращает css селектор(ы) элемента(ов) по содержимому
+# def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False):
+#     def get_css_path(element):
+#         path = []
+#         while element and element.name:
+#             selector = element.name
+
+#             # Если у элемента есть ID — это уникально
+#             if element.has_attr("id"):
+#                 selector = f"#{element['id']}"
+#                 path.append(selector)
+#                 break
+
+#             # Если есть класс(ы)
+#             elif element.has_attr("class"):
+#                 selector += "." + ".".join(element["class"])
+
+#             # Проверяем порядок элемента среди сиблингов
+#             siblings = element.find_previous_siblings(element.name)
+#             if siblings:
+#                 selector += f":nth-of-type({len(siblings) + 1})"
+
+#             path.append(selector)
+#             element = element.parent
+
+#         return " > ".join(reversed(path))
+
+#     soup = BeautifulSoup(html, "html.parser")
+#     selectors = []
+
+#     for el in soup.find_all(True):
+#         el_text = el.get_text(strip=True)
+#         # Текст внутри элемента
+#         if el_text:
+#             match = (text.strip() == el_text) if exact else fuzzy_text_match(text, el_text)
+#             if match:
+#                 selector = get_css_path(el)
+#                 if return_all_selectors:
+#                     selectors.append(selector)
+#                     continue
+#                 return selector
+
+#         # Проверка атрибутов
+#         for attr_name, attr_val in el.attrs.items():
+#             if isinstance(attr_val, list):
+#                 attr_val = " ".join(attr_val)
+#             if isinstance(attr_val, str):
+#                 match = (text.strip() == attr_val.strip()) if exact else fuzzy_text_match(text, attr_val)
+#                 if match:
+#                     selector = get_css_path(el) + f"[{attr_name}]"
+#                     if return_all_selectors:
+#                         selectors.append(selector)
+#                         continue
+#                     return selector
+
+#     if return_all_selectors:
+#         return selectors if selectors else None
+#     return None
+
+
+
+
 
 
 # Находит и возвращает css селектор(ы) элемента(ов) по содержимому
-def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False):
+def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
+    # Построение пути css селектора для данного элемента
     def get_css_path(element):
         path = []
         while element and element.name:
@@ -179,34 +244,31 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
     selectors = []
 
     for el in soup.find_all(True):
-        # Текст внутри элемента
-        if el.string:
-            el_text = el.string.strip()
-            match = (text == el_text) if exact else fuzzy_text_match(text, el_text)
-            if match:
-                selector = get_css_path(el)
-                if return_all_selectors:
-                    selectors.append(selector)
-                    continue
+        # Проверяем текст внутри элемента
+        if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
+            selector = get_css_path(el)
+            if return_all_selectors:
+                selectors.append(selector)
+            else:
                 return selector
 
-        # Проверка атрибутов
+        # Проверяем атрибуты
         for attr_name, attr_val in el.attrs.items():
             if isinstance(attr_val, list):
                 attr_val = " ".join(attr_val)
             if isinstance(attr_val, str):
-                match = (text == attr_val.strip()) if exact else fuzzy_text_match(text, attr_val)
+                match = (text == attr_val.strip()) if exact else (text in attr_val)
                 if match:
                     selector = get_css_path(el) + f"[{attr_name}]"
                     if return_all_selectors:
                         selectors.append(selector)
-                        continue
-                    return selector
+                    else:
+                        return selector
 
     if return_all_selectors:
         return selectors if selectors else None
-    return None
 
+    return None
 
 
 # Получает и возвращает значение элемента по селектору
@@ -423,7 +485,7 @@ def compute_match_score(found_text, target_text):
 substring_brand = data_input_table["links"]["simple"][0]["brand"]
 substring_name = data_input_table["links"]["simple"][0]["name"]
 # substring_price = data_input_table["links"]["simple"][0]["price"]
-substring_price = "10&nbsp;320 руб."
+substring_price = "10 320"
 
 # selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
