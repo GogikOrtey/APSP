@@ -268,41 +268,128 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
 
 
 
+### Старая, рабочая
+# # Основная функция: Получает css селектор, по текстовому соержанию элемента
+# def get_css_selector_from_text_value_element(html, finding_element):
+#     print("")
+#     print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
+#     all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
+#     # print(all_selectors)
 
-# Основная функция: Получает css селектор, по текстовому соержанию элемента
+#     if not all_selectors:
+#         print("🟡 Не найдено ни одного подходящего селектора")
+#         return ""
+
+#     # Сортируем селекторы по длине (от короткого к длинному)
+#     all_selectors = sorted(all_selectors, key=len)
+
+#     # Проверяем каждый селектор
+#     for selector in all_selectors:
+#         print("")
+#         print(f"🟢 Проверка селектора: {selector}")
+#         result_element = get_element_from_selector(html, selector)
+
+#         # Если элемент найден — возвращаем этот селектор
+#         if result_element != "":
+#             print("✅ Найден корректный селектор")
+
+#             # Дистилляция путей селектора
+#             result_distill_selector = distill_selector(html, selector, get_element_from_selector, finding_element)
+
+#             return result_distill_selector
+#         else:
+#             print("❌ Элемент по селектору не найден")
+
+#     # Если ни один не подошёл
+#     print("🔴 Не найдено корректного селектора")
+#     return ""
+
+
+
+
+
+
+
+
+
 def get_css_selector_from_text_value_element(html, finding_element):
     print("")
     print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
     all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
-    # print(all_selectors)
 
     if not all_selectors:
         print("🟡 Не найдено ни одного подходящего селектора")
         return ""
 
-    # Сортируем селекторы по длине (от короткого к длинному)
-    all_selectors = sorted(all_selectors, key=len)
+    print(f"Найдено {len(all_selectors)} возможных селекторов")
+
+    valid_selectors = []
 
     # Проверяем каждый селектор
     for selector in all_selectors:
         print("")
         print(f"🟢 Проверка селектора: {selector}")
-        result_element = get_element_from_selector(html, selector)
+        result_text = get_element_from_selector(html, selector)
 
-        # Если элемент найден — возвращаем этот селектор
-        if result_element != "":
-            print("✅ Найден корректный селектор")
-
-            # Дистилляция путей селектора
-            result_distill_selector = distill_selector(html, selector, get_element_from_selector, finding_element)
-
-            return result_distill_selector
-        else:
+        if result_text == "":
             print("❌ Элемент по селектору не найден")
+            continue
 
-    # Если ни один не подошёл
-    print("🔴 Не найдено корректного селектора")
-    return ""
+        # Проверяем совпадение
+        if result_text.strip() == finding_element.strip():
+            match_score = 1.0  # строгое совпадение
+            print(f"✅ Совпадение 100%: [{result_text}]")
+        else:
+            # Вычисляем схожесть по длине и совпадению символов
+            match_score = compute_match_score(result_text, finding_element)
+            print(f"⚪ Совпадение {match_score*100:.1f}%: [{result_text}]")
+
+        valid_selectors.append({
+            "selector": selector,
+            "result": result_text,
+            "score": match_score
+        })
+
+    # Если ни один селектор не подошёл
+    if not valid_selectors:
+        print("🔴 Не найдено корректных селекторов")
+        return ""
+
+    # Сортируем по совпадению (от лучшего к худшему)
+    valid_selectors.sort(key=lambda x: x["score"], reverse=True)
+
+    # Берём лучший результат
+    best = valid_selectors[0]
+    print("")
+    print(f"🏆 Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
+
+    # Дистилляция пути
+    result_distill_selector = distill_selector(html, best["selector"], get_element_from_selector, finding_element)
+    return result_distill_selector
+
+
+# --- Вспомогательная функция сравнения текста ---
+def compute_match_score(found_text, target_text):
+    """Простая оценка схожести по количеству общих символов"""
+    found_text = found_text.strip().lower()
+    target_text = target_text.strip().lower()
+
+    if not found_text or not target_text:
+        return 0.0
+
+    # Длина совпадающих символов (по порядку)
+    common = sum(1 for a, b in zip(found_text, target_text) if a == b)
+    score = common / max(len(target_text), len(found_text))
+    return score
+
+
+
+
+
+
+
+
+
 
 
 ### Запаковать извлечение одного селектора в функцию
