@@ -96,7 +96,7 @@ else:
 
 
 
-
+# Находит и возвращает все фрагменты подстроки в html
 def find_contexts(text: str, substring: str, context_size: int = 300) -> list[str]:
     """
     Находит все вхождения `substring` в `text` и возвращает список
@@ -124,123 +124,54 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
     return contexts
 
 
+
+
+
+
 # substring = "Makita"
 substring_brand = data_input_table["links"]["simple"][0]["brand"]
 substring_name = data_input_table["links"]["simple"][0]["name"]
 
-# found = find_contexts(html, substring)
-# # for i, ctx in enumerate(found, 1):
-# #     print(f"\n=== Фрагмент {i} ===")
-# #     print(ctx)
-
-# # print(found[0])
-
-# prompt = f"""
-# Отправляю тебе фрагмент html кода. Конкретно из этого примера мы извлекаем значение "{substring}", 
-# но тебе нужно найти пример, что бы он работал и с другими значениями. 
-# В ответе напиши только один путь селекторов, по которому можно извлечь такое значение из html страницы.
-# {found[0]}
-# """
-
-# print("_____________________________________")
-# print("Посылаем запрос")
-# print(prompt)
-
-# # response = sendMessageToYandexGPT(prompt)
-
-# # Нужно сделать аналог, на внутреннем DOM полученной страницы
-# # И прописать работу с библиотекой cheerio
 
 
 
 
 
 
-# Работает
-# 2я версия, некорректно обрабатывает img
-
-# def get_css_path(element):
-#     """Построение CSS-селектора для данного элемента."""
-#     path = []
-#     while element and element.name:
-#         selector = element.name
-
-#         # Если у элемента есть ID — это уникально
-#         if element.has_attr("id"):
-#             selector = f"#{element['id']}"
-#             path.append(selector)
-#             break
-
-#         # Если есть класс(ы)
-#         elif element.has_attr("class"):
-#             selector += "." + ".".join(element["class"])
-
-#         # Проверяем порядок элемента среди сиблингов
-#         siblings = element.find_previous_siblings(element.name)
-#         if siblings:
-#             selector += f":nth-of-type({len(siblings) + 1})"
-
-#         path.append(selector)
-#         element = element.parent
-
-#     return " > ".join(reversed(path))
-
-
-# def find_text_selector(html: str, text: str, exact: bool = False):
-#     """Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах."""
-#     soup = BeautifulSoup(html, "html.parser")
-
-#     # Проходим по всем элементам в документе
-#     for el in soup.find_all(True):  # True — значит все теги
-#         # Проверяем текст внутри элемента
-#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-#             return get_css_path(el)
-
-#         # Проверяем все атрибуты
-#         for attr_val in el.attrs.values():
-#             if isinstance(attr_val, list):
-#                 attr_val = " ".join(attr_val)
-#             if isinstance(attr_val, str) and (text in attr_val if not exact else text == attr_val.strip()):
-#                 return get_css_path(el)
-
-#     return None
 
 
 
 
 
-def get_css_path(element):
-    """Построение CSS-селектора для данного элемента."""
-    path = []
-    while element and element.name:
-        selector = element.name
 
-        # Если у элемента есть ID — это уникально
-        if element.has_attr("id"):
-            selector = f"#{element['id']}"
-            path.append(selector)
-            break
-
-        # Если есть класс(ы)
-        elif element.has_attr("class"):
-            selector += "." + ".".join(element["class"])
-
-        # Проверяем порядок элемента среди сиблингов
-        siblings = element.find_previous_siblings(element.name)
-        if siblings:
-            selector += f":nth-of-type({len(siblings) + 1})"
-
-        path.append(selector)
-        element = element.parent
-
-    return " > ".join(reversed(path))
-
-
+# Находит и возвращает css селектор элемента, по его содержанию
 def find_text_selector(html: str, text: str, exact: bool = False):
-    """
-    Находит CSS-селектор элемента, содержащего заданный текст или значение в атрибутах.
-    Если найдено в атрибуте (alt/title/value/placeholder и т.д.), возвращает путь с указанием атрибута: "селектор@@attr".
-    """
+    # Построение пути css селектора для данного элемента
+    def get_css_path(element):
+        path = []
+        while element and element.name:
+            selector = element.name
+
+            # Если у элемента есть ID — это уникально
+            if element.has_attr("id"):
+                selector = f"#{element['id']}"
+                path.append(selector)
+                break
+
+            # Если есть класс(ы)
+            elif element.has_attr("class"):
+                selector += "." + ".".join(element["class"])
+
+            # Проверяем порядок элемента среди сиблингов
+            siblings = element.find_previous_siblings(element.name)
+            if siblings:
+                selector += f":nth-of-type({len(siblings) + 1})"
+
+            path.append(selector)
+            element = element.parent
+
+        return " > ".join(reversed(path))
+
     soup = BeautifulSoup(html, "html.parser")
 
     for el in soup.find_all(True):
@@ -260,39 +191,7 @@ def find_text_selector(html: str, text: str, exact: bool = False):
 
     return None
 
-
-
-
-
-
-
-finded_element = substring_brand
-print("")
-print(f"🟦 Извлекли такой селектор для поля {finded_element}:")
-# selector = find_text_selector(html, substring_name)
-selector = find_text_selector(html, finded_element)
-print(selector)
-
-### Короче, это работает, но выводит мусорные css пути
-### В целом, на этом пока что можно остановиться
-### И чистить их уже позже (позже прописать, или позже в коде чистить)
-
-
-
-
-# Проверяем селектор: Получаем элемент из html по нему:
-
-# selector = "html > body > div.wrapper > img:nth-of-type(1)"
-# selector = "a.catalog-element-brand img"
-
-# tree = html_lx.fromstring(html)
-# element = tree.cssselect(selector)[0]  # Возьмём первый найденный
-
-# # Выводим HTML этого элемента
-# print("")
-# print("🟢 Проверка селектора:")
-# print(html_lx.tostring(element, encoding="unicode", pretty_print=True))
-
+# Получает и возвращает значение элемента по селектору
 def get_element_from_selector(html, selector):
     tree = html_lx.fromstring(html)
     element = tree.cssselect(selector)[0]
@@ -308,14 +207,68 @@ def get_element_from_selector(html, selector):
     
     return result
 
+
+
+
+### Запаковать извлечение одного селектора в функцию
+# и проверить на другом поле, например name
+
+
+
+finded_element = substring_brand
+print("")
+print(f"🟦 Извлекли такой селектор для поля {finded_element}:")
+selector = find_text_selector(html, finded_element)
+print(selector)
+
+
+### Тут надо написать функцию дистилляции css путей
+
+
+# Проверяем селектор: Получаем элемент из html по нему:
 print("")
 print("🟢 Проверка селектора:")
 resule_test_element = get_element_from_selector(html, selector)
 print(resule_test_element)
 
-# print("")
-# print("🟡 Проверка значения селектора:")
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Старое:
 #i-18-bitrix-catalog-element-catalog-default-1-qepX1RQfHh6Q > div.catalog-element-wrapper.intec-content.intec-content-visible > div.catalog-element-wrapper-2.intec-content-wrapper > div.catalog-element-information-wrap > div.catalog-element-information.intec-grid.intec-grid-nowrap.intec-grid-768-wrap.intec-grid-a-h-start.intec-grid-a-v-start.intec-grid-i-20:nth-of-type(3) > div.catalog-element-information-right.intec-grid-item.intec-grid-item-768-1:nth-of-type(2) > div.catalog-element-information-right-wrapper > div.catalog-element-information-part.intec-grid.intec-grid-wrap.intec-grid-a-v-center.intec-grid-i-10 > div.intec-grid-item-auto:nth-of-type(2) > a.catalog-element-brand.intec-ui-picture > img
+# selector = "html > body > div.wrapper > img:nth-of-type(1)"
+# selector = "a.catalog-element-brand img"
