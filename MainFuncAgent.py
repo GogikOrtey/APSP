@@ -128,9 +128,7 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
 
 
 
-# substring = "Makita"
-substring_brand = data_input_table["links"]["simple"][0]["brand"]
-substring_name = data_input_table["links"]["simple"][0]["name"]
+
 
 
 
@@ -207,29 +205,38 @@ def get_element_from_selector(html, selector):
     
     return result
 
+# Основная функция: Получает css селектор, по текстовому соержанию элемента
+def get_css_selector_from_text_value_element(html, finding_element):
+    print("")
+    print(f"🟦 Извлекли такой селектор для поля {finding_element}:")
+    selector = find_text_selector(html, finding_element)
+    print(selector)
 
 
+    ### Тут надо написать функцию дистилляции css путей
+
+
+    # Проверяем селектор: Получаем элемент из html по нему:
+    print("")
+    print("🟢 Проверка селектора:")
+    resule_test_element = get_element_from_selector(html, selector)
+    print(resule_test_element)
+
+    return selector
 
 ### Запаковать извлечение одного селектора в функцию
 # и проверить на другом поле, например name
 
 
+# substring = "Makita"
+substring_brand = data_input_table["links"]["simple"][0]["brand"]
+substring_name = data_input_table["links"]["simple"][0]["name"]
 
-finded_element = substring_brand
+selector_result = get_css_selector_from_text_value_element(html, substring_name)
 print("")
-print(f"🟦 Извлекли такой селектор для поля {finded_element}:")
-selector = find_text_selector(html, finded_element)
-print(selector)
+print(f"selector_result = {selector_result}")
 
 
-### Тут надо написать функцию дистилляции css путей
-
-
-# Проверяем селектор: Получаем элемент из html по нему:
-print("")
-print("🟢 Проверка селектора:")
-resule_test_element = get_element_from_selector(html, selector)
-print(resule_test_element)
 
 
 
