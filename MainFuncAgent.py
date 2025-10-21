@@ -219,8 +219,8 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
     if len(parts) < 2:
         return selector
 
-    print(f"🔍 Исходный селектор: {selector}")
-    print(f"🧩 Всего звеньев: {len(parts)}")
+    # print(f"🔍 Исходный селектор: {selector}")
+    # print(f"🧩 Всего звеньев: {len(parts)}")
 
     i = 0
     while i < len(parts) - 1:  # последний не трогаем
@@ -230,22 +230,24 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
         result = get_element_from_selector(html, test_selector)
 
         if result == expected_value:
-            print(f"✅ Удалено звено {i+1}/{len(parts)}: {parts[i]}")
+            # print(f"✅ Удалено звено {i+1}/{len(parts)}: {parts[i]}")
             parts.pop(i)  # Удаляем звено окончательно, не двигаем индекс
         else:
-            print(f"❌ Нельзя удалить звено {i+1}: {parts[i]}")
+            # print(f"❌ Нельзя удалить звено {i+1}: {parts[i]}")
             i += 1  # Переходим к следующему
 
     final_selector = " > ".join(parts)
-    print(f"🏁 Итоговый очищенный селектор:\n{final_selector}")
+    # print(f"🏁 Итоговый очищенный селектор:\n{final_selector}")
+    print("")
+    print("🔷 Выполнили дистилляцию селектора")
     return final_selector
 
 
 
 
-selector = "#i-18-bitrix-catalog-element-catalog-default-1-qepX1RQfHh6Q > div.catalog-element-wrapper.intec-content.intec-content-visible > div.catalog-element-wrapper-2.intec-content-wrapper > div.catalog-element-information-wrap > div.catalog-element-information.intec-grid.intec-grid-nowrap.intec-grid-768-wrap.intec-grid-a-h-start.intec-grid-a-v-start.intec-grid-i-20:nth-of-type(3) > div.catalog-element-information-right.intec-grid-item.intec-grid-item-768-1:nth-of-type(2) > div.catalog-element-information-right-wrapper > div.catalog-element-information-part.intec-grid.intec-grid-wrap.intec-grid-a-v-center.intec-grid-i-10 > div.intec-grid-item-auto:nth-of-type(2) > a.catalog-element-brand.intec-ui-picture > img[alt]"
-result_distill_selector = distill_selector(html, selector, get_element_from_selector, "Аntika")
-print(result_distill_selector)
+# selector = "#i-18-bitrix-catalog-element-catalog-default-1-qepX1RQfHh6Q > div.catalog-element-wrapper.intec-content.intec-content-visible > div.catalog-element-wrapper-2.intec-content-wrapper > div.catalog-element-information-wrap > div.catalog-element-information.intec-grid.intec-grid-nowrap.intec-grid-768-wrap.intec-grid-a-h-start.intec-grid-a-v-start.intec-grid-i-20:nth-of-type(3) > div.catalog-element-information-right.intec-grid-item.intec-grid-item-768-1:nth-of-type(2) > div.catalog-element-information-right-wrapper > div.catalog-element-information-part.intec-grid.intec-grid-wrap.intec-grid-a-v-center.intec-grid-i-10 > div.intec-grid-item-auto:nth-of-type(2) > a.catalog-element-brand.intec-ui-picture > img[alt]"
+# result_distill_selector = distill_selector(html, selector, get_element_from_selector, "Аntika")
+# print(result_distill_selector)
 
 
 
@@ -264,56 +266,57 @@ print(result_distill_selector)
 
 
 
-### Раскомментировать
 
 
-# # Основная функция: Получает css селектор, по текстовому соержанию элемента
-# def get_css_selector_from_text_value_element(html, finding_element):
-#     print("")
-#     print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
-#     all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
-#     # print(all_selectors)
 
-#     if not all_selectors:
-#         print("🟡 Не найдено ни одного подходящего селектора")
-#         return ""
+# Основная функция: Получает css селектор, по текстовому соержанию элемента
+def get_css_selector_from_text_value_element(html, finding_element):
+    print("")
+    print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
+    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
+    # print(all_selectors)
 
-#     # Сортируем селекторы по длине (от короткого к длинному)
-#     all_selectors = sorted(all_selectors, key=len)
+    if not all_selectors:
+        print("🟡 Не найдено ни одного подходящего селектора")
+        return ""
 
-#     # Проверяем каждый селектор
-#     for selector in all_selectors:
-#         print("")
-#         print(f"🟢 Проверка селектора: {selector}")
-#         result_element = get_element_from_selector(html, selector)
+    # Сортируем селекторы по длине (от короткого к длинному)
+    all_selectors = sorted(all_selectors, key=len)
 
-#         # Если элемент найден — возвращаем этот селектор
-#         if result_element != "":
-#             print("✅ Найден корректный селектор")
+    # Проверяем каждый селектор
+    for selector in all_selectors:
+        print("")
+        print(f"🟢 Проверка селектора: {selector}")
+        result_element = get_element_from_selector(html, selector)
 
-#             ### Тут надо написать функцию дистилляции css путей
+        # Если элемент найден — возвращаем этот селектор
+        if result_element != "":
+            print("✅ Найден корректный селектор")
 
-#             return selector
-#         else:
-#             print("❌ Элемент по селектору не найден")
+            # Дистилляция путей селектора
+            result_distill_selector = distill_selector(html, selector, get_element_from_selector, finding_element)
 
-#     # Если ни один не подошёл
-#     print("🔴 Не найдено корректного селектора")
-#     return ""
+            return result_distill_selector
+        else:
+            print("❌ Элемент по селектору не найден")
 
-
-# ### Запаковать извлечение одного селектора в функцию
-# # и проверить на другом поле, например name
+    # Если ни один не подошёл
+    print("🔴 Не найдено корректного селектора")
+    return ""
 
 
-# # substring = "Makita"
-# substring_brand = data_input_table["links"]["simple"][0]["brand"]
-# substring_name = data_input_table["links"]["simple"][0]["name"]
+### Запаковать извлечение одного селектора в функцию
+# и проверить на другом поле, например name
 
-# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+
+# substring = "Makita"
+substring_brand = data_input_table["links"]["simple"][0]["brand"]
+substring_name = data_input_table["links"]["simple"][0]["name"]
+
+selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# print("")
-# print(f"selector_result = {selector_result}")
+print("")
+print(f"🟩 selector_result = {selector_result}")
 
 
 
