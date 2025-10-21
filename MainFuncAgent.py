@@ -127,70 +127,6 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Находит и возвращает css селектор элемента, по его содержанию
-# def find_text_selector(html: str, text: str, exact: bool = False):
-#     # Построение пути css селектора для данного элемента
-#     def get_css_path(element):
-#         path = []
-#         while element and element.name:
-#             selector = element.name
-
-#             # Если у элемента есть ID — это уникально
-#             if element.has_attr("id"):
-#                 selector = f"#{element['id']}"
-#                 path.append(selector)
-#                 break
-
-#             # Если есть класс(ы)
-#             elif element.has_attr("class"):
-#                 selector += "." + ".".join(element["class"])
-
-#             # Проверяем порядок элемента среди сиблингов
-#             siblings = element.find_previous_siblings(element.name)
-#             if siblings:
-#                 selector += f":nth-of-type({len(siblings) + 1})"
-
-#             path.append(selector)
-#             element = element.parent
-
-#         return " > ".join(reversed(path))
-
-#     soup = BeautifulSoup(html, "html.parser")
-
-#     for el in soup.find_all(True):
-#         # Проверяем текст внутри элемента
-#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-#             return get_css_path(el)
-
-#         # Проверяем атрибуты
-#         for attr_name, attr_val in el.attrs.items():
-#             if isinstance(attr_val, list):
-#                 attr_val = " ".join(attr_val)
-#             if isinstance(attr_val, str):
-#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
-#                 if match:
-#                     # Возвращаем селектор + указание на атрибут
-#                     return get_css_path(el) + f"[{attr_name}]"
-
-#     return None
-
-from bs4 import BeautifulSoup
-
 # Находит и возвращает css селектор(ы) элемента(ов) по содержимому
 def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
     # Построение пути css селектора для данного элемента
@@ -274,25 +210,37 @@ def get_element_from_selector(html, selector):
 # Основная функция: Получает css селектор, по текстовому соержанию элемента
 def get_css_selector_from_text_value_element(html, finding_element):
     print("")
-    print(f"🟦 Извлекли такой селектор для поля \"{finding_element}\":")
-    all_selector = find_text_selector(html, finding_element, return_all_selectors=True)
-    # TODO Нужно будет сделать цикл for, по всем извлечённым селекторам
-    # в порядке возрастания их длины
-    # Пока проверка не покажет верное совпадение
-    selector = min(all_selector, key=len)
-    print(selector)
+    print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
+    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
+    # print(all_selectors)
 
+    if not all_selectors:
+        print("🟡 Не найдено ни одного подходящего селектора")
+        return ""
 
-    ### Тут надо написать функцию дистилляции css путей
+    # Сортируем селекторы по длине (от короткого к длинному)
+    all_selectors = sorted(all_selectors, key=len)
 
+    # Проверяем каждый селектор
+    for selector in all_selectors:
+        print("")
+        print(f"🟢 Проверка селектора: {selector}")
+        result_element = get_element_from_selector(html, selector)
 
-    # Проверяем селектор: Получаем элемент из html по нему:
-    print("")
-    print("🟢 Проверка селектора:")
-    resule_test_element = get_element_from_selector(html, selector)
-    print(resule_test_element)
+        # Если элемент найден — возвращаем этот селектор
+        if result_element != "":
+            print("✅ Найден корректный селектор")
 
-    return selector
+            ### Тут надо написать функцию дистилляции css путей
+
+            return selector
+        else:
+            print("❌ Элемент по селектору не найден")
+
+    # Если ни один не подошёл
+    print("🔴 Не найдено корректного селектора")
+    return ""
+
 
 ### Запаковать извлечение одного селектора в функцию
 # и проверить на другом поле, например name
@@ -302,7 +250,8 @@ def get_css_selector_from_text_value_element(html, finding_element):
 substring_brand = data_input_table["links"]["simple"][0]["brand"]
 substring_name = data_input_table["links"]["simple"][0]["name"]
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+selector_result = get_css_selector_from_text_value_element(html, substring_brand)
 print("")
 print(f"selector_result = {selector_result}")
 
