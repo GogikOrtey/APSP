@@ -397,10 +397,14 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
 
 
 # Основная функция: Получает css селектор, по текстовому соержанию элемента
-def get_css_selector_from_text_value_element(html, finding_element):
+def get_css_selector_from_text_value_element(html, finding_element, is_price = False):
     print("")
     print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
-    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
+    if(is_price):
+        # Для извлечения price и oldPrice - отдельный отбработчик
+        all_selectors = handle_selector_price(html, finding_element)
+    else:
+        all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
 
     if not all_selectors:
         print("🟡 Не найдено ни одного подходящего селектора")
@@ -477,6 +481,106 @@ def compute_match_score(found_text, target_text):
 
 
 
+# Извлекает селекторы цены
+# Перед этим очистив html от мусорных спецсимволов
+def handle_selector_price(html, finding_element):
+    # 1. Очистка HTML
+    def clean_html(text: str) -> str:
+        text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+        text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+        return text.strip()
+
+    # 2. Нормализация чисел/цен
+    def normalize_price(s: str) -> str:
+        if not s:
+            return ""
+        s = s.strip().lower()
+        s = re.sub(r"[^\d,\.]", "", s)
+        s = re.sub(r"[^\d]", "", s)
+        return s
+
+    # 3. Функция построения CSS-пути для элемента
+    def get_css_path(element):
+        path = []
+        while element is not None and isinstance(element.tag, str):
+            selector = element.tag
+
+            # Если есть ID — уникальный селектор
+            if 'id' in element.attrib:
+                selector = f"#{element.attrib['id']}"
+                path.append(selector)
+                break
+
+            # Если есть классы
+            if 'class' in element.attrib:
+                classes = element.attrib['class'].split()
+                selector += '.' + '.'.join(classes)
+
+            # nth-of-type среди сиблингов
+            parent = element.getparent()
+            if parent is not None:
+                same_tag_siblings = [sib for sib in parent if isinstance(sib.tag, str) and sib.tag == element.tag]
+                if len(same_tag_siblings) > 1:
+                    index = same_tag_siblings.index(element) + 1
+                    selector += f":nth-of-type({index})"
+
+            path.append(selector)
+            element = parent
+
+        return " > ".join(reversed(path))
+
+    # 4. Основная функция поиска селекторов по цене
+    def find_price_selectors(html: str, finding_element: str, return_all_selectors: bool = False):
+        html = clean_html(html)
+        target_norm = normalize_price(finding_element)
+
+        tree = html_lx.fromstring(html)
+        selectors = []
+
+        for elem in tree.iter():
+            # Пропускаем комментарии, доктайпы
+            if not isinstance(elem.tag, str):
+                continue
+
+            # Проверяем текст
+            text = elem.text_content().strip() if elem.text_content() else ""
+            if text and normalize_price(text) == target_norm:
+                selector = get_css_path(elem)
+                if return_all_selectors:
+                    selectors.append(selector)
+                else:
+                    return selector
+
+            # Проверяем все атрибуты
+            for attr_name, attr_val in elem.attrib.items():
+                if isinstance(attr_val, str) and normalize_price(attr_val) == target_norm:
+                    selector = f"{get_css_path(elem)}[{attr_name}]"
+                    if return_all_selectors:
+                        selectors.append(selector)
+                    else:
+                        return selector
+
+        if return_all_selectors:
+            return selectors if selectors else None
+
+        return None
+    
+    # Вернуть все селекторы
+    all_selectors = find_price_selectors(html, finding_element, return_all_selectors=True)
+    # print(all_selectors)
+
+    # # Вернуть первый найденный селектор
+    # first_selector = find_price_selectors(html, finding_element)
+    # print(first_selector)
+
+    return all_selectors
+
+
+
+### Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
+
+
+
 ### Запаковать извлечение одного селектора в функцию
 # и проверить на другом поле, например name
 
@@ -489,7 +593,7 @@ substring_price = "10 320"
 
 # selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-selector_result = get_css_selector_from_text_value_element(html, substring_price)
+selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 print("")
 print(f"🟩 selector_result = {selector_result}")
 
