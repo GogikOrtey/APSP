@@ -143,7 +143,56 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
 
 
 # Находит и возвращает css селектор элемента, по его содержанию
-def find_text_selector(html: str, text: str, exact: bool = False):
+# def find_text_selector(html: str, text: str, exact: bool = False):
+#     # Построение пути css селектора для данного элемента
+#     def get_css_path(element):
+#         path = []
+#         while element and element.name:
+#             selector = element.name
+
+#             # Если у элемента есть ID — это уникально
+#             if element.has_attr("id"):
+#                 selector = f"#{element['id']}"
+#                 path.append(selector)
+#                 break
+
+#             # Если есть класс(ы)
+#             elif element.has_attr("class"):
+#                 selector += "." + ".".join(element["class"])
+
+#             # Проверяем порядок элемента среди сиблингов
+#             siblings = element.find_previous_siblings(element.name)
+#             if siblings:
+#                 selector += f":nth-of-type({len(siblings) + 1})"
+
+#             path.append(selector)
+#             element = element.parent
+
+#         return " > ".join(reversed(path))
+
+#     soup = BeautifulSoup(html, "html.parser")
+
+#     for el in soup.find_all(True):
+#         # Проверяем текст внутри элемента
+#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
+#             return get_css_path(el)
+
+#         # Проверяем атрибуты
+#         for attr_name, attr_val in el.attrs.items():
+#             if isinstance(attr_val, list):
+#                 attr_val = " ".join(attr_val)
+#             if isinstance(attr_val, str):
+#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
+#                 if match:
+#                     # Возвращаем селектор + указание на атрибут
+#                     return get_css_path(el) + f"[{attr_name}]"
+
+#     return None
+
+from bs4 import BeautifulSoup
+
+# Находит и возвращает css селектор(ы) элемента(ов) по содержимому
+def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
     # Построение пути css селектора для данного элемента
     def get_css_path(element):
         path = []
@@ -171,11 +220,16 @@ def find_text_selector(html: str, text: str, exact: bool = False):
         return " > ".join(reversed(path))
 
     soup = BeautifulSoup(html, "html.parser")
+    selectors = []
 
     for el in soup.find_all(True):
         # Проверяем текст внутри элемента
         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-            return get_css_path(el)
+            selector = get_css_path(el)
+            if return_all_selectors:
+                selectors.append(selector)
+            else:
+                return selector
 
         # Проверяем атрибуты
         for attr_name, attr_val in el.attrs.items():
@@ -184,15 +238,26 @@ def find_text_selector(html: str, text: str, exact: bool = False):
             if isinstance(attr_val, str):
                 match = (text == attr_val.strip()) if exact else (text in attr_val)
                 if match:
-                    # Возвращаем селектор + указание на атрибут
-                    return get_css_path(el) + f"[{attr_name}]"
+                    selector = get_css_path(el) + f"[{attr_name}]"
+                    if return_all_selectors:
+                        selectors.append(selector)
+                    else:
+                        return selector
+
+    if return_all_selectors:
+        return selectors if selectors else None
 
     return None
+
 
 # Получает и возвращает значение элемента по селектору
 def get_element_from_selector(html, selector):
     tree = html_lx.fromstring(html)
-    element = tree.cssselect(selector)[0]
+    search_elem = tree.cssselect(selector)
+    if(len(search_elem) == 0): 
+        print("🟡 По селектору элемент не найден")
+        return ""
+    element = search_elem[0]
 
     # Проверяем, есть ли в селекторе указание атрибута в []
     attr_match = re.search(r"\[([a-zA-Z0-9_-]+)\]", selector)
@@ -208,8 +273,12 @@ def get_element_from_selector(html, selector):
 # Основная функция: Получает css селектор, по текстовому соержанию элемента
 def get_css_selector_from_text_value_element(html, finding_element):
     print("")
-    print(f"🟦 Извлекли такой селектор для поля {finding_element}:")
-    selector = find_text_selector(html, finding_element)
+    print(f"🟦 Извлекли такой селектор для поля \"{finding_element}\":")
+    all_selector = find_text_selector(html, finding_element, return_all_selectors=True)
+    # TODO Нужно будет сделать цикл for, по всем извлечённым селекторам
+    # в порядке возрастания их длины
+    # Пока проверка не покажет верное совпадение
+    selector = min(all_selector, key=len)
     print(selector)
 
 
