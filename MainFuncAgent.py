@@ -285,24 +285,36 @@ print(selector)
 # selector = "html > body > div.wrapper > img:nth-of-type(1)"
 # selector = "a.catalog-element-brand img"
 
-tree = html_lx.fromstring(html)
-element = tree.cssselect(selector)[0]  # Возьмём первый найденный
+# tree = html_lx.fromstring(html)
+# element = tree.cssselect(selector)[0]  # Возьмём первый найденный
 
-# Выводим HTML этого элемента
+# # Выводим HTML этого элемента
+# print("")
+# print("🟢 Проверка селектора:")
+# print(html_lx.tostring(element, encoding="unicode", pretty_print=True))
+
+def get_element_from_selector(html, selector):
+    tree = html_lx.fromstring(html)
+    element = tree.cssselect(selector)[0]
+
+    # Проверяем, есть ли в селекторе указание атрибута в []
+    attr_match = re.search(r"\[([a-zA-Z0-9_-]+)\]", selector)
+
+    if attr_match:
+        attr_name = attr_match.group(1)
+        result = element.get(attr_name)
+    else:        
+        result = html_lx.tostring(element, encoding="unicode", pretty_print=True)
+    
+    return result
+
 print("")
 print("🟢 Проверка селектора:")
-print(html_lx.tostring(element, encoding="unicode", pretty_print=True))
+resule_test_element = get_element_from_selector(html, selector)
+print(resule_test_element)
 
-"""
-Достать атрибут можно так:
-
-el = tree.cssselect('img[alt]')[0]
-value = el.get('alt')
-
-"""
-
-print("")
-print("🟡 Проверка значения селектора:")
+# print("")
+# print("🟡 Проверка значения селектора:")
 
 
 
