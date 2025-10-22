@@ -293,80 +293,80 @@ def get_element_from_selector(html, selector):
     return result
 
 
-def distill_selector(html, selector, get_element_from_selector, expected_value):
-    """
-    Пробует сократить CSS селектор, удаляя ненужные звенья.
-    Если удаление звена ломает результат, звено сохраняется.
-    Возвращает максимально упрощённый корректный селектор.
-    """
+# def distill_selector(html, selector, get_element_from_selector, expected_value):
+#     """
+#     Пробует сократить CSS селектор, удаляя ненужные звенья.
+#     Если удаление звена ломает результат, звено сохраняется.
+#     Возвращает максимально упрощённый корректный селектор.
+#     """
 
-    parts = [part.strip() for part in selector.split(">")]
-    if len(parts) < 2:
-        return selector
+#     parts = [part.strip() for part in selector.split(">")]
+#     if len(parts) < 2:
+#         return selector
 
-    # print(f"🔍 Исходный селектор: {selector}")
-    # print(f"🧩 Всего звеньев: {len(parts)}")
+#     # print(f"🔍 Исходный селектор: {selector}")
+#     # print(f"🧩 Всего звеньев: {len(parts)}")
 
-    i = 0
-    while i < len(parts) - 1:  # последний не трогаем
-        test_parts = parts[:i] + parts[i+1:]
-        test_selector = " > ".join(test_parts)
+#     i = 0
+#     while i < len(parts) - 1:  # последний не трогаем
+#         test_parts = parts[:i] + parts[i+1:]
+#         test_selector = " > ".join(test_parts)
 
-        result = get_element_from_selector(html, test_selector)
+#         result = get_element_from_selector(html, test_selector)
 
-        if result == expected_value:
-            # print(f"✅ Удалено звено {i+1}/{len(parts)}: {parts[i]}")
-            parts.pop(i)  # Удаляем звено окончательно, не двигаем индекс
-        else:
-            # print(f"❌ Нельзя удалить звено {i+1}: {parts[i]}")
-            i += 1  # Переходим к следующему
+#         if result == expected_value:
+#             # print(f"✅ Удалено звено {i+1}/{len(parts)}: {parts[i]}")
+#             parts.pop(i)  # Удаляем звено окончательно, не двигаем индекс
+#         else:
+#             # print(f"❌ Нельзя удалить звено {i+1}: {parts[i]}")
+#             i += 1  # Переходим к следующему
 
-    final_selector = " > ".join(parts)
-    # print(f"🏁 Итоговый очищенный селектор:\n{final_selector}")
-    print("")
-    print("🔷 Выполнили дистилляцию селектора")
-    return final_selector
+#     final_selector = " > ".join(parts)
+#     # print(f"🏁 Итоговый очищенный селектор:\n{final_selector}")
+#     print("")
+#     print("🔷 Выполнили дистилляцию селектора")
+#     return final_selector
 
 
-# Также плохо чистит этот большой селектор price
-"""
-def distill_selector(html, selector, get_element_from_selector, expected_value):
+# # Также плохо чистит этот большой селектор price
+# """
+# def distill_selector(html, selector, get_element_from_selector, expected_value):
     
-    Сокращает CSS селектор до минимально возможного, удаляя все ненужные звенья.
-    Проверяет каждое звено: если после его удаления результат сохраняется — удаляем.
-    Использует пробелы, чтобы не требовать строгой иерархии.
+#     Сокращает CSS селектор до минимально возможного, удаляя все ненужные звенья.
+#     Проверяет каждое звено: если после его удаления результат сохраняется — удаляем.
+#     Использует пробелы, чтобы не требовать строгой иерархии.
     
-    # Разбиваем селектор на части
-    parts = [part.strip() for part in selector.replace(">", " ").split()]
-    if len(parts) < 2:
-        return selector
+#     # Разбиваем селектор на части
+#     parts = [part.strip() for part in selector.replace(">", " ").split()]
+#     if len(parts) < 2:
+#         return selector
 
-    changed = True
-    while changed:
-        changed = False
-        i = 0
-        while i < len(parts):
-            test_parts = parts[:i] + parts[i+1:]
-            if not test_parts:
-                i += 1
-                continue
+#     changed = True
+#     while changed:
+#         changed = False
+#         i = 0
+#         while i < len(parts):
+#             test_parts = parts[:i] + parts[i+1:]
+#             if not test_parts:
+#                 i += 1
+#                 continue
 
-            test_selector = " ".join(test_parts)
-            result = get_element_from_selector(html, test_selector)
+#             test_selector = " ".join(test_parts)
+#             result = get_element_from_selector(html, test_selector)
 
-            if result == expected_value:
-                # Удаляем ненужное звено
-                parts.pop(i)
-                changed = True
-                # Не увеличиваем i, так как сдвинулись звенья
-            else:
-                i += 1
+#             if result == expected_value:
+#                 # Удаляем ненужное звено
+#                 parts.pop(i)
+#                 changed = True
+#                 # Не увеличиваем i, так как сдвинулись звенья
+#             else:
+#                 i += 1
 
-    final_selector = " ".join(parts)
-    print("")
-    print("🔷 Выполнили дистилляцию селектора (минимальный путь)")
-    return final_selector
-"""
+#     final_selector = " ".join(parts)
+#     print("")
+#     print("🔷 Выполнили дистилляцию селектора (минимальный путь)")
+#     return final_selector
+# """
 
 
 
@@ -431,6 +431,139 @@ def distill_selector(html, selector, get_element_from_selector, expected_value):
 #     return ""
 
 
+import re
+
+def _split_selector_preserving_brackets(selector: str):
+    """
+    Разбивает селектор по '>' но игнорирует '>' внутри [], (), '' и "".
+    Возвращает список звеньев (строк) без лишних пробелов по краям.
+    """
+    parts = []
+    buf = []
+    bracket_sq = 0  # []
+    bracket_par = 0 # ()
+    in_single = False
+    in_double = False
+
+    i = 0
+    while i < len(selector):
+        ch = selector[i]
+
+        # переключение состояния строк
+        if ch == "'" and not in_double:
+            in_single = not in_single
+            buf.append(ch)
+            i += 1
+            continue
+        if ch == '"' and not in_single:
+            in_double = not in_double
+            buf.append(ch)
+            i += 1
+            continue
+
+        if not in_single and not in_double:
+            if ch == '[':
+                bracket_sq += 1
+                buf.append(ch)
+                i += 1
+                continue
+            if ch == ']':
+                if bracket_sq > 0:
+                    bracket_sq -= 1
+                buf.append(ch)
+                i += 1
+                continue
+            if ch == '(':
+                bracket_par += 1
+                buf.append(ch)
+                i += 1
+                continue
+            if ch == ')':
+                if bracket_par > 0:
+                    bracket_par -= 1
+                buf.append(ch)
+                i += 1
+                continue
+
+        # разделитель '>' только если мы не внутри скобок/строк
+        if ch == '>' and not in_single and not in_double and bracket_sq == 0 and bracket_par == 0:
+            part = ''.join(buf).strip()
+            if part != '':
+                parts.append(part)
+            buf = []
+            # пропускаем возможные пробелы вокруг >
+            i += 1
+            # skip following spaces
+            while i < len(selector) and selector[i].isspace():
+                i += 1
+            continue
+
+        buf.append(ch)
+        i += 1
+
+    last = ''.join(buf).strip()
+    if last != '':
+        parts.append(last)
+    return parts
+
+def simplify_selector_keep_value(html: str, selector: str, get_element_from_selector):
+    """
+    Пытается удалить ненужные звенья в селекторе (слева направо).
+    Возвращает упрощённый селектор, который гарантированно возвращает
+    такое же значение, как исходный селектор, по вызову get_element_from_selector.
+    Параметры:
+      - html: текст html страницы
+      - selector: исходный строгий селектор (через '>')
+      - get_element_from_selector: функция (html, selector) -> value (строка)
+    """
+    # начальная проверка: получаем исходное значение
+    try:
+        original_value = get_element_from_selector(html, selector)
+    except Exception:
+        # если исходный селектор уже валидный, но функция кидает — лучше вернуть исходный
+        return selector
+
+    # разбиваем селектор корректно
+    parts = _split_selector_preserving_brackets(selector)
+
+    # если один сегмент — возвратим как есть
+    if len(parts) <= 1:
+        return selector.strip()
+
+    i = 0
+    # проходим слева направо. Для каждого индекса пробуем удалить parts[i].
+    # Если после удаления результат совпадает с original_value — применяем удаление и
+    # остаёмся на том же i (т.к. дальше сдвинулись элементы).
+    # Иначе переходим к следующему i.
+    while i < len(parts):
+        # нельзя удалить все звенья — должен остаться хотя бы одно
+        if len(parts) == 1:
+            break
+
+        candidate_parts = parts[:i] + parts[i+1:]
+        candidate_selector = " > ".join(candidate_parts)
+
+        try:
+            candidate_value = get_element_from_selector(html, candidate_selector)
+        except Exception:
+            # если селектор стал невалидным или привёл к исключению — считаем, что удаление ломает цепочку
+            candidate_value = None
+
+        # сравнение: строгая эквивалентность
+        if candidate_value == original_value:
+            # удаление безопасно — применяем
+            parts = candidate_parts
+            # НЕ инкрементируем i: нужно попытаться удалить новое звено на этой же позиции
+            # (поведение: удаляем как можно больше подряд)
+            # но если i теперь == len(parts) (удалили последний) - цикл завершится naturally
+            continue
+        else:
+            # удаление ломает — оставляем звено и идём дальше
+            i += 1
+
+    # собрать итоговый селектор
+    simplified = " > ".join(parts)
+    return simplified
 
 
 
@@ -495,7 +628,8 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
     print(f"🏆 Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
 
     # Дистилляция пути
-    result_distill_selector = distill_selector(html, best["selector"], get_element_from_selector, finding_element)
+    # result_distill_selector = distill_selector(html, best["selector"], get_element_from_selector, finding_element)
+    result_distill_selector = simplify_selector_keep_value(html, best["selector"], get_element_from_selector)
     return result_distill_selector
 
 
@@ -627,9 +761,9 @@ substring_name = data_input_table["links"]["simple"][0]["name"]
 # substring_price = data_input_table["links"]["simple"][0]["price"]
 substring_price = "10 320"
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 print("")
 print(f"🟩 selector_result = {selector_result}")
 
