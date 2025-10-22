@@ -152,88 +152,6 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# # Находит и возвращает css селектор(ы) элемента(ов) по содержимому
-# def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
-#     # Построение пути css селектора для данного элемента
-#     def get_css_path(element):
-#         path = []
-#         while element and element.name:
-#             selector = element.name
-
-#             # Если у элемента есть ID — это уникально
-#             if element.has_attr("id"):
-#                 selector = f"#{element['id']}"
-#                 path.append(selector)
-#                 break
-
-#             # Если есть класс(ы)
-#             elif element.has_attr("class"):
-#                 selector += "." + ".".join(element["class"])
-
-#             # Проверяем порядок элемента среди сиблингов
-#             siblings = element.find_previous_siblings(element.name)
-#             if siblings:
-#                 selector += f":nth-of-type({len(siblings) + 1})"
-
-#             path.append(selector)
-#             element = element.parent
-
-#         return " > ".join(reversed(path))
-
-#     soup = BeautifulSoup(html, "html.parser")
-#     selectors = []
-
-#     for el in soup.find_all(True):
-#         # Проверяем текст внутри элемента
-#         if el.string and ((text == el.string.strip()) if exact else (text in el.string)):
-#             selector = get_css_path(el)
-#             if return_all_selectors:
-#                 selectors.append(selector)
-#             else:
-#                 return selector
-
-#         # Проверяем атрибуты
-#         for attr_name, attr_val in el.attrs.items():
-#             if isinstance(attr_val, list):
-#                 attr_val = " ".join(attr_val)
-#             if isinstance(attr_val, str):
-#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
-#                 if match:
-#                     selector = get_css_path(el) + f"[{attr_name}]"
-#                     if return_all_selectors:
-#                         selectors.append(selector)
-#                     else:
-#                         return selector
-
-#     if return_all_selectors:
-#         return selectors if selectors else None
-
-#     return None
-
-
-
-
-
-
-
-
-
-
-
-
-
 def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
     def get_css_path(element):
         path = []
@@ -253,7 +171,6 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
         return " > ".join(reversed(path))
 
     def normalize_text(s):
-        # Убираем двойные пробелы, переносы строк и т.п.
         return " ".join(s.split())
 
     def similarity(a, b):
@@ -262,26 +179,24 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
     soup = BeautifulSoup(html, "html.parser")
     selectors = []
 
-    # Этап 1. Прямой и частичный поиск
+    # 🔹 Этап 1. Прямой поиск (строгий / частичный)
     for el in soup.find_all(True):
         element_text = el.get_text(strip=True)
-        if not element_text:
-            continue
-
-        match = (text == element_text) if exact else (text in element_text)
-        if match:
-            selector = get_css_path(el)
-            if return_all_selectors:
-                selectors.append(selector)
-            else:
-                return selector
+        if element_text:
+            match = (text == element_text) if exact else (text in element_text)
+            if match:
+                selector = get_css_path(el)
+                if return_all_selectors:
+                    selectors.append(selector)
+                else:
+                    return selector
 
         # Проверяем атрибуты
         for attr_name, attr_val in el.attrs.items():
             if isinstance(attr_val, list):
                 attr_val = " ".join(attr_val)
             if isinstance(attr_val, str):
-                match = (text == attr_val) if exact else (text in attr_val)
+                match = (text == attr_val.strip()) if exact else (text in attr_val)
                 if match:
                     selector = get_css_path(el) + f"[{attr_name}]"
                     if return_all_selectors:
@@ -289,25 +204,37 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
                     else:
                         return selector
 
-    # Этап 2. Нестрогий (fuzzy) поиск, если ничего не найдено
+    # 🔹 Этап 2. Нестрогий (fuzzy) поиск
     if not selectors:
-        threshold = 0.7  # можно подправить при необходимости
+        threshold = 0.7
         for el in soup.find_all(True):
+            # Проверка текста элемента
             element_text = el.get_text(strip=True)
-            if not element_text:
-                continue
-            score = similarity(text, element_text)
-            if score >= threshold:
-                selector = get_css_path(el)
-                if return_all_selectors:
-                    selectors.append(selector)
-                else:
-                    return selector
+            if element_text:
+                score = similarity(text, element_text)
+                if score >= threshold:
+                    selector = get_css_path(el)
+                    if return_all_selectors:
+                        selectors.append(selector)
+                    else:
+                        return selector
+
+            # Проверка атрибутов
+            for attr_name, attr_val in el.attrs.items():
+                if isinstance(attr_val, list):
+                    attr_val = " ".join(attr_val)
+                if isinstance(attr_val, str):
+                    score = similarity(text, attr_val)
+                    if score >= threshold:
+                        selector = get_css_path(el) + f"[{attr_name}]"
+                        if return_all_selectors:
+                            selectors.append(selector)
+                        else:
+                            return selector
 
     if return_all_selectors:
         return selectors if selectors else None
     return None
-
 
 
 
@@ -669,26 +596,26 @@ def handle_selector_price(html, finding_element):
 
 
 
-isPrint = True
+# isPrint = True
 
-elem_number = 1
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
+# elem_number = 0
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
 
-substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-print("")
-print(f"🟩 selector_result = {selector_result}")
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
-# # Получаем куски по подстроке
-# result = find_contexts(html, substring_name)
-# print(result)
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
 
 
 
@@ -760,15 +687,13 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
 
 
 
-# fill_selectors_for_items(
-#     html,
-#     data_input_table["links"]["simple"],
-#     get_css_selector_from_text_value_element
-# )
+fill_selectors_for_items(
+    html,
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
 
-# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
-
-
+print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
 
 
 
@@ -798,7 +723,3 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
 
 
 
-# Старое:
-#i-18-bitrix-catalog-element-catalog-default-1-qepX1RQfHh6Q > div.catalog-element-wrapper.intec-content.intec-content-visible > div.catalog-element-wrapper-2.intec-content-wrapper > div.catalog-element-information-wrap > div.catalog-element-information.intec-grid.intec-grid-nowrap.intec-grid-768-wrap.intec-grid-a-h-start.intec-grid-a-v-start.intec-grid-i-20:nth-of-type(3) > div.catalog-element-information-right.intec-grid-item.intec-grid-item-768-1:nth-of-type(2) > div.catalog-element-information-right-wrapper > div.catalog-element-information-part.intec-grid.intec-grid-wrap.intec-grid-a-v-center.intec-grid-i-10 > div.intec-grid-item-auto:nth-of-type(2) > a.catalog-element-brand.intec-ui-picture > img
-# selector = "html > body > div.wrapper > img:nth-of-type(1)"
-# selector = "a.catalog-element-brand img"
