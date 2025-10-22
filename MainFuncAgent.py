@@ -55,12 +55,6 @@ data_input_table = {
                 "price": "10 320",
                 "brand": "Аntika",
                 "inStock": True,
-                "_selectors": {
-                    "name": "",
-                    "price": "",
-                    "brand": "",
-                    "inStock": "",
-                }
             }
         ]
     },
@@ -538,13 +532,14 @@ def handle_selector_price(html, finding_element):
 # print(f"🟩 selector_result = {selector_result}")
 
 
+
 # Обработчик: Находит css селекторы для каждого элемента
 def fill_selectors_for_items(html, items, get_css_selector_from_text_value_element):
     for item in items:
-        # Берём ссылку на словарь с селекторами
-        selectors = item.get("_selectors", {})
+        # Если нет поля _selectors — создаём
+        selectors = {}
 
-        # Проходим по всем ключам, кроме служебных
+        # Проходим по всем ключам, кроме служебных и ссылки
         for key, value in item.items():
             if key.startswith("_") or key == "link":
                 continue  # пропускаем служебные поля
@@ -553,18 +548,21 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
             # Обрабатываем только строки
             if isinstance(value, str) and value.strip():
                 try:
-                    is_price = True if(key == "price" or key == "oldPrice") else False
-                    selector = get_css_selector_from_text_value_element(html, value, is_price = is_price)
-                    selectors[key] = selector
+                    is_price = key in ("price", "oldPrice")
+                    selector = get_css_selector_from_text_value_element(html, value, is_price=is_price)
+                    if selector:
+                        selectors[key] = selector
+                        print(f"🟩 Успешно нашли подходящий селектор для поля {key}")
+                    else:
+                        print(f"🟨 Обработали поле {key}, но не нашли для него селектора")
                 except Exception as e:
                     print(f"🟧 Ошибка при поиске селектора для {key}: {e}")
-
-            if(selector != ""): print(f"🟩 Успешно нашли селектор для поля {key}")
-            else: print(f"🟨 Обработали поле {key}, но не нашли для него селектора")
-            # print("")
+            else:
+                print(f"⬜ Пропускаем поле {key}: Не строка или пустое значение")
 
         # Записываем обратно
         item["_selectors"] = selectors
+
 
 
 fill_selectors_for_items(
