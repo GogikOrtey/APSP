@@ -5,6 +5,7 @@ from addedFunc import get_html
 from addedFunc import ErrorHandler
 from bs4 import BeautifulSoup
 from lxml import html as html_lx
+from pprint import pprint
 import requests
 import json
 import re
@@ -531,26 +532,54 @@ def handle_selector_price(html, finding_element):
 # TODO Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
 
 
-# substring = "Makita"
-substring_brand = data_input_table["links"]["simple"][0]["brand"]
-substring_name = data_input_table["links"]["simple"][0]["name"]
-# substring_price = data_input_table["links"]["simple"][0]["price"]
-substring_price = "10 320"
+# # substring = "Makita"
+# substring_brand = data_input_table["links"]["simple"][0]["brand"]
+# substring_name = data_input_table["links"]["simple"][0]["name"]
+# # substring_price = data_input_table["links"]["simple"][0]["price"]
+# substring_price = "10 320"
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-print("")
-print(f"🟩 selector_result = {selector_result}")
-
-
+# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
+# Обработчик: Находит css селекторы для каждого элемента
+def fill_selectors_for_items(html, items, get_css_selector_from_text_value_element):
+    for item in items:
+        # Берём ссылку на словарь с селекторами
+        selectors = item.get("_selectors", {})
+
+        # Проходим по всем ключам, кроме служебных
+        for key, value in item.items():
+            if key.startswith("_") or key == "link":
+                continue  # пропускаем служебные поля
+
+            # Обрабатываем только строки
+            if isinstance(value, str) and value.strip():
+                try:
+                    is_price = True if(key == "price" or key == "oldPrice") else False
+                    selector = get_css_selector_from_text_value_element(html, value, is_price = is_price)
+                    selectors[key] = selector
+                except Exception as e:
+                    print(f"🟧 Ошибка при поиске селектора для {key}: {e}")
+
+            print(f"🟩🟩🟩 Успешно нашли селектор для поля {key}")
+            print("")
+            print("")
+
+        # Записываем обратно
+        item["_selectors"] = selectors
 
 
+fill_selectors_for_items(
+    html,
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
 
-
-
+print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
 
 
 
