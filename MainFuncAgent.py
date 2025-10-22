@@ -54,7 +54,35 @@ data_input_table = {
                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
                 "price": "10 320",
                 "brand": "Аntika",
-                "inStock": True,
+                "inStock": "В наличии",
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+                "name": "Опора ППРС D25 в Екатеринбурге",
+                "price": "5",
+                "brand": "",
+                "inStock": "В наличии",
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+                "name": "Заглушка (D20) в Екатеринбурге",
+                "price": "4",
+                "brand": "MeerPlast",
+                "inStock": "В наличии",
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+                "name": "Крестовина 20 ППРС в Екатеринбурге",
+                "price": "16",
+                "brand": "MeerPlast",
+                "inStock": "В наличии",
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+                "price": "102",
+                "brand": "MeerPlast",
+                "inStock": "В наличии",
             }
         ]
     },
