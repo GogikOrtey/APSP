@@ -2,6 +2,7 @@
 
 from addedFunc import sendMessageToYandexGPT
 from addedFunc import get_html
+from addedFunc import find_contexts
 from addedFunc import ErrorHandler
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
@@ -121,37 +122,11 @@ else:
 
 
 
-# Находит и возвращает все фрагменты подстроки в html
-def find_contexts(text: str, substring: str, context_size: int = 300) -> list[str]:
-    """
-    Находит все вхождения `substring` в `text` и возвращает список
-    контекстов (по `context_size` символов до и после совпадения).
-    Если контексты перекрываются — объединяет их.
-    """
-    results = []
-    substring = re.escape(substring)  # экранируем спецсимволы
-    matches = list(re.finditer(substring, text, flags=re.IGNORECASE))
-
-    for match in matches:
-        start = max(0, match.start() - context_size)
-        end = min(len(text), match.end() + context_size)
-
-        # Проверяем, не пересекается ли с уже добавленным результатом
-        if results and start <= results[-1][1]:
-            # объединяем с предыдущим фрагментом
-            prev_start, prev_end = results[-1]
-            results[-1] = (prev_start, max(prev_end, end))
-        else:
-            results.append((start, end))
-
-    # формируем итоговые куски текста
-    contexts = [text[s:e] for s, e in results]
-    return contexts
 
 
 
 
-
+# Находит и возвращает css селекторы элементов по содержимому
 def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
     def get_css_path(element):
         path = []
@@ -179,7 +154,7 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
     soup = BeautifulSoup(html, "html.parser")
     selectors = []
 
-    # 🔹 Этап 1. Прямой поиск (строгий / частичный)
+    # Этап 1. Прямой поиск (строгий / частичный)
     for el in soup.find_all(True):
         element_text = el.get_text(strip=True)
         if element_text:
@@ -204,7 +179,7 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
                     else:
                         return selector
 
-    # 🔹 Этап 2. Нестрогий (fuzzy) поиск
+    # Этап 2. Нестрогий (fuzzy) поиск
     if not selectors:
         threshold = 0.7
         for el in soup.find_all(True):
@@ -279,80 +254,8 @@ def get_element_from_selector(html, selector):
 
 
 
-
-def _split_selector_preserving_brackets(selector: str):
-    """
-    Разбивает селектор по '>' но игнорирует '>' внутри [], (), '' и "".
-    Возвращает список звеньев (строк) без лишних пробелов по краям.
-    """
-    parts = []
-    buf = []
-    bracket_sq = 0  # []
-    bracket_par = 0 # ()
-    in_single = False
-    in_double = False
-
-    i = 0
-    while i < len(selector):
-        ch = selector[i]
-
-        # переключение состояния строк
-        if ch == "'" and not in_double:
-            in_single = not in_single
-            buf.append(ch)
-            i += 1
-            continue
-        if ch == '"' and not in_single:
-            in_double = not in_double
-            buf.append(ch)
-            i += 1
-            continue
-
-        if not in_single and not in_double:
-            if ch == '[':
-                bracket_sq += 1
-                buf.append(ch)
-                i += 1
-                continue
-            if ch == ']':
-                if bracket_sq > 0:
-                    bracket_sq -= 1
-                buf.append(ch)
-                i += 1
-                continue
-            if ch == '(':
-                bracket_par += 1
-                buf.append(ch)
-                i += 1
-                continue
-            if ch == ')':
-                if bracket_par > 0:
-                    bracket_par -= 1
-                buf.append(ch)
-                i += 1
-                continue
-
-        # разделитель '>' только если мы не внутри скобок/строк
-        if ch == '>' and not in_single and not in_double and bracket_sq == 0 and bracket_par == 0:
-            part = ''.join(buf).strip()
-            if part != '':
-                parts.append(part)
-            buf = []
-            # пропускаем возможные пробелы вокруг >
-            i += 1
-            # skip following spaces
-            while i < len(selector) and selector[i].isspace():
-                i += 1
-            continue
-
-        buf.append(ch)
-        i += 1
-
-    last = ''.join(buf).strip()
-    if last != '':
-        parts.append(last)
-    return parts
-
+# Дистилляция пути css селектора
+# Принимает полный и точный селектор, очищает, и возвращает сокращённый
 def simplify_selector_keep_value(html: str, selector: str, get_element_from_selector):
     """
     Пытается удалить ненужные звенья в селекторе (слева направо).
@@ -363,6 +266,80 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
       - selector: исходный строгий селектор (через '>')
       - get_element_from_selector: функция (html, selector) -> value (строка)
     """
+
+    def _split_selector_preserving_brackets(selector: str):
+        """
+        Разбивает селектор по '>' но игнорирует '>' внутри [], (), '' и "".
+        Возвращает список звеньев (строк) без лишних пробелов по краям.
+        """
+        parts = []
+        buf = []
+        bracket_sq = 0  # []
+        bracket_par = 0 # ()
+        in_single = False
+        in_double = False   
+
+        i = 0
+        while i < len(selector):
+            ch = selector[i]    
+
+            # переключение состояния строк
+            if ch == "'" and not in_double:
+                in_single = not in_single
+                buf.append(ch)
+                i += 1
+                continue
+            if ch == '"' and not in_single:
+                in_double = not in_double
+                buf.append(ch)
+                i += 1
+                continue    
+
+            if not in_single and not in_double:
+                if ch == '[':
+                    bracket_sq += 1
+                    buf.append(ch)
+                    i += 1
+                    continue
+                if ch == ']':
+                    if bracket_sq > 0:
+                        bracket_sq -= 1
+                    buf.append(ch)
+                    i += 1
+                    continue
+                if ch == '(':
+                    bracket_par += 1
+                    buf.append(ch)
+                    i += 1
+                    continue
+                if ch == ')':
+                    if bracket_par > 0:
+                        bracket_par -= 1
+                    buf.append(ch)
+                    i += 1
+                    continue    
+
+            # разделитель '>' только если мы не внутри скобок/строк
+            if ch == '>' and not in_single and not in_double and bracket_sq == 0 and bracket_par == 0:
+                part = ''.join(buf).strip()
+                if part != '':
+                    parts.append(part)
+                buf = []
+                # пропускаем возможные пробелы вокруг >
+                i += 1
+                # skip following spaces
+                while i < len(selector) and selector[i].isspace():
+                    i += 1
+                continue    
+
+            buf.append(ch)
+            i += 1  
+
+        last = ''.join(buf).strip()
+        if last != '':
+            parts.append(last)
+        return parts
+
     # начальная проверка: получаем исходное значение
     try:
         original_value = get_element_from_selector(html, selector)

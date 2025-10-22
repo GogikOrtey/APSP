@@ -118,3 +118,34 @@ class ErrorHandler(Exception):
 # raise ErrorHandler("Кастомное исключение")           # без кода
 # raise ErrorHandler("Кастомное исключение", 1)      # с числовым кодом
 # raise ErrorHandler("Кастомное исключение", "2-1")    # с текстовым кодом
+
+
+
+# Находит и возвращает все фрагменты подстроки в html
+# Сейчас используется только для тестов
+# Но писалось для извлечения малого контектса для YandexGPT
+def find_contexts(text: str, substring: str, context_size: int = 300) -> list[str]:
+    """
+    Находит все вхождения `substring` в `text` и возвращает список
+    контекстов (по `context_size` символов до и после совпадения).
+    Если контексты перекрываются — объединяет их.
+    """
+    results = []
+    substring = re.escape(substring)  # экранируем спецсимволы
+    matches = list(re.finditer(substring, text, flags=re.IGNORECASE))
+
+    for match in matches:
+        start = max(0, match.start() - context_size)
+        end = min(len(text), match.end() + context_size)
+
+        # Проверяем, не пересекается ли с уже добавленным результатом
+        if results and start <= results[-1][1]:
+            # объединяем с предыдущим фрагментом
+            prev_start, prev_end = results[-1]
+            results[-1] = (prev_start, max(prev_end, end))
+        else:
+            results.append((start, end))
+
+    # формируем итоговые куски текста
+    contexts = [text[s:e] for s, e in results]
+    return contexts
