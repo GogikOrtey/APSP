@@ -10,7 +10,7 @@ import requests
 import json
 import re
 
-
+isPrint = False
 
 
 
@@ -350,7 +350,7 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
 # Основная функция: Получает css селектор, по текстовому соержанию элемента
 def get_css_selector_from_text_value_element(html, finding_element, is_price = False):
     print("")
-    print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
+    if isPrint: print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
     if(is_price):
         # Для извлечения price и oldPrice - отдельный отбработчик
         all_selectors = handle_selector_price(html, finding_element)
@@ -358,7 +358,7 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
         all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
 
     if not all_selectors:
-        print("🟡 Не найдено ни одного подходящего селектора")
+        if isPrint: print("🟡 Не найдено ни одного подходящего селектора")
         return ""
 
     print(f"Найдено {len(all_selectors)} возможных селекторов")
@@ -367,22 +367,22 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
 
     # Проверяем каждый селектор
     for selector in all_selectors:
-        print("")
-        print(f"🟢 Проверка селектора: {selector}")
+        if isPrint: print("")
+        if isPrint: print(f"🟢 Проверка селектора: {selector}")
         result_text = get_element_from_selector(html, selector)
 
         if result_text == "":
-            print("❌ Элемент по селектору не найден")
+            if isPrint: print("❌ Элемент по селектору не найден")
             continue
 
         # Проверяем наличие подстроки — строгое совпадение по содержанию
         if finding_element.strip() in result_text.strip():
             match_score = 1.0
-            print(f"✅ Строгое совпадение: [{result_text}]")
+            if isPrint: print(f"✅ Строгое совпадение: [{result_text}]")
         else:
             # Если нет прямого вхождения — оцениваем схожесть
             match_score = compute_match_score(result_text, finding_element)
-            print(f"⚪ Совпадение {match_score*100:.1f}%: [{result_text}]")
+            if isPrint: print(f"⚪ Совпадение {match_score*100:.1f}%: [{result_text}]")
 
         valid_selectors.append({
             "selector": selector,
@@ -392,7 +392,7 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
 
     # Если ни один не подошёл
     if not valid_selectors:
-        print("🔴 Не найдено корректных селекторов")
+        if isPrint: print("🔴 Не найдено корректных селекторов")
         return ""
 
     # Сортируем:
@@ -401,8 +401,8 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
     valid_selectors.sort(key=lambda x: (-x["score"], len(x["selector"])))
 
     best = valid_selectors[0]
-    print("")
-    print(f"🏆 Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
+    if isPrint: print("")
+    if isPrint: print(f"🏆 Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
 
     # Дистилляция пути
     # result_distill_selector = distill_selector(html, best["selector"], get_element_from_selector, finding_element)
@@ -423,13 +423,6 @@ def compute_match_score(found_text, target_text):
     common = sum(1 for a, b in zip(found_text, target_text) if a == b)
     score = common / max(len(target_text), len(found_text))
     return score
-
-
-
-
-
-
-
 
 
 
@@ -556,6 +549,7 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
             if key.startswith("_") or key == "link":
                 continue  # пропускаем служебные поля
 
+            selector = ""
             # Обрабатываем только строки
             if isinstance(value, str) and value.strip():
                 try:
@@ -565,9 +559,9 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
                 except Exception as e:
                     print(f"🟧 Ошибка при поиске селектора для {key}: {e}")
 
-            print(f"🟩🟩🟩 Успешно нашли селектор для поля {key}")
-            print("")
-            print("")
+            if(selector != ""): print(f"🟩 Успешно нашли селектор для поля {key}")
+            else: print(f"🟨 Обработали поле {key}, но не нашли для него селектора")
+            # print("")
 
         # Записываем обратно
         item["_selectors"] = selectors
