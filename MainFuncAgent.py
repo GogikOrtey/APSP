@@ -148,6 +148,21 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
     return contexts
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Находит и возвращает css селектор(ы) элемента(ов) по содержимому
 def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
     # Построение пути css селектора для данного элемента
@@ -451,6 +466,8 @@ def compute_match_score(found_text, target_text):
 # Извлекает селекторы цены
 # Перед этим очистив html от мусорных спецсимволов
 def handle_selector_price(html, finding_element):
+    # TODO Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
+
     # 1. Очистка HTML
     def clean_html(text: str) -> str:
         text = text.replace("&nbsp;", " ").replace("\xa0", " ")
@@ -544,20 +561,61 @@ def handle_selector_price(html, finding_element):
 
 
 
-# TODO Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
 
 
-# # substring = "Makita"
-# substring_brand = data_input_table["links"]["simple"][0]["brand"]
-# substring_name = data_input_table["links"]["simple"][0]["name"]
-# # substring_price = data_input_table["links"]["simple"][0]["price"]
-# substring_price = "10 320"
+# isPrint = True
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# html = get_html( data_input_table["links"]["simple"][4]["link"])
+# # print(html[:500])
+
+# substring_brand = data_input_table["links"]["simple"][4]["brand"]
+# substring_name = data_input_table["links"]["simple"][4]["name"]
+# substring_price = data_input_table["links"]["simple"][4]["price"]
+
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 # print("")
 # print(f"🟩 selector_result = {selector_result}")
+
+
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -566,6 +624,7 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
     for item in items:
         # Если нет поля _selectors — создаём
         selectors = {}
+        html = get_html(item["link"])
 
         # Проходим по всем ключам, кроме служебных и ссылки
         for key, value in item.items():
@@ -587,6 +646,7 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
                     print(f"🟧 Ошибка при поиске селектора для {key}: {e}")
             else:
                 print(f"⬜ Пропускаем поле {key}: Не строка или пустое значение")
+        print("_______________________")
 
         # Записываем обратно
         item["_selectors"] = selectors
