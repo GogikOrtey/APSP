@@ -216,20 +216,6 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Получает и возвращает значение элемента по селектору
 def get_element_from_selector(html, selector):
     tree = html_lx.fromstring(html)
@@ -401,6 +387,8 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
     if(is_price):
         # Для извлечения price и oldPrice - отдельный отбработчик
         all_selectors = handle_selector_price(html, finding_element)
+    elif finding_element.strip().lower() == "в наличии":
+        all_selectors = find_text_selector(html, finding_element, exact=True, return_all_selectors=True)
     else:
         all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
 
@@ -573,28 +561,28 @@ def handle_selector_price(html, finding_element):
 
 
 
-isPrint = True
+# isPrint = True
 
-elem_number = 0
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-print(html[:500])
+# elem_number = 0
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# print(html[:500])
 
-substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-substring_stock = data_input_table["links"]["simple"][elem_number]["inStock"]
+# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# substring_stock = data_input_table["links"]["simple"][elem_number]["inStock"]
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-selector_result = get_css_selector_from_text_value_element(html, substring_stock)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-print("")
-print(f"🟩 selector_result = {selector_result}")
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# selector_result = get_css_selector_from_text_value_element(html, substring_stock)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
-# # Получаем куски по подстроке
-# result = find_contexts(html, substring_name)
-# print(result)
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
 
 
 
@@ -666,13 +654,13 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
 
 
 
-# fill_selectors_for_items(
-#     html,
-#     data_input_table["links"]["simple"],
-#     get_css_selector_from_text_value_element
-# )
+fill_selectors_for_items(
+    html,
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
 
-# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
+print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
 
 
 
