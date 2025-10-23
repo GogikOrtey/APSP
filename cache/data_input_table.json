@@ -6,12 +6,12 @@
                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
                 "price": "10 320",
                 "brand": "Аntika",
-                "inStock": "В наличии",
+                "stock": "В наличии",
                 "_selectors": {
                     "name": "#pagetitle",
                     "price": "div.catalog-element-panel-price-discount:nth-of-type(1)",
                     "brand": "div:nth-of-type(5) > meta:nth-of-type(4)[content]",
-                    "inStock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
+                    "stock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
                 }
             },
             {
@@ -19,11 +19,11 @@
                 "name": "Опора ППРС D25 в Екатеринбурге",
                 "price": "5",
                 "brand": "",
-                "inStock": "В наличии",
+                "stock": "В наличии",
                 "_selectors": {
                     "name": "#pagetitle",
                     "price": "#i-20-intec-universe-main-widget-form-5-1Gj5t7KajcNv[class]",
-                    "inStock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
+                    "stock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
                 }
             },
             {
@@ -31,12 +31,12 @@
                 "name": "Заглушка (D20) в Екатеринбурге",
                 "price": "4",
                 "brand": "MeerPlast",
-                "inStock": "В наличии",
+                "stock": "В наличии",
                 "_selectors": {
                     "name": "#pagetitle",
                     "price": "i.iblock-vote-rating-item.intec-ui-icon.intec-ui-icon-star-1:nth-of-type(4)[title]",
                     "brand": "div:nth-of-type(5) > meta:nth-of-type(4)[content]",
-                    "inStock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
+                    "stock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
                 }
             },
             {
@@ -44,12 +44,12 @@
                 "name": "Крестовина 20 ППРС в Екатеринбурге",
                 "price": "16",
                 "brand": "MeerPlast",
-                "inStock": "В наличии",
+                "stock": "В наличии",
                 "_selectors": {
                     "name": "#pagetitle",
                     "price": "#bx_3218110189_i-23-bitrix-news-list-default-7DqYycKlRukS_37378",
                     "brand": "div:nth-of-type(5) > meta:nth-of-type(4)[content]",
-                    "inStock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
+                    "stock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
                 }
             },
             {
@@ -57,12 +57,12 @@
                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
                 "price": "102",
                 "brand": "MeerPlast",
-                "inStock": "В наличии",
+                "stock": "В наличии",
                 "_selectors": {
                     "name": "#pagetitle",
                     "price": "div:nth-of-type(2) > meta:nth-of-type(1)[content]",
                     "brand": "div:nth-of-type(5) > meta:nth-of-type(4)[content]",
-                    "inStock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
+                    "stock": "div.catalog-element-panel-quantity-wrap:nth-of-type(2)"
                 }
             }
         ]
