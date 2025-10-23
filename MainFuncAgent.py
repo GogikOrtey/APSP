@@ -559,7 +559,7 @@ def handle_selector_price(html, finding_element):
 
 
 
-
+### Тест одного селектора
 
 # isPrint = True
 
@@ -668,26 +668,63 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
         item["_selectors"] = selectors
 
 
+### Тест всех селекторов
 
-fill_selectors_for_items(
-    html,
-    data_input_table["links"]["simple"],
-    get_css_selector_from_text_value_element
-)
+
+# fill_selectors_for_items(
+#     html,
+#     data_input_table["links"]["simple"],
+#     get_css_selector_from_text_value_element
+# )
+
+# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
+# # print(json.dumps(content_html, indent=4, ensure_ascii=False))
+
+
+
+
+
+#  Сохраняем эти 2 json локально (по большей части для теста)
+
+# import os
+
+# # Создаём папку "cache", если её нет
+# os.makedirs("cache", exist_ok=True)
+
+# # --- Сохранение в JSON ---
+# with open("cache/data_input_table.json", "w", encoding="utf-8") as f:
+#     json.dump(data_input_table, f, ensure_ascii=False, indent=4)
+
+# with open("cache/content_html.json", "w", encoding="utf-8") as f:
+#     json.dump(content_html, f, ensure_ascii=False, indent=4)
+
+# print("✅ Файлы сохранены")
+
+
+
+
+
+
+
+
+
+
+
+### Загрузка файлов обратно
+
+with open("cache/data_input_table.json", "r", encoding="utf-8") as f:
+    data_input_table = json.load(f)
+
+with open("cache/content_html.json", "r", encoding="utf-8") as f:
+    content_html = json.load(f)
+
+print("✅ Файлы загружены обратно")
+# print("data_input_table:", data_input_table)
+# print("content_html:", content_html)
+
 
 print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
-
-
-
-
-
-
-
-
-
-
-
-
+# print(json.dumps(content_html, indent=4, ensure_ascii=False))
 
 
 
@@ -940,12 +977,47 @@ def resolve_selectors_across_examples(
 
 
 
+def make_html_fetcher_from_cache(content_html):
+    """
+    Возвращает функцию html_fetcher(link),
+    которая достаёт html_content из заранее сохранённого словаря content_html
+    """
+    html_map = {}
+    for group in content_html.values():
+        for item in group:
+            link = item.get("link", "").strip()
+            html_text = item.get("html_content", "")
+            if link and html_text:
+                html_map[link] = html_text
+
+    def fetcher(url):
+        if url in html_map:
+            return html_map[url]
+        raise ValueError(f"HTML для {url} не найден в content_html")
+
+    return fetcher
 
 
 
 
 
 
+
+
+
+# создаём html_fetcher на основе кеша
+html_fetcher = make_html_fetcher_from_cache(content_html)
+
+# вызываем основной алгоритм
+result = resolve_selectors_across_examples(
+    data_input_table["links"]["simple"],
+    html_fetcher=html_fetcher,
+    verbose=True
+)
+
+print("✅ Итоговые селекторы:")
+for field, sels in result["result_selectors"].items():
+    print(f" {field}: {sels}")
 
 
 
