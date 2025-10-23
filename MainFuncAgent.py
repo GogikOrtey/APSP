@@ -696,7 +696,7 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
                             html, value, is_price=is_price, is_exact=is_exact
                         )
                         if selector:
-                            print(f"🟩 Найден селектор для поля {key} (попытка {attempt}, exact={is_exact})")
+                            print(f"🟩 Найден селектор для поля {key}")
                             selectors[key] = selector
                             break  # если нашли — выходим из цикла
                         elif attempt == 1:
