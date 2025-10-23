@@ -57,7 +57,7 @@ isPrint = False
 
 
 
-# Данные извлечённые из таблицы, например:
+# # Данные извлечённые из таблицы, например:
 # data_input_table = {
 #     "links": {
 #         "simple": [
@@ -380,7 +380,7 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
     # Если после удаления результат совпадает с original_value — применяем удаление и
     # остаёмся на том же i (т.к. дальше сдвинулись элементы).
     # Иначе переходим к следующему i.
-    while i < len(parts):
+    while i < len(parts) - 1:
         # нельзя удалить все звенья — должен остаться хотя бы одно
         if len(parts) == 1:
             break
@@ -416,13 +416,13 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
 
 
 # Основная функция: Получает css селектор, по текстовому содержанию элемента
-def get_css_selector_from_text_value_element(html, finding_element, is_price = False):
+def get_css_selector_from_text_value_element(html, finding_element, is_price = False, is_exact = False):
     print("")
     if isPrint: print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
     if(is_price):
         # Для извлечения price и oldPrice - отдельный отбработчик
         all_selectors = handle_selector_price(html, finding_element)
-    elif finding_element.strip().lower() == "в наличии":
+    elif finding_element.strip().lower() == "в наличии" or is_exact:
         all_selectors = find_text_selector(html, finding_element, exact=True, return_all_selectors=True)
     else:
         all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
@@ -594,7 +594,7 @@ def handle_selector_price(html, finding_element):
 
 
 
-### Тест одного селектора с одной страницы
+# ## Тест одного селектора с одной страницы
 
 # isPrint = True
 
@@ -605,11 +605,11 @@ def handle_selector_price(html, finding_element):
 # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
 # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
 # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# substring_stock = data_input_table["links"]["simple"][elem_number]["inStock"]
+# substring_stock = data_input_table["links"]["simple"][elem_number]["stock"]
 
 # # selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_stock)
+# selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_stock)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 # print("")
 # print(f"🟩 selector_result = {selector_result}")
@@ -683,23 +683,35 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
         for key, value in item.items():
             if key.startswith("_") or key == "link":
                 continue  # пропускаем служебные поля
-
+            
             selector = ""
             # Обрабатываем только строки
             if isinstance(value, str) and value.strip():
                 try:
                     is_price = key in ("price", "oldPrice")
-                    selector = get_css_selector_from_text_value_element(html, value, is_price=is_price)
-                    if selector:
-                        selectors[key] = selector
-                        print(f"🟩 Успешно нашли подходящий селектор для поля {key}")
-                    else:
-                        print(f"🟨 Обработали поле {key}, но не нашли для него селектора")
+
+                    # Две попытки: сначала exact=True, потом exact=False
+                    for attempt, is_exact in enumerate([True, False], start=1):
+                        selector = get_css_selector_from_text_value_element(
+                            html, value, is_price=is_price, is_exact=is_exact
+                        )
+                        if selector:
+                            print(f"🟩 Найден селектор для поля {key} (попытка {attempt}, exact={is_exact})")
+                            selectors[key] = selector
+                            break  # если нашли — выходим из цикла
+                        elif attempt == 1:
+                            print(f"🟨 Не нашли при exact=True, пробуем с exact=False...")
+
+                    if not selector:
+                        print(f"🟧 Не удалось найти селектор для поля {key} даже при exact=False")
+
                 except Exception as e:
-                    print(f"🟧 Ошибка при поиске селектора для {key}: {e}")
+                    print(f"🟥 Ошибка при поиске селектора для {key}: {e}")
             else:
                 print(f"⬜ Пропускаем поле {key}: Не строка или пустое значение")
+
         print("_______________________")
+
 
         # Записываем обратно
         item["_selectors"] = selectors
@@ -721,21 +733,21 @@ print_json(data_input_table["links"]["simple"])
 
 
 
-#  Сохраняем эти 2 json локально (по большей части для теста)
+# #  Сохраняем эти 2 json локально (по большей части для теста)
 
-import os
+# import os
 
-# Создаём папку "cache", если её нет
-os.makedirs("cache", exist_ok=True)
+# # Создаём папку "cache", если её нет
+# os.makedirs("cache", exist_ok=True)
 
-# --- Сохранение в JSON ---
-with open("cache/data_input_table.json", "w", encoding="utf-8") as f:
-    json.dump(data_input_table, f, ensure_ascii=False, indent=4)
+# # --- Сохранение в JSON ---
+# with open("cache/data_input_table.json", "w", encoding="utf-8") as f:
+#     json.dump(data_input_table, f, ensure_ascii=False, indent=4)
 
-with open("cache/content_html.json", "w", encoding="utf-8") as f:
-    json.dump(content_html, f, ensure_ascii=False, indent=4)
+# with open("cache/content_html.json", "w", encoding="utf-8") as f:
+#     json.dump(content_html, f, ensure_ascii=False, indent=4)
 
-print("✅ Файлы сохранены")
+# print("✅ Файлы сохранены")
 
 
 
@@ -1033,7 +1045,7 @@ def select_best_selectors(input_data, content_html):
 
 
 
-
+## Вернуть, это на данный момент конечная точка программы
 
 result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
