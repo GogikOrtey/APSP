@@ -1084,6 +1084,11 @@ print_json(result_select_best_selectors["result_selectors"])
 """
 
 После этого:
+
+
+...
+
+
 Нужно будет добавить извлечение полей из excel файла
 Добавить бота в Тг
 
