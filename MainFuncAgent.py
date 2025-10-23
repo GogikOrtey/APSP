@@ -617,6 +617,14 @@ def handle_selector_price(html, finding_element):
 
 
 
+content_html = {
+    "simple": [
+        # {
+        #     "link": "",
+        #     "html_content": ""  
+        # },    
+    ]
+}
 
 
 
@@ -626,6 +634,13 @@ def fill_selectors_for_items(html, items, get_css_selector_from_text_value_eleme
         # Если нет поля _selectors — создаём
         selectors = {}
         html = get_html(item["link"])
+
+        # Храню html в отдельном массиве
+        new_item = {
+            "link": item["link"],
+            "html_content": html
+        }
+        content_html["simple"].append(new_item)
 
         # Проходим по всем ключам, кроме служебных и ссылки
         for key, value in item.items():
@@ -669,10 +684,313 @@ print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=Fal
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+
+Дальше нужно собрать все селекторы в один
+Проверить на всех страницах
+И вывести как результат
+
+
+Если селекторов несколько разных - то как-то надо их отсортировать, и проверять с начала списка
+если один первый селектор достаёт корректные значения для всех страниц - то его и используем. 
+Если нет - то смотрим следующий
+Если вообще не находим такого, то пробуем с комбинациями по 2, 3, и далее до полного количества примеров
+Но если кол-во необходимых селекторов будет = кол-ву примеров, то дропаем в ошибку, это неверный селектор
+
+
+
+"""
+
+
+### Уже есть код, нужно вставить и протестировать
+### Возможно, в другом файле
+
+
+
+
+
+
+
+import re
+import itertools
+from collections import Counter, defaultdict
+from typing import Callable, Dict, List, Any, Iterable, Tuple
+import requests
+
+
+def normalize_text(s: str) -> str:
+    if s is None:
+        return ""
+    s = re.sub(r"\s+", " ", s).strip()
+    return s.lower()
+
+
+def normalize_price(s: str) -> str:
+    if s is None:
+        return ""
+    # извлечь цифры и разделители
+    digits = re.findall(r"[\d]+", s.replace(",", ""))
+    return "".join(digits)
+
+
+def extract_using_selector(tree: html_lx.HtmlElement, selector: str) -> str:
+    """
+    Пытается выполнить CSS селектор на дереве lxml и вернуть строковое значение.
+    Поддерживает селекторы, которые указывают атрибут в конце вроде "[content]" или "[class]".
+    Если несколько элементов — возвращает первый непустой результат.
+    """
+    selector = selector.strip()
+    # попытка выделить атрибут в квадратных скобках в конце
+    attr_match = re.search(r"\[([a-zA-Z0-9_\-:]+)\]\s*$", selector)
+    attr = None
+    if attr_match:
+        attr = attr_match.group(1)
+        # уберём этот кусок для передачи cssselect, если он стоял в конце как самостоятельный фрагмент
+        # (но учти: селектор может легитимно содержать [..] внутри — мы учитываем только последний)
+        # попробуем применить целиком сначала (на случай, если это часть сложного селектора)
+        try:
+            elems = tree.cssselect(selector)
+        except Exception:
+            # попробуем удалить последний [attr]
+            selector_no_attr = selector[:attr_match.start()].rstrip()
+            try:
+                elems = tree.cssselect(selector_no_attr)
+            except Exception:
+                elems = []
+    else:
+        try:
+            elems = tree.cssselect(selector)
+        except Exception:
+            elems = []
+
+    for el in elems:
+        # если указали attr и элемент имеет его — возвращаем
+        if attr:
+            val = el.get(attr)
+            if val:
+                return val.strip()
+        # если элемент — meta or input, попробуем стандартные атрибуты
+        if el.tag in ("meta", "link", "img", "input"):
+            # common attrs
+            for a in ("content", "value", "alt", "src", "href", "data-src"):
+                v = el.get(a)
+                if v:
+                    return v.strip()
+        # иначе текстовое содержимое
+        text = el.text_content()
+        if text and text.strip():
+            return text.strip()
+    return ""
+
+
+def default_fetcher(url: str, timeout=10) -> str:
+    r = requests.get(url, timeout=timeout, headers={"User-Agent": "parser-bot/1.0"})
+    r.raise_for_status()
+    return r.text
+
+
+def score_selector(selector: str, count: int) -> float:
+    # чем чаще встречается и короче — тем лучше
+    return count / (1 + len(selector))
+
+
+def resolve_selectors_across_examples(
+    examples: List[Dict[str, Any]],
+    fields: Iterable[str] = ("name", "price", "brand", "inStock"),
+    html_fetcher: Callable[[str], str] = default_fetcher,
+    max_combination_size: int = None,
+    verbose: bool = True,
+) -> Dict[str, Any]:
+    """
+    examples: список примеров, каждый пример - dict с keys: link, поля и _selectors dict
+    возвращает: {
+        "result_selectors": {field: [selector(s) chosen as list])},
+        "report": {...}
+    }
+    """
+    # 1) Собираем селекторы по полям
+    selectors_by_field = defaultdict(list)
+    for ex in examples:
+        sdict = ex.get("_selectors", {})
+        for f in fields:
+            sel = sdict.get(f)
+            if sel:
+                selectors_by_field[f].append(sel.strip())
+
+    # уникализируем и считаем частоты
+    counters = {f: Counter(selectors_by_field[f]) for f in fields}
+    # сортировка кандидатов: по частоте desc, затем по длине asc
+    candidates = {}
+    for f, counter in counters.items():
+        items = list(counter.items())
+        items.sort(key=lambda t: (-t[1], len(t[0])))
+        candidates[f] = [it[0] for it in items]
+
+    if verbose:
+        print("Кандидаты по полям (в порядке приоритета):")
+        for f in fields:
+            print(f" - {f}: {len(candidates[f])} селекторов -> {candidates[f]}")
+
+    # 2) Подготовка html деревьев
+    trees = []
+    for ex in examples:
+        url = ex["link"]
+        html_text = html_fetcher(url)
+        tree = html_lx.fromstring(html_text)
+        trees.append((url, tree, ex))
+
+    # 3) Проверяльщик: функция, которая проверяет набор селекторов (комбинацию) для одного поля
+    def check_selector_set_for_field(field: str, sel_set: Tuple[str, ...]) -> bool:
+        # для каждой страницы должно быть, что хотя бы один селектор из sel_set извлечёт совпадающее с примером значение
+        for url, tree, ex in trees:
+            expected = ex.get(field, "")
+            extracted_any = ""
+            for s in sel_set:
+                got = extract_using_selector(tree, s)
+                if got:
+                    extracted_any = got
+                    break
+            # нормализация сравнения
+            if field == "price":
+                if normalize_price(expected) != normalize_price(extracted_any):
+                    if verbose:
+                        print(f"  [FAIL] {field} on {url}: expected '{expected}' got '{extracted_any}' using {sel_set}")
+                    return False
+            else:
+                if normalize_text(expected) != normalize_text(extracted_any):
+                    if verbose:
+                        print(f"  [FAIL] {field} on {url}: expected '{expected}' got '{extracted_any}' using {sel_set}")
+                    return False
+        if verbose:
+            print(f"  [OK] field {field} works with selectors {sel_set}")
+        return True
+
+    result_selectors = {}
+    report = {"tried": {}}
+
+    # лимит на размер комбинаций
+    n_examples = len(examples)
+    if max_combination_size is None:
+        max_combination_size = n_examples - 1  # если равен n_examples => ошибка по условию
+
+    for field in fields:
+        cand_list = candidates.get(field, [])
+        report["tried"][field] = {"singles": [], "combinations": []}
+
+        # сначала пробуем одиночные селекторы в порядке приоритета
+        found = False
+        for s in cand_list:
+            report["tried"][field]["singles"].append(s)
+            if check_selector_set_for_field(field, (s,)):
+                result_selectors[field] = [s]
+                found = True
+                break
+        if found:
+            continue
+
+        # если одиночные не прошли — пробуем комбинации размера 2..max_combination_size
+        # Перебираем комбинации из кандидатов (если кандидатов мало, то возможны все комбинации)
+        for size in range(2, max_combination_size + 1):
+            if size > len(cand_list):
+                break
+            if verbose:
+                print(f"Пробуем комбинации size={size} для поля {field} (всего {len(cand_list)} кандидатов)")
+            ok = False
+            # ограничим число комбинаций, чтобы не взорвать время: если кандидатов много — используем лучшую часть
+            max_cands_for_comb = 12
+            use_candidates = cand_list[:max_cands_for_comb] if len(cand_list) > max_cands_for_comb else cand_list
+            for combo in itertools.combinations(use_candidates, size):
+                report["tried"][field]["combinations"].append(combo)
+                if check_selector_set_for_field(field, combo):
+                    result_selectors[field] = list(combo)
+                    ok = True
+                    break
+            if ok:
+                found = True
+                break
+
+        if not found:
+            # если минимальный возмож размер равен числу примеров -> по твоей логике это ошибка
+            if max_combination_size >= n_examples:
+                raise RuntimeError(f"Для поля '{field}' не найден валидный набор селекторов; "
+                                   f"минимальный размер комбинации достиг {n_examples} — селекторы вероятно неверные.")
+            else:
+                # оставляем пустой и отчётим
+                result_selectors[field] = []
+                if verbose:
+                    print(f"[WARN] Для поля {field} не найден селектор(ы).")
+
+    return {"result_selectors": result_selectors, "report": report}
+
+
+
+
+
+
+
+
+
+
+
+
+# print(f"🔷🔷🔷 Сливаем селекторы в один")
+# res = resolve_selectors_across_examples(data_input_table["links"]["simple"], verbose=True)
+# print("Итоговые селекторы:")
+# print(res["result_selectors"])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 Дальше нужно будет проверить, что селекторы реально верные
-
-Возможно что-то поумать по поводу InStock, или закостылить и оставить на потом
 
 И далее уже выписывать сливку селекторов в один формат
 И там проверка, выбор лучших если одинаковые результаты, или комбинация, если разные
@@ -702,3 +1020,10 @@ print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=Fal
 
 
 
+"""
+
+После этого:
+Нужно будет добавить извлечение полей из excel файла
+Добавить бота в Тг
+
+"""
