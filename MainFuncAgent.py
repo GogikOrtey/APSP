@@ -58,42 +58,62 @@ isPrint = False
 
 
 # Данные извлечённые из таблицы, например:
+# data_input_table = {
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
+#                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
+#                 "price": "10 320",
+#                 "brand": "Аntika",
+#                 "stock": "В наличии",
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+#                 "name": "Опора ППРС D25 в Екатеринбурге",
+#                 "price": "5",
+#                 "brand": "",
+#                 "stock": "В наличии",
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+#                 "name": "Заглушка (D20) в Екатеринбурге",
+#                 "price": "4",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+#                 "name": "Крестовина 20 ППРС в Екатеринбурге",
+#                 "price": "16",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+#                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+#                 "price": "102",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
+
+
+
+
+# Данные с сайта 2
 data_input_table = {
     "links": {
         "simple": [
             {
-                "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
-                "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
-                "price": "10 320",
-                "brand": "Аntika",
-                "stock": "В наличии",
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
-                "name": "Опора ППРС D25 в Екатеринбурге",
-                "price": "5",
-                "brand": "",
-                "stock": "В наличии",
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-                "name": "Заглушка (D20) в Екатеринбурге",
-                "price": "4",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-                "name": "Крестовина 20 ППРС в Екатеринбурге",
-                "price": "16",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-                "price": "102",
-                "brand": "MeerPlast",
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+                "price": "16 125",
+                "article": "00017728",
+                "brand": "TRITON",
                 "stock": "В наличии",
             }
         ]
@@ -837,16 +857,6 @@ def select_best_selectors(input_data, content_html):
         # чем чаще встречается и короче — тем лучше
         return count / (1 + len(selector))
     
-
-
-
-
-    ### Нужно сделать получение полей динамическим
-
-
-
-
-
 
     def resolve_selectors_across_examples(
             examples: List[Dict[str, Any]],
