@@ -836,14 +836,34 @@ def select_best_selectors(input_data, content_html):
     def score_selector(selector: str, count: int) -> float:
         # чем чаще встречается и короче — тем лучше
         return count / (1 + len(selector))
+    
+
+
+
+
+    ### Нужно сделать получение полей динамическим
+
+
+
+
+
 
     def resolve_selectors_across_examples(
-        examples: List[Dict[str, Any]],
-        fields: Iterable[str] = ("name", "price", "brand", "inStock"),
-        html_fetcher: Callable[[str], str] = default_fetcher,
-        max_combination_size: int = None,
-        verbose: bool = True,
-    ) -> Dict[str, Any]:
+            examples: List[Dict[str, Any]],
+            fields: Iterable[str] = None,
+            html_fetcher: Callable[[str], str] = None,
+            max_combination_size: int = None,
+            verbose: bool = True,
+        ) -> Dict[str, Any]:
+
+        # Если fields не передан — определяем автоматически из примеров
+        if not fields:
+            if not examples:
+                raise ValueError("Список examples пуст — невозможно определить поля автоматически.")
+            fields = [key for key in examples[0].keys() if key != "link" and not key.startswith("_")]
+
+        if verbose:
+            print(f"Используемые поля: {fields}")
         """
         examples: список примеров, каждый пример - dict с keys: link, поля и _selectors dict
         возвращает: {
