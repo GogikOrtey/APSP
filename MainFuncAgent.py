@@ -114,7 +114,41 @@ data_input_table = {
                 "price": "16 125",
                 "article": "00017728",
                 "brand": "TRITON",
-                "stock": "В наличии",
+                # "stock": "В наличии",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+                "price": "9 900 руб.",
+                "article": "УТ000001951",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+                "price": "7 990 руб.",
+                "article": "УТ000006868",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+                "price": "24 820 руб.",
+                "article": "УТ000001271",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+                "price": "15 руб.",
+                "article": "00027670",
+                "brand": "MasterProf",
+                # Не в наличии
+                "imageLink": ""
             }
         ]
     },
@@ -398,7 +432,7 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
         if candidate_value == original_value:
             # удаление безопасно — применяем
             parts = candidate_parts
-            # НЕ инкрементируем i: нужно попытаться удалить новое звено на этой же позиции
+            # Не инкрементируем i: нужно попытаться удалить новое звено на этой же позиции
             # (поведение: удаляем как можно больше подряд)
             # но если i теперь == len(parts) (удалили последний) - цикл завершится naturally
             continue
@@ -717,7 +751,7 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
         item["_selectors"] = selectors
 
 
-### Тест всех селекторов
+### Получение всех селекторов
 
 
 fill_selectors_for_items(
@@ -1045,7 +1079,7 @@ def select_best_selectors(input_data, content_html):
 
 
 
-## Вернуть, это на данный момент конечная точка программы
+## На данный момент это конечная точка программы
 
 result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
@@ -1110,7 +1144,8 @@ print_json(result_select_best_selectors["result_selectors"])
 Протестировать на нескольких разных страницах 2го сайта
 Протестировать на разных других сайтах
 
-Подумать про то, как лучше собирать селектор InStock
+Подумать про то, как лучше собирать селектор InStock - это сложная задача, на потом
+Также с oldPrice - тоже сложная задача, тоже на пототом
 
 И далее нужно будет выписать вставку кода в шаблон
 
