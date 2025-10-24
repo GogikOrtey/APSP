@@ -201,133 +201,23 @@ check_avialible_html()
 
 
 
-# Находит и возвращает css селекторы элементов по содержимому
-def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
-    def get_css_path(element):
-        path = []
-        while element and element.name and element.name != "[document]":
-            selector = element.name
-            if element.has_attr("id"):
-                selector = f"#{element['id']}"
-                path.append(selector)
-                break
-            elif element.has_attr("class"):
-                selector += "." + ".".join(element["class"])
-            siblings = element.find_previous_siblings(element.name)
-            if siblings:
-                selector += f":nth-of-type({len(siblings) + 1})"
-            path.append(selector)
-            element = element.parent
-        return " > ".join(reversed(path))
-
-    def normalize_text(s):
-        return " ".join(s.split())
-
-    def similarity(a, b):
-        return SequenceMatcher(None, normalize_text(a), normalize_text(b)).ratio()
-
-    soup = BeautifulSoup(html, "html.parser")
-    selectors = []
-
-    # Этап 1. Прямой поиск (строгий / частичный)
-    for el in soup.find_all(True):
-        element_text = el.get_text(strip=True)
-        if element_text:
-            match = (text == element_text) if exact else (text in element_text)
-            if match:
-                selector = get_css_path(el)
-                if return_all_selectors:
-                    selectors.append(selector)
-                else:
-                    return selector
-
-        # Проверяем атрибуты
-        for attr_name, attr_val in el.attrs.items():
-            if isinstance(attr_val, list):
-                attr_val = " ".join(attr_val)
-            if isinstance(attr_val, str):
-                match = (text == attr_val.strip()) if exact else (text in attr_val)
-                if match:
-                    selector = get_css_path(el) + f"[{attr_name}]"
-                    if return_all_selectors:
-                        selectors.append(selector)
-                    else:
-                        return selector
-
-    # Этап 2. Нестрогий (fuzzy) поиск
-    if not selectors:
-        threshold = 0.7
-        for el in soup.find_all(True):
-            # Проверка текста элемента
-            element_text = el.get_text(strip=True)
-            if element_text:
-                score = similarity(text, element_text)
-                if score >= threshold:
-                    selector = get_css_path(el)
-                    if return_all_selectors:
-                        selectors.append(selector)
-                    else:
-                        return selector
-
-            # Проверка атрибутов
-            for attr_name, attr_val in el.attrs.items():
-                if isinstance(attr_val, list):
-                    attr_val = " ".join(attr_val)
-                if isinstance(attr_val, str):
-                    score = similarity(text, attr_val)
-                    if score >= threshold:
-                        selector = get_css_path(el) + f"[{attr_name}]"
-                        if return_all_selectors:
-                            selectors.append(selector)
-                        else:
-                            return selector
-
-    if return_all_selectors:
-        return selectors if selectors else None
-    return None
-
-
-
-
-
 # # Находит и возвращает css селекторы элементов по содержимому
 # def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
-#     def escape_attr_value(v: str):
-#         # Экранируем двойные кавычки внутри значения, чтобы безопасно помещать в "[attr="..."]"
-#         if '"' in v and "'" not in v:
-#             return f"'{v}'"
-#         # заменим управляющие пробелы на нормальные пробелы
-#         v = " ".join(v.split())
-#         return v.replace('"', '\\"')
-
 #     def get_css_path(element):
 #         path = []
-#         el = element
-#         while el and getattr(el, "name", None) and el.name != "[document]":
-#             selector = el.name
-#             if el.has_attr("id"):
-#                 selector = f"#{el['id']}"
+#         while element and element.name and element.name != "[document]":
+#             selector = element.name
+#             if element.has_attr("id"):
+#                 selector = f"#{element['id']}"
 #                 path.append(selector)
 #                 break
-#             elif el.has_attr("class"):
-#                 # объединяем классы в селектор
-#                 classes = ".".join([c for c in el.get("class", []) if c])
-#                 if classes:
-#                     selector = f"{selector}.{classes}"
-#             # посчитаем индекс среди однородных детей родителя (nth-of-type)
-#             parent = el.parent
-#             if parent and parent.find_all:
-#                 same_tag_siblings = [ch for ch in parent.find_all(el.name, recursive=False)]
-#                 if len(same_tag_siblings) > 1:
-#                     # найти позицию el среди них
-#                     index = 1
-#                     for i, ch in enumerate(same_tag_siblings, start=1):
-#                         if ch is el:
-#                             index = i
-#                             break
-#                     selector += f":nth-of-type({index})"
+#             elif element.has_attr("class"):
+#                 selector += "." + ".".join(element["class"])
+#             siblings = element.find_previous_siblings(element.name)
+#             if siblings:
+#                 selector += f":nth-of-type({len(siblings) + 1})"
 #             path.append(selector)
-#             el = el.parent
+#             element = element.parent
 #         return " > ".join(reversed(path))
 
 #     def normalize_text(s):
@@ -339,43 +229,32 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 #     soup = BeautifulSoup(html, "html.parser")
 #     selectors = []
 
-#     # --- Этап 1. Прямой поиск (строгий / частичный) ---
+#     # Этап 1. Прямой поиск (строгий / частичный)
 #     for el in soup.find_all(True):
 #         element_text = el.get_text(strip=True)
 #         if element_text:
 #             match = (text == element_text) if exact else (text in element_text)
 #             if match:
-#                 selector_path = get_css_path(el)
+#                 selector = get_css_path(el)
 #                 if return_all_selectors:
-#                     selectors.append(selector_path)
+#                     selectors.append(selector)
 #                 else:
-#                     return selector_path
+#                     return selector
 
 #         # Проверяем атрибуты
 #         for attr_name, attr_val in el.attrs.items():
-#             # привести список атрибутов к строке (class и т.п.)
 #             if isinstance(attr_val, list):
-#                 attr_val_str = " ".join(attr_val)
-#             else:
-#                 attr_val_str = str(attr_val)
+#                 attr_val = " ".join(attr_val)
+#             if isinstance(attr_val, str):
+#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
+#                 if match:
+#                     selector = get_css_path(el) + f"[{attr_name}]"
+#                     if return_all_selectors:
+#                         selectors.append(selector)
+#                     else:
+#                         return selector
 
-#             if not isinstance(attr_val_str, str):
-#                 continue
-
-#             match = (text == attr_val_str.strip()) if exact else (text in attr_val_str)
-#             if match:
-#                 # Формируем более точный селектор по атрибуту, а не по nth-of-type
-#                 escaped = escape_attr_value(attr_val_str.strip())
-#                 attr_selector = f"{el.name}[{attr_name}=\"{escaped}\"]" if '"' not in escaped else f"{el.name}[{attr_name}={escaped}]"
-#                 full_path = get_css_path(el)
-#                 if return_all_selectors:
-#                     # вернём оба варианта (атрибутный и полный путь)
-#                     selectors.append(attr_selector)
-#                     selectors.append(full_path)
-#                 else:
-#                     return attr_selector
-
-#     # --- Этап 2. Нестрогий (fuzzy) поиск ---
+#     # Этап 2. Нестрогий (fuzzy) поиск
 #     if not selectors:
 #         threshold = 0.7
 #         for el in soup.find_all(True):
@@ -384,32 +263,24 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 #             if element_text:
 #                 score = similarity(text, element_text)
 #                 if score >= threshold:
-#                     selector_path = get_css_path(el)
+#                     selector = get_css_path(el)
 #                     if return_all_selectors:
-#                         selectors.append(selector_path)
+#                         selectors.append(selector)
 #                     else:
-#                         return selector_path
+#                         return selector
 
 #             # Проверка атрибутов
 #             for attr_name, attr_val in el.attrs.items():
 #                 if isinstance(attr_val, list):
-#                     attr_val_str = " ".join(attr_val)
-#                 else:
-#                     attr_val_str = str(attr_val)
-
-#                 if not isinstance(attr_val_str, str):
-#                     continue
-
-#                 score = similarity(text, attr_val_str)
-#                 if score >= threshold:
-#                     escaped = escape_attr_value(attr_val_str.strip())
-#                     attr_selector = f"{el.name}[{attr_name}=\"{escaped}\"]" if '"' not in escaped else f"{el.name}[{attr_name}={escaped}]"
-#                     full_path = get_css_path(el)
-#                     if return_all_selectors:
-#                         selectors.append(attr_selector)
-#                         selectors.append(full_path)
-#                     else:
-#                         return attr_selector
+#                     attr_val = " ".join(attr_val)
+#                 if isinstance(attr_val, str):
+#                     score = similarity(text, attr_val)
+#                     if score >= threshold:
+#                         selector = get_css_path(el) + f"[{attr_name}]"
+#                         if return_all_selectors:
+#                             selectors.append(selector)
+#                         else:
+#                             return selector
 
 #     if return_all_selectors:
 #         return selectors if selectors else None
@@ -417,6 +288,134 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 
 
 
+
+
+# Находит и возвращает css селекторы элементов по содержимому
+def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
+    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
+    PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
+
+    def get_css_path(element):
+        path = []
+        while element and element.name and element.name != "[document]":
+            selector = element.name
+
+            # Если есть id — это всегда уникально
+            if element.has_attr("id"):
+                selector = f"#{element['id']}"
+                path.append(selector)
+                break
+
+            # Добавляем классы, если есть
+            if element.has_attr("class"):
+                selector += "." + ".".join(element["class"])
+
+            # Если элемент имеет уникальные/значимые атрибуты — пропускаем nth-of-type
+            has_significant_attr = any(
+                attr in PRIORITY_ATTRS or attr not in IGNORED_ATTRS
+                for attr in element.attrs.keys()
+            )
+
+            if not has_significant_attr:
+                siblings = element.find_previous_siblings(element.name)
+                if siblings:
+                    selector += f":nth-of-type({len(siblings) + 1})"
+
+            path.append(selector)
+            element = element.parent
+
+        return " > ".join(reversed(path))
+
+    def normalize_text(s):
+        return " ".join(s.split())
+
+    def similarity(a, b):
+        return SequenceMatcher(None, normalize_text(a), normalize_text(b)).ratio()
+
+    soup = BeautifulSoup(html, "html.parser")
+    selectors = []
+
+    def make_selector(el, base_selector, attr_name):
+        parts = [base_selector]
+
+        if attr_name in IGNORED_ATTRS:
+            # если нашли игнорируемый атрибут, ищем более информативный
+            for alt_attr in PRIORITY_ATTRS:
+                if el.has_attr(alt_attr):
+                    val = el.get(alt_attr)
+                    if isinstance(val, list):
+                        val = " ".join(val)
+                    if isinstance(val, str):
+                        parts.append(f'[{alt_attr}="{val.strip()}"]')
+                    break
+            # добавляем сам matched-атрибут без значения
+            parts.append(f'[{attr_name}]')
+        else:
+            val = el.get(attr_name)
+            if isinstance(val, list):
+                val = " ".join(val)
+            if isinstance(val, str):
+                parts.append(f'[{attr_name}="{val.strip()}"]')
+            else:
+                parts.append(f'[{attr_name}]')
+
+        return "".join(parts)
+
+    # --- Этап 1. Прямой поиск ---
+    for el in soup.find_all(True):
+        element_text = el.get_text(strip=True)
+        if element_text:
+            match = (text == element_text) if exact else (text in element_text)
+            if match:
+                selector = get_css_path(el)
+                if return_all_selectors:
+                    selectors.append(selector)
+                else:
+                    return selector
+
+        for attr_name, attr_val in el.attrs.items():
+            if isinstance(attr_val, list):
+                attr_val = " ".join(attr_val)
+            if isinstance(attr_val, str):
+                match = (text == attr_val.strip()) if exact else (text in attr_val)
+                if match:
+                    base_selector = get_css_path(el)
+                    selector = make_selector(el, base_selector, attr_name)
+                    if return_all_selectors:
+                        selectors.append(selector)
+                    else:
+                        return selector
+
+    # --- Этап 2. Fuzzy поиск ---
+    if not selectors:
+        threshold = 0.7
+        for el in soup.find_all(True):
+            element_text = el.get_text(strip=True)
+            if element_text:
+                score = similarity(text, element_text)
+                if score >= threshold:
+                    selector = get_css_path(el)
+                    if return_all_selectors:
+                        selectors.append(selector)
+                    else:
+                        return selector
+
+            for attr_name, attr_val in el.attrs.items():
+                if isinstance(attr_val, list):
+                    attr_val = " ".join(attr_val)
+                if isinstance(attr_val, str):
+                    score = similarity(text, attr_val)
+                    if score >= threshold:
+                        base_selector = get_css_path(el)
+                        selector = make_selector(el, base_selector, attr_name)
+                        if return_all_selectors:
+                            selectors.append(selector)
+                        else:
+                            return selector
+
+    if return_all_selectors:
+        return selectors if selectors else None
+    return None
 
 
 
