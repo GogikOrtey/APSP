@@ -148,7 +148,7 @@ data_input_table = {
                 "article": "00027670",
                 "brand": "MasterProf",
                 # Не в наличии
-                "imageLink": ""
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
             }
         ]
     },
@@ -199,7 +199,7 @@ check_avialible_html()
 def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
     def get_css_path(element):
         path = []
-        while element and element.name:
+        while element and element.name and element.name != "[document]":
             selector = element.name
             if element.has_attr("id"):
                 selector = f"#{element['id']}"
@@ -628,62 +628,6 @@ def handle_selector_price(html, finding_element):
 
 
 
-# ## Тест одного селектора с одной страницы
-
-# isPrint = True
-
-# elem_number = 0
-# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
-
-# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# substring_stock = data_input_table["links"]["simple"][elem_number]["stock"]
-
-# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_stock)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# print("")
-# print(f"🟩 selector_result = {selector_result}")
-
-
-# # # Получаем куски по подстроке
-# # result = find_contexts(html, substring_name)
-# # print(result)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 content_html = {
@@ -749,79 +693,6 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
 
         # Записываем обратно
         item["_selectors"] = selectors
-
-
-### Получение всех селекторов
-
-
-fill_selectors_for_items(
-    data_input_table["links"]["simple"],
-    get_css_selector_from_text_value_element
-)
-
-# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
-print_json(data_input_table["links"]["simple"])
-# print(json.dumps(content_html, indent=4, ensure_ascii=False))
-
-
-
-
-
-# #  Сохраняем эти 2 json локально (по большей части для теста)
-
-# import os
-
-# # Создаём папку "cache", если её нет
-# os.makedirs("cache", exist_ok=True)
-
-# # --- Сохранение в JSON ---
-# with open("cache/data_input_table.json", "w", encoding="utf-8") as f:
-#     json.dump(data_input_table, f, ensure_ascii=False, indent=4)
-
-# with open("cache/content_html.json", "w", encoding="utf-8") as f:
-#     json.dump(content_html, f, ensure_ascii=False, indent=4)
-
-# print("✅ Файлы сохранены")
-
-
-
-
-
-
-
-
-
-
-
-# ### Загрузка файлов обратно
-
-# with open("cache/data_input_table.json", "r", encoding="utf-8") as f:
-#     data_input_table = json.load(f)
-
-# with open("cache/content_html.json", "r", encoding="utf-8") as f:
-#     content_html = json.load(f)
-
-# print("✅ Файлы загружены обратно")
-# # print("data_input_table:", data_input_table)
-# # print("content_html:", content_html)
-
-
-# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
-# # print(json.dumps(content_html, indent=4, ensure_ascii=False))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1077,9 +948,96 @@ def select_best_selectors(input_data, content_html):
 
 
 
+# ## Тест одного селектора с одной страницы
+
+# isPrint = True
+
+# elem_number = 0
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
+
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# # substring_stock = data_input_table["links"]["simple"][elem_number]["stock"]
+# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_stock)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
-## На данный момент это конечная точка программы
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
+
+
+
+
+
+
+
+### Получение всех селекторов
+
+
+fill_selectors_for_items(
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
+
+# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
+print_json(data_input_table["links"]["simple"])
+# print(json.dumps(content_html, indent=4, ensure_ascii=False))
+
+
+
+
+
+# #  Сохраняем эти 2 json локально (по большей части для теста)
+
+# import os
+
+# # Создаём папку "cache", если её нет
+# os.makedirs("cache", exist_ok=True)
+
+# # --- Сохранение в JSON ---
+# with open("cache/data_input_table.json", "w", encoding="utf-8") as f:
+#     json.dump(data_input_table, f, ensure_ascii=False, indent=4)
+
+# with open("cache/content_html.json", "w", encoding="utf-8") as f:
+#     json.dump(content_html, f, ensure_ascii=False, indent=4)
+
+# print("✅ Файлы сохранены")
+
+
+
+# ### Загрузка файлов обратно
+
+# with open("cache/data_input_table.json", "r", encoding="utf-8") as f:
+#     data_input_table = json.load(f)
+
+# with open("cache/content_html.json", "r", encoding="utf-8") as f:
+#     content_html = json.load(f)
+
+# print("✅ Файлы загружены обратно")
+# # print("data_input_table:", data_input_table)
+# # print("content_html:", content_html)
+
+
+# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
+# # print(json.dumps(content_html, indent=4, ensure_ascii=False))
+
+
+
+
+
+
+
+### На данный момент это конечная точка программы
 
 result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
