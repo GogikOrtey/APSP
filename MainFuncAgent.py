@@ -831,7 +831,9 @@ def select_best_selectors(input_data, content_html):
 
         # 3) Проверяльщик: функция, которая проверяет набор селекторов (комбинацию) для одного поля
         def check_selector_set_for_field(field: str, sel_set: Tuple[str, ...]) -> bool:
-            # для каждой страницы должно быть, что хотя бы один селектор из sel_set извлечёт совпадающее с примером значение
+            fails = 0
+            total = len(trees)
+
             for url, tree, ex in trees:
                 expected = ex.get(field, "")
                 extracted_any = ""
@@ -840,20 +842,24 @@ def select_best_selectors(input_data, content_html):
                     if got:
                         extracted_any = got
                         break
-                # нормализация сравнения
+                    
                 if field == "price":
-                    if normalize_price(expected) != normalize_price(extracted_any):
-                        if verbose:
-                            print(f"  [FAIL] {field} on {url}: expected '{expected}' got '{extracted_any}' using {sel_set}")
-                        return False
+                    match = normalize_price(expected) == normalize_price(extracted_any)
                 else:
-                    if normalize_text(expected) != normalize_text(extracted_any):
-                        if verbose:
-                            print(f"  [FAIL] {field} on {url}: expected '{expected}' got '{extracted_any}' using {sel_set}")
-                        return False
-            if verbose:
-                print(f"  [OK] field {field} works with selectors {sel_set}")
-            return True
+                    match = normalize_text(expected) == normalize_text(extracted_any)
+
+                if not match:
+                    fails += 1
+                    if verbose:
+                        print(f"  [FAIL] {field} on {url}: expected '{expected}' got '{extracted_any}' using {sel_set}")
+
+            # допускаем 1 несовпадение (или, например, ≤30% страниц)
+            if fails <= 1 or fails / total <= 0.4:
+                if verbose:
+                    print(f"  [OK~] field {field} works with selectors {sel_set} (fails {fails}/{total})")
+                return True
+
+            return False
 
         result_selectors = {}
         report = {"tried": {}}
