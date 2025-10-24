@@ -12,7 +12,7 @@ from lxml import etree
 # TODO: Когда здесь наберётся достаточно функций, разбить их по категориям, и добавить оглавление
 
 # Отправляет запрос к YandexGPT и возвращает текстовый ответ модели.
-def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: bool = True) -> str:
+def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: bool = True, temperature = 0.8, maxTokens = 1024) -> str:
     print("Посылаю запрос к YandexGPT:")
 
     if isSmartModel:
@@ -40,8 +40,8 @@ def sendMessageToYandexGPT(prompt: str, isSmartModel: bool = False, isPrint: boo
         "modelUri": f"gpt://{folder_id}/{model}/latest",
         "completionOptions": {
             "stream": False,
-            "temperature": 0.8, #0.6,
-            "maxTokens": 1024, #300
+            "temperature": temperature, #0.6,
+            "maxTokens": maxTokens, #300
 
             # Добавьте параметр разнообразия
             "topP": 0.9,         
