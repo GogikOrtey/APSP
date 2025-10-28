@@ -474,6 +474,8 @@ check_avialible_html()
 #     return None
 
 
+
+
 def clean_html(text: str) -> str:
     if not text:
         return ""
@@ -914,8 +916,6 @@ def compute_match_score(found_text, target_text):
 
 
 # # region handle_selector_price
-
-# # TODO Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
 
 # # Извлекает селекторы цены
 # # Перед этим очистив html от мусорных спецсимволов
@@ -1514,6 +1514,16 @@ print_json(result_select_best_selectors["result_selectors"])
 
 
 
+"""
+
+Вынести в отдельный фалйлик
+
+find_text_selector - принимает содержимое, возвращает набор селекторов
+    get_element_from_selector - проверка наличия содержимого в селекторе
+get_css_selector_from_text_value_element - принимает массив, валидирует, сортирует, и возвращает один лучший
+    simplify_selector_keep_value - дистилляция этого лучшего, перед возвратом
+
+"""
 
 
 
@@ -1531,6 +1541,8 @@ print_json(result_select_best_selectors["result_selectors"])
 """
 
 После этого:
+
+Починить всё, на тех примерах что у меня есть
 
 Протестировать на разных других сайтах
 
