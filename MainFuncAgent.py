@@ -344,13 +344,178 @@ check_avialible_html()
 
 # region find_text_selector
 
-# Находит и возвращает css селекторы элементов по содержимому
-# Принимает один элемент, находит и возвращает набор селекторов, по которым этот элемент можно получить
-# Если exact = True, то ...
-def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
+# # Находит и возвращает css селекторы элементов по содержимому
+# # Принимает один элемент, находит и возвращает набор селекторов, по которым этот элемент можно получить
+# # Если exact = True, то ...
+# def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
+#     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
+#     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
+
+#     def get_css_path(element):
+#         path = []
+#         while element and element.name and element.name != "[document]":
+#             selector = element.name
+
+#             # Если есть id — это всегда уникально
+#             if element.has_attr("id"):
+#                 selector = f"#{element['id']}"
+#                 path.append(selector)
+#                 break
+
+#             # Добавляем классы, если есть
+#             if element.has_attr("class"):
+#                 selector += "." + ".".join(element["class"])
+
+#             # Если элемент имеет уникальные/значимые атрибуты — пропускаем nth-of-type
+#             has_significant_attr = any(
+#                 attr in PRIORITY_ATTRS or attr not in IGNORED_ATTRS
+#                 for attr in element.attrs.keys()
+#             )
+
+#             if not has_significant_attr:
+#                 siblings = element.find_previous_siblings(element.name)
+#                 if siblings:
+#                     selector += f":nth-of-type({len(siblings) + 1})"
+
+#             path.append(selector)
+#             element = element.parent
+
+#         return " > ".join(reversed(path))
+
+#     def normalize_text(s):
+#         return " ".join(s.split())
+
+#     def similarity(a, b):
+#         return SequenceMatcher(None, normalize_text(a), normalize_text(b)).ratio()
+
+#     soup = BeautifulSoup(html, "html.parser")
+#     selectors = []
+
+#     def make_selector(el, base_selector, attr_name):
+#         parts = [base_selector]
+
+#         if attr_name in IGNORED_ATTRS:
+#             # если нашли игнорируемый атрибут, ищем более информативный
+#             for alt_attr in PRIORITY_ATTRS:
+#                 if el.has_attr(alt_attr):
+#                     val = el.get(alt_attr)
+#                     if isinstance(val, list):
+#                         val = " ".join(val)
+#                     if isinstance(val, str):
+#                         parts.append(f'[{alt_attr}="{val.strip()}"]')
+#                     break
+#             # добавляем сам matched-атрибут без значения
+#             parts.append(f'[{attr_name}]')
+#         else:
+#             val = el.get(attr_name)
+#             if isinstance(val, list):
+#                 val = " ".join(val)
+#             if isinstance(val, str):
+#                 parts.append(f'[{attr_name}="{val.strip()}"]')
+#             else:
+#                 parts.append(f'[{attr_name}]')
+
+#         return "".join(parts)
+
+#     # --- Этап 1. Прямой поиск ---
+#     for el in soup.find_all(True):
+#         element_text = el.get_text(strip=True)
+#         if element_text:
+#             match = (text == element_text) if exact else (text in element_text)
+#             if match:
+#                 selector = get_css_path(el)
+#                 if return_all_selectors:
+#                     selectors.append(selector)
+#                 else:
+#                     return selector
+
+#         for attr_name, attr_val in el.attrs.items():
+#             if isinstance(attr_val, list):
+#                 attr_val = " ".join(attr_val)
+#             if isinstance(attr_val, str):
+#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
+#                 if match:
+#                     base_selector = get_css_path(el)
+#                     selector = make_selector(el, base_selector, attr_name)
+#                     if return_all_selectors:
+#                         selectors.append(selector)
+#                     else:
+#                         return selector
+
+#     # --- Этап 2. Fuzzy поиск ---
+#     if not selectors:
+#         threshold = 0.7
+#         for el in soup.find_all(True):
+#             element_text = el.get_text(strip=True)
+#             if element_text:
+#                 score = similarity(text, element_text)
+#                 if score >= threshold:
+#                     selector = get_css_path(el)
+#                     if return_all_selectors:
+#                         selectors.append(selector)
+#                     else:
+#                         return selector
+
+#             for attr_name, attr_val in el.attrs.items():
+#                 if isinstance(attr_val, list):
+#                     attr_val = " ".join(attr_val)
+#                 if isinstance(attr_val, str):
+#                     score = similarity(text, attr_val)
+#                     if score >= threshold:
+#                         base_selector = get_css_path(el)
+#                         selector = make_selector(el, base_selector, attr_name)
+#                         if return_all_selectors:
+#                             selectors.append(selector)
+#                         else:
+#                             return selector
+
+#     if return_all_selectors:
+#         return selectors if selectors else None
+#     return None
+
+
+def clean_html(text: str) -> str:
+    if not text:
+        return ""
+    text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+    text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+    return text.strip()
+
+def normalize_price(s: str) -> str:
+    if not s:
+        return ""
+    s = s.strip().lower()
+    s = clean_html(s)
+    s = re.sub(r"[^\d,\.]", "", s)
+    s = re.sub(r"[^\d]", "", s)
+    return s
+
+
+def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False, isPriceHandle: bool = False):
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
 
+    # # --- 1. Очистка HTML ---
+    # def clean_html(text: str) -> str:
+    #     text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+    #     text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+    #     return text.strip()
+
+    # # --- 2. Нормализация чисел/цен ---
+    # def normalize_price(s: str) -> str:
+    #     if not s:
+    #         return ""
+    #     s = s.strip().lower()
+    #     s = re.sub(r"[^\d,\.]", "", s)
+    #     s = re.sub(r"[^\d]", "", s)
+    #     return s
+
+    # --- 3. Очистим HTML, если надо ---
+    if isPriceHandle:
+        html = clean_html(html)
+        text = normalize_price(text)
+
+    # --- 4. Вспомогательные функции ---
     def get_css_path(element):
         path = []
         while element and element.name and element.name != "[document]":
@@ -388,9 +553,6 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
     def similarity(a, b):
         return SequenceMatcher(None, normalize_text(a), normalize_text(b)).ratio()
 
-    soup = BeautifulSoup(html, "html.parser")
-    selectors = []
-
     def make_selector(el, base_selector, attr_name):
         parts = [base_selector]
 
@@ -404,7 +566,6 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
                     if isinstance(val, str):
                         parts.append(f'[{alt_attr}="{val.strip()}"]')
                     break
-            # добавляем сам matched-атрибут без значения
             parts.append(f'[{attr_name}]')
         else:
             val = el.get(attr_name)
@@ -417,11 +578,16 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 
         return "".join(parts)
 
-    # --- Этап 1. Прямой поиск ---
+    # --- 5. Парсим HTML ---
+    soup = BeautifulSoup(html, "html.parser")
+    selectors = []
+
+    # --- 6. Основной поиск ---
     for el in soup.find_all(True):
         element_text = el.get_text(strip=True)
         if element_text:
-            match = (text == element_text) if exact else (text in element_text)
+            check_value = normalize_price(element_text) if isPriceHandle else element_text
+            match = (text == check_value) if exact else (text in check_value)
             if match:
                 selector = get_css_path(el)
                 if return_all_selectors:
@@ -433,7 +599,8 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
             if isinstance(attr_val, list):
                 attr_val = " ".join(attr_val)
             if isinstance(attr_val, str):
-                match = (text == attr_val.strip()) if exact else (text in attr_val)
+                check_value = normalize_price(attr_val) if isPriceHandle else attr_val
+                match = (text == check_value) if exact else (text in check_value)
                 if match:
                     base_selector = get_css_path(el)
                     selector = make_selector(el, base_selector, attr_name)
@@ -442,13 +609,14 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
                     else:
                         return selector
 
-    # --- Этап 2. Fuzzy поиск ---
+    # --- 7. Fuzzy-поиск ---
     if not selectors:
         threshold = 0.7
         for el in soup.find_all(True):
             element_text = el.get_text(strip=True)
             if element_text:
-                score = similarity(text, element_text)
+                check_value = normalize_price(element_text) if isPriceHandle else element_text
+                score = similarity(text, check_value)
                 if score >= threshold:
                     selector = get_css_path(el)
                     if return_all_selectors:
@@ -460,7 +628,8 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
                 if isinstance(attr_val, list):
                     attr_val = " ".join(attr_val)
                 if isinstance(attr_val, str):
-                    score = similarity(text, attr_val)
+                    check_value = normalize_price(attr_val) if isPriceHandle else attr_val
+                    score = similarity(text, check_value)
                     if score >= threshold:
                         base_selector = get_css_path(el)
                         selector = make_selector(el, base_selector, attr_name)
@@ -472,7 +641,6 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
     if return_all_selectors:
         return selectors if selectors else None
     return None
-
 
 
 
@@ -663,13 +831,14 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
 def get_css_selector_from_text_value_element(html, finding_element, is_price = False, is_exact = True):
     print("")
     if isPrint: print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
-    if(is_price):
-        # Для извлечения price и oldPrice - отдельный обработчик
-        all_selectors = handle_selector_price(html, finding_element)
-    elif finding_element.strip().lower() == "в наличии" or is_exact:
-        all_selectors = find_text_selector(html, finding_element, exact=True, return_all_selectors=True)
-    else:
-        all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
+    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True, isPriceHandle=is_price)
+    # if(is_price):
+    #     # Для извлечения price и oldPrice - отдельный обработчик
+    #     all_selectors = handle_selector_price(html, finding_element)
+    # # elif finding_element.strip().lower() == "в наличии" or is_exact:
+    # #     all_selectors = find_text_selector(html, finding_element, exact=True, return_all_selectors=True)
+    # else:
+    #     all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
 
     if not all_selectors:
         if isPrint: print("🟡 Не найдено ни одного подходящего селектора")
@@ -744,103 +913,103 @@ def compute_match_score(found_text, target_text):
 
 
 
-# region handle_selector_price
+# # region handle_selector_price
 
-# TODO Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
+# # TODO Потом надо будет слить всё в один метод, а не выделять отдельно извлечение цен (чисел)
 
-# Извлекает селекторы цены
-# Перед этим очистив html от мусорных спецсимволов
-def handle_selector_price(html, finding_element):
-    # # 1. Очистка HTML
-    # def clean_html(text: str) -> str:
-    #     text = text.replace("&nbsp;", " ").replace("\xa0", " ")
-    #     text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
-    #     return text.strip()
+# # Извлекает селекторы цены
+# # Перед этим очистив html от мусорных спецсимволов
+# def handle_selector_price(html, finding_element):
+#     # # 1. Очистка HTML
+#     # def clean_html(text: str) -> str:
+#     #     text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+#     #     text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+#     #     return text.strip()
 
-    # # 2. Нормализация чисел/цен
-    # def normalize_price(s: str) -> str:
-    #     if not s:
-    #         return ""
-    #     s = s.strip().lower()
-    #     s = re.sub(r"[^\d,\.]", "", s)
-    #     s = re.sub(r"[^\d]", "", s)
-    #     return s
+#     # # 2. Нормализация чисел/цен
+#     # def normalize_price(s: str) -> str:
+#     #     if not s:
+#     #         return ""
+#     #     s = s.strip().lower()
+#     #     s = re.sub(r"[^\d,\.]", "", s)
+#     #     s = re.sub(r"[^\d]", "", s)
+#     #     return s
 
-    # 3. Функция построения CSS-пути для элемента
-    def get_css_path(element):
-        path = []
-        while element is not None and isinstance(element.tag, str):
-            selector = element.tag
+#     # 3. Функция построения CSS-пути для элемента
+#     def get_css_path(element):
+#         path = []
+#         while element is not None and isinstance(element.tag, str):
+#             selector = element.tag
 
-            # Если есть ID — уникальный селектор
-            if 'id' in element.attrib:
-                selector = f"#{element.attrib['id']}"
-                path.append(selector)
-                break
+#             # Если есть ID — уникальный селектор
+#             if 'id' in element.attrib:
+#                 selector = f"#{element.attrib['id']}"
+#                 path.append(selector)
+#                 break
 
-            # Если есть классы
-            if 'class' in element.attrib:
-                classes = element.attrib['class'].split()
-                selector += '.' + '.'.join(classes)
+#             # Если есть классы
+#             if 'class' in element.attrib:
+#                 classes = element.attrib['class'].split()
+#                 selector += '.' + '.'.join(classes)
 
-            # nth-of-type среди сиблингов
-            parent = element.getparent()
-            if parent is not None:
-                same_tag_siblings = [sib for sib in parent if isinstance(sib.tag, str) and sib.tag == element.tag]
-                if len(same_tag_siblings) > 1:
-                    index = same_tag_siblings.index(element) + 1
-                    selector += f":nth-of-type({index})"
+#             # nth-of-type среди сиблингов
+#             parent = element.getparent()
+#             if parent is not None:
+#                 same_tag_siblings = [sib for sib in parent if isinstance(sib.tag, str) and sib.tag == element.tag]
+#                 if len(same_tag_siblings) > 1:
+#                     index = same_tag_siblings.index(element) + 1
+#                     selector += f":nth-of-type({index})"
 
-            path.append(selector)
-            element = parent
+#             path.append(selector)
+#             element = parent
 
-        return " > ".join(reversed(path))
+#         return " > ".join(reversed(path))
 
-    # 4. Основная функция поиска селекторов по цене
-    def find_price_selectors(html: str, finding_element: str, return_all_selectors: bool = False):
-        html = clean_html(html)
-        target_norm = normalize_price(finding_element)
+#     # 4. Основная функция поиска селекторов по цене
+#     def find_price_selectors(html: str, finding_element: str, return_all_selectors: bool = False):
+#         html = clean_html(html)
+#         target_norm = normalize_price(finding_element)
 
-        tree = html_lx.fromstring(html)
-        selectors = []
+#         tree = html_lx.fromstring(html)
+#         selectors = []
 
-        for elem in tree.iter():
-            # Пропускаем комментарии, доктайпы
-            if not isinstance(elem.tag, str):
-                continue
+#         for elem in tree.iter():
+#             # Пропускаем комментарии, доктайпы
+#             if not isinstance(elem.tag, str):
+#                 continue
 
-            # Проверяем текст
-            text = elem.text_content().strip() if elem.text_content() else ""
-            if text and normalize_price(text) == target_norm:
-                selector = get_css_path(elem)
-                if return_all_selectors:
-                    selectors.append(selector)
-                else:
-                    return selector
+#             # Проверяем текст
+#             text = elem.text_content().strip() if elem.text_content() else ""
+#             if text and normalize_price(text) == target_norm:
+#                 selector = get_css_path(elem)
+#                 if return_all_selectors:
+#                     selectors.append(selector)
+#                 else:
+#                     return selector
 
-            # Проверяем все атрибуты
-            for attr_name, attr_val in elem.attrib.items():
-                if isinstance(attr_val, str) and normalize_price(attr_val) == target_norm:
-                    selector = f"{get_css_path(elem)}[{attr_name}]"
-                    if return_all_selectors:
-                        selectors.append(selector)
-                    else:
-                        return selector
+#             # Проверяем все атрибуты
+#             for attr_name, attr_val in elem.attrib.items():
+#                 if isinstance(attr_val, str) and normalize_price(attr_val) == target_norm:
+#                     selector = f"{get_css_path(elem)}[{attr_name}]"
+#                     if return_all_selectors:
+#                         selectors.append(selector)
+#                     else:
+#                         return selector
 
-        if return_all_selectors:
-            return selectors if selectors else None
+#         if return_all_selectors:
+#             return selectors if selectors else None
 
-        return None
+#         return None
     
-    # Вернуть все селекторы
-    all_selectors = find_price_selectors(html, finding_element, return_all_selectors=True)
-    # print(all_selectors)
+#     # Вернуть все селекторы
+#     all_selectors = find_price_selectors(html, finding_element, return_all_selectors=True)
+#     # print(all_selectors)
 
-    # # Вернуть первый найденный селектор
-    # first_selector = find_price_selectors(html, finding_element)
-    # print(first_selector)
+#     # # Вернуть первый найденный селектор
+#     # first_selector = find_price_selectors(html, finding_element)
+#     # print(first_selector)
 
-    return all_selectors
+#     return all_selectors
 
 
 
@@ -912,21 +1081,7 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
         item["_selectors"] = selectors
 
 
-def clean_html(text: str) -> str:
-    if not text:
-        return ""
-    text = text.replace("&nbsp;", " ").replace("\xa0", " ")
-    text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
-    return text.strip()
 
-def normalize_price(s: str) -> str:
-    if not s:
-        return ""
-    s = s.strip().lower()
-    s = clean_html(s)
-    s = re.sub(r"[^\d,\.]", "", s)
-    s = re.sub(r"[^\d]", "", s)
-    return s
 
 # region select_best_selectors
 
