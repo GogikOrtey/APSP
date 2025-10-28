@@ -198,7 +198,7 @@ data_input_table = {
                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
             },
             {
-                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
                 "price": "195 000 ₽",
                 "oldPrice": "238 150 ₽",
