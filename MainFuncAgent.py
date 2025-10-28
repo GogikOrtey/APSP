@@ -108,9 +108,6 @@ isPrint = False
 
 
 
-############################## article не нашёл !!!
-
-
 # Данные с сайта 2
 data_input_table = {
     "links": {
@@ -124,30 +121,30 @@ data_input_table = {
                 # "stock": "В наличии",
                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
             },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-                "price": "9 900 руб.",
-                "article": "УТ000001951",
-                # "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-                "price": "7 990 руб.",
-                "article": "УТ000006868",
-                # "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-                "price": "24 820 руб.",
-                "article": "УТ000001271",
-                # "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-            },
+            # {
+            #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+            #     "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+            #     "price": "9 900 руб.",
+            #     "article": "УТ000001951",
+            #     "brand": "TRITON",
+            #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            # },
+            # {
+            #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+            #     "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+            #     "price": "7 990 руб.",
+            #     "article": "УТ000006868",
+            #     "brand": "TRITON",
+            #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+            # },
+            # {
+            #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+            #     "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+            #     "price": "24 820 руб.",
+            #     "article": "УТ000001271",
+            #     "brand": "TRITON",
+            #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+            # },
             {
                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
