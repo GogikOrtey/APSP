@@ -751,20 +751,20 @@ def compute_match_score(found_text, target_text):
 # Извлекает селекторы цены
 # Перед этим очистив html от мусорных спецсимволов
 def handle_selector_price(html, finding_element):
-    # 1. Очистка HTML
-    def clean_html(text: str) -> str:
-        text = text.replace("&nbsp;", " ").replace("\xa0", " ")
-        text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
-        return text.strip()
+    # # 1. Очистка HTML
+    # def clean_html(text: str) -> str:
+    #     text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+    #     text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+    #     return text.strip()
 
-    # 2. Нормализация чисел/цен
-    def normalize_price(s: str) -> str:
-        if not s:
-            return ""
-        s = s.strip().lower()
-        s = re.sub(r"[^\d,\.]", "", s)
-        s = re.sub(r"[^\d]", "", s)
-        return s
+    # # 2. Нормализация чисел/цен
+    # def normalize_price(s: str) -> str:
+    #     if not s:
+    #         return ""
+    #     s = s.strip().lower()
+    #     s = re.sub(r"[^\d,\.]", "", s)
+    #     s = re.sub(r"[^\d]", "", s)
+    #     return s
 
     # 3. Функция построения CSS-пути для элемента
     def get_css_path(element):
@@ -912,6 +912,21 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
         item["_selectors"] = selectors
 
 
+def clean_html(text: str) -> str:
+    if not text:
+        return ""
+    text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+    text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+    return text.strip()
+
+def normalize_price(s: str) -> str:
+    if not s:
+        return ""
+    s = s.strip().lower()
+    s = clean_html(s)
+    s = re.sub(r"[^\d,\.]", "", s)
+    s = re.sub(r"[^\d]", "", s)
+    return s
 
 # region select_best_selectors
 
@@ -927,12 +942,12 @@ def select_best_selectors(input_data, content_html):
         s = re.sub(r"\s+", " ", s).strip()
         return s.lower()
 
-    def normalize_price(s: str) -> str:
-        if s is None:
-            return ""
-        # извлечь цифры и разделители
-        digits = re.findall(r"[\d]+", s.replace(",", ""))
-        return "".join(digits)
+    # def normalize_price(s: str) -> str:
+    #     if s is None:
+    #         return ""
+    #     # извлечь цифры и разделители
+    #     digits = re.findall(r"[\d]+", s.replace(",", ""))
+    #     return "".join(digits)
 
     def extract_using_selector(tree: html_lx.HtmlElement, selector: str) -> str:
         """
@@ -999,10 +1014,16 @@ def select_best_selectors(input_data, content_html):
         if not fields:
             if not examples:
                 raise ValueError("Список examples пуст — невозможно определить поля автоматически.")
-            fields = [key for key in examples[0].keys() if key != "link" and not key.startswith("_")]
+            # Собираем все уникальные поля из всех примеров
+            all_fields = set()
+            for ex in examples:
+                all_fields.update(ex.keys())
+            # Исключаем служебные
+            fields = [f for f in all_fields if f != "link" and not f.startswith("_")]
 
         if verbose:
             print(f"Используемые поля: {fields}")
+
         """
         examples: список примеров, каждый пример - dict с keys: link, поля и _selectors dict
         возвращает: {
@@ -1047,57 +1068,41 @@ def select_best_selectors(input_data, content_html):
             total = 0
 
             for url, tree, ex in trees:
-                # Пропускаем примеры, где нет ожидаемого значения или в исходном объекте
-                # не было найдено селектора для этого поля — такие примеры не учитываем
                 expected = ex.get(field, "")
                 sdict = ex.get("_selectors", {}) if isinstance(ex.get("_selectors", {}), dict) else {}
                 if not expected or not sdict.get(field):
                     if verbose:
-                        # маленькая диагностическая заметка о пропуске
                         print(f"  [SKIP] {field} on {url}: no expected value or no original selector")
                     continue
-
+                
                 total += 1
-
                 extracted_any = ""
                 for s in sel_set:
                     got = extract_using_selector(tree, s)
                     if got:
                         extracted_any = got
                         break
-
-                if field == "price":
+                    
+                # 💡 Обработка ценовых полей
+                if field in ("price", "oldPrice"):
                     match = normalize_price(expected) == normalize_price(extracted_any)
                 else:
                     match = normalize_text(expected) == normalize_text(extracted_any)
 
                 if not match:
-                    # Пропускаем случай, если и ожидаемое, и извлечённое пустые
                     if not expected and not extracted_any:
                         continue
-
+                    
                     fails += 1
                     if verbose and print_fail_report:
                         print(
-                            f"  [FAIL] {field} on {url}: "
+                            f"  [🟧 FAIL] {field} on {url}: "
                             f"expected '{str(expected)[:70]}' "
                             f"got '{str(extracted_any)[:70]}' "
                             f"using {str(sel_set)[:70]}"
                         )
 
-            # Если нет ни одного учитываемого примера — не считаем комбинацию валидной
-            if total == 0:
-                if verbose:
-                    print(f"  [WARN] field {field}: no examples with expected value + original selector to validate against")
-                return False
-
-            # Допускаем до 1 неудачи или долю неудач <= 30% (как было раньше)
-            if fails <= 1 or (fails / total) <= 0.3:
-                if verbose:
-                    print(f"  [OK] field {field} works with selectors {sel_set} (fails {fails}/{total})")
-                return True
-
-            return False
+            return fails == 0
 
         result_selectors = {}
         report = {"tried": {}}
@@ -1198,14 +1203,15 @@ def select_best_selectors(input_data, content_html):
 
 # isPrint = True
 
-# elem_number = 0
+# elem_number = 1
 # html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
 # # print(html[:500])
 
 # # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_brand = data_input_table["links"]["simple"][elem_number]["article"]
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["article"]
 # # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
 # # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
 # # substring_stock = data_input_table["links"]["simple"][elem_number]["stock"]
 # # substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
@@ -1213,8 +1219,9 @@ def select_best_selectors(input_data, content_html):
 # # selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_stock)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
 # print("")
 # print(f"🟩 selector_result = {selector_result}")
 
@@ -1309,9 +1316,23 @@ print_json(result_select_best_selectors["result_selectors"])
 
 
 
+# # Собирает финальный код для вставки в шаблон
+# def selectorChecker():
+#     """
+#     Проверяет, что все селекторы действительно извлекают то что нужно
+#     И если нужно, то собирает код, который правит их результаты, или как-то
+#     по другому обрабатывает (через агента генерации кода)
+    
+
+#     Если InStock_trigger и OutOfStock_trigger - одинаковые, то
+#     используем проверку на InStock_trigger, а по умолчанию оставляем занчение "OutOfStock"
+
+#     Использует автоформаттер для price и oldPrice
+#     Проверяет, что итоговые значения корректны
+#         Простейшая проверка - попробовать пройтись parseInt
 
 
-
+#     """
 
 
 
