@@ -57,54 +57,54 @@ isPrint = False
 
 # region Входные данные
 
-# # Данные извлечённые из таблицы, например:
-# data_input_table = {
-#     "links": {
-#         "simple": [
-#             # {
-#             #     "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
-#             #     "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
-#             #     "price": "10 320",
-#             #     "brand": "Аntika",
-#             #     "stock": "В наличии",
-#             #     "imageLink": ""
-#             # },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
-#                 "name": "Опора ППРС D25 в Екатеринбурге",
-#                 "price": "5",
-#                 "brand": "",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-#                 "name": "Заглушка (D20) в Екатеринбурге",
-#                 "price": "4",
-#                 "brand": "MeerPlast",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-#                 "name": "Крестовина 20 ППРС в Екатеринбурге",
-#                 "price": "16",
-#                 "brand": "MeerPlast",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-#                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-#                 "price": "102",
-#                 "brand": "MeerPlast",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
+# Данные извлечённые из таблицы, например:
+data_input_table = {
+    "links": {
+        "simple": [
+            {
+                "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
+                "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
+                "price": "10 320",
+                "brand": "Аntika",
+                "stock": "В наличии",
+                "imageLink": ""
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+                "name": "Опора ППРС D25 в Екатеринбурге",
+                "price": "5",
+                "brand": "",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+                "name": "Заглушка (D20) в Екатеринбурге",
+                "price": "4",
+                "brand": "MeerPlast",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+                "name": "Крестовина 20 ППРС в Екатеринбурге",
+                "price": "16",
+                "brand": "MeerPlast",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+                "price": "102",
+                "brand": "MeerPlast",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
+            }
+        ]
+    },
+    "search_requests": []
+}
 
 
 
@@ -183,34 +183,34 @@ isPrint = False
 
 
 
-# Данные с сайта 4
-data_input_table = {
-    "links": {
-        "simple": [
-            {
-                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
-                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
-                "price": "99 800 ₽",
-                "oldPrice": "109 780 ₽",
-                "article": "13455",
-                "brand": "Baxi",
-                "OutOfStock_trigger": "Предзаказ",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
-            },
-            {
-                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
-                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
-                "price": "195 000 ₽",
-                "oldPrice": "238 150 ₽",
-                "article": "38354",
-                "brand": "Baxi",
-                "InStock_trigger": "В наличии",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Данные с сайта 4
+# data_input_table = {
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+#                 "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+#                 "price": "99 800 ₽",
+#                 "oldPrice": "109 780 ₽",
+#                 "article": "13455",
+#                 "brand": "Baxi",
+#                 "OutOfStock_trigger": "Предзаказ",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
+#             },
+#             {
+#                 "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
+#                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+#                 "price": "195 000 ₽",
+#                 "oldPrice": "238 150 ₽",
+#                 "article": "38354",
+#                 "brand": "Baxi",
+#                 "InStock_trigger": "В наличии",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
