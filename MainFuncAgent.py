@@ -129,7 +129,7 @@ data_input_table = {
                 "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
                 "price": "9 900 руб.",
                 "article": "УТ000001951",
-                "brand": "TRITON",
+                # "brand": "TRITON",
                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
             },
             {
@@ -137,7 +137,7 @@ data_input_table = {
                 "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
                 "price": "7 990 руб.",
                 "article": "УТ000006868",
-                "brand": "TRITON",
+                # "brand": "TRITON",
                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
             },
             {
@@ -145,7 +145,7 @@ data_input_table = {
                 "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
                 "price": "24 820 руб.",
                 "article": "УТ000001271",
-                "brand": "TRITON",
+                # "brand": "TRITON",
                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
             },
             {
@@ -1014,37 +1014,55 @@ def select_best_selectors(input_data, content_html):
         # 3) Проверяльщик: функция, которая проверяет набор селекторов (комбинацию) для одного поля
         def check_selector_set_for_field(field: str, sel_set: Tuple[str, ...]) -> bool:
             fails = 0
-            total = len(trees)
+            total = 0
 
             for url, tree, ex in trees:
+                # Пропускаем примеры, где нет ожидаемого значения или в исходном объекте
+                # не было найдено селектора для этого поля — такие примеры не учитываем
                 expected = ex.get(field, "")
+                sdict = ex.get("_selectors", {}) if isinstance(ex.get("_selectors", {}), dict) else {}
+                if not expected or not sdict.get(field):
+                    if verbose:
+                        # маленькая диагностическая заметка о пропуске
+                        print(f"  [SKIP] {field} on {url}: no expected value or no original selector")
+                    continue
+
+                total += 1
+
                 extracted_any = ""
                 for s in sel_set:
                     got = extract_using_selector(tree, s)
                     if got:
                         extracted_any = got
                         break
-                    
+
                 if field == "price":
                     match = normalize_price(expected) == normalize_price(extracted_any)
                 else:
                     match = normalize_text(expected) == normalize_text(extracted_any)
 
                 if not match:
+                    # Пропускаем случай, если и ожидаемое, и извлечённое пустые
+                    if not expected and not extracted_any:
+                        continue
+
                     fails += 1
-                    if verbose:
-                        if print_fail_report: print(
+                    if verbose and print_fail_report:
+                        print(
                             f"  [FAIL] {field} on {url}: "
                             f"expected '{str(expected)[:70]}' "
                             f"got '{str(extracted_any)[:70]}' "
                             f"using {str(sel_set)[:70]}"
                         )
 
-            #######################################
-            # Нужно проставить 30%
-            # И не проверять пустые
-            # допускаем 1 несовпадение (или, например, ≤30% страниц)
-            if fails <= 1 or fails / total <= 0.4:
+            # Если нет ни одного учитываемого примера — не считаем комбинацию валидной
+            if total == 0:
+                if verbose:
+                    print(f"  [WARN] field {field}: no examples with expected value + original selector to validate against")
+                return False
+
+            # Допускаем до 1 неудачи или долю неудач <= 30% (как было раньше)
+            if fails <= 1 or (fails / total) <= 0.3:
                 if verbose:
                     print(f"  [OK] field {field} works with selectors {sel_set} (fails {fails}/{total})")
                 return True
