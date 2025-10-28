@@ -108,56 +108,57 @@ isPrint = False
 
 
 
-# Данные с сайта 2
-data_input_table = {
-    "links": {
-        "simple": [
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
-                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
-                "price": "16 125",
-                "article": "00017728",
-                "brand": "TRITON",
-                # "stock": "В наличии",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            },
-            # {
-            #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-            #     "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-            #     "price": "9 900 руб.",
-            #     "article": "УТ000001951",
-            #     "brand": "TRITON",
-            #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            # },
-            # {
-            #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-            #     "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-            #     "price": "7 990 руб.",
-            #     "article": "УТ000006868",
-            #     "brand": "TRITON",
-            #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-            # },
-            # {
-            #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-            #     "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-            #     "price": "24 820 руб.",
-            #     "article": "УТ000001271",
-            #     "brand": "TRITON",
-            #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-            # },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
-                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
-                "price": "15 руб.",
-                "article": "00027670",
-                "brand": "MasterProf",
-                # Не в наличии
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Данные с сайта 2
+# data_input_table = {
+#     "links": {
+#         "simple": [
+#             # {
+#             #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+#             #     "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+#             #     "price": "16 125",
+#             #     "article": "00017728",
+#             #     "brand": "TRITON",
+#             #     # "stock": "В наличии",
+#             #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             # },
+#             # # {
+#             # #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+#             # #     "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+#             # #     "price": "9 900 руб.",
+#             # #     "article": "УТ000001951",
+#             # #     "brand": "TRITON",
+#             # #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             # # },
+#             # # {
+#             # #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+#             # #     "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+#             # #     "price": "7 990 руб.",
+#             # #     "article": "УТ000006868",
+#             # #     "brand": "TRITON",
+#             # #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+#             # # },
+#             # # {
+#             # #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+#             # #     "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+#             # #     "price": "24 820 руб.",
+#             # #     "article": "УТ000001271",
+#             # #     "brand": "TRITON",
+#             # #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+#             # # },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+#                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+#                 "price": "15 руб.",
+#                 "article": "00027670",
+#                 "brand": "MasterProf",
+#                 # Не в наличии
+#                 # # "OutOfStock_trigger": "",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -179,6 +180,37 @@ data_input_table = {
 #     },
 #     "search_requests": []
 # }
+
+
+
+# Данные с сайта 4
+data_input_table = {
+    "links": {
+        "simple": [
+            {
+                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+                "price": "99 800 ₽",
+                "oldPrice": "109 780 ₽",
+                "article": "13455",
+                "brand": "Baxi",
+                "OutOfStock_trigger": "Предзаказ",
+                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
+            },
+            {
+                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+                "price": "195 000 ₽",
+                "oldPrice": "238 150 ₽",
+                "article": "38354",
+                "brand": "Baxi",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+            }
+        ]
+    },
+    "search_requests": []
+}
 
 
 
@@ -843,6 +875,7 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
 
         # Проходим по всем ключам, кроме служебных и ссылки
         for key, value in item.items():
+            # TODO Позже сделать условие покрасивее, пока что оставлю так
             if key.startswith("_") or key == "link":
                 continue  # пропускаем служебные поля
             
@@ -1330,6 +1363,9 @@ print_json(result_select_best_selectors["result_selectors"])
 Также с oldPrice
     Единственное что приходит в голову - искать напрямую селекторы
     и если не заводится, то слать запрос ChatGPT
+
+И нужно добавить модуль точного извлечения значения, тогда как например значение артикула может собираться как:
+"Артикул: 112233"
 
 И далее нужно будет выписать вставку кода в шаблон
 и генерацию финального кода parseCard
