@@ -57,108 +57,108 @@ isPrint = False
 
 # region Входные данные
 
-# Данные извлечённые из таблицы, например:
-data_input_table = {
-    "links": {
-        "simple": [
-            {
-                "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
-                "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
-                "price": "10 320",
-                "brand": "Аntika",
-                "stock": "В наличии",
-                "imageLink": ""
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
-                "name": "Опора ППРС D25 в Екатеринбурге",
-                "price": "5",
-                "brand": "",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-                "name": "Заглушка (D20) в Екатеринбурге",
-                "price": "4",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-                "name": "Крестовина 20 ППРС в Екатеринбурге",
-                "price": "16",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-                "price": "102",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
-            }
-        ]
-    },
-    "search_requests": []
-}
-
-
-
-# # Данные с сайта 2
+# # Данные извлечённые из таблицы, например:
 # data_input_table = {
 #     "links": {
 #         "simple": [
-#             # {
-#             #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
-#             #     "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
-#             #     "price": "16 125",
-#             #     "article": "00017728",
-#             #     "brand": "TRITON",
-#             #     # "stock": "В наличии",
-#             #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-#             # },
-#             # # {
-#             # #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-#             # #     "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-#             # #     "price": "9 900 руб.",
-#             # #     "article": "УТ000001951",
-#             # #     "brand": "TRITON",
-#             # #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-#             # # },
-#             # # {
-#             # #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-#             # #     "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-#             # #     "price": "7 990 руб.",
-#             # #     "article": "УТ000006868",
-#             # #     "brand": "TRITON",
-#             # #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-#             # # },
-#             # # {
-#             # #     "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-#             # #     "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-#             # #     "price": "24 820 руб.",
-#             # #     "article": "УТ000001271",
-#             # #     "brand": "TRITON",
-#             # #     "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-#             # # },
 #             {
-#                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
-#                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
-#                 "price": "15 руб.",
-#                 "article": "00027670",
-#                 "brand": "MasterProf",
-#                 # Не в наличии
-#                 # # "OutOfStock_trigger": "",
-#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
+#                 "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
+#                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
+#                 "price": "10 320",
+#                 "brand": "Аntika",
+#                 "stock": "В наличии",
+#                 "imageLink": ""
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+#                 "name": "Опора ППРС D25 в Екатеринбурге",
+#                 "price": "5",
+#                 "brand": "",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+#                 "name": "Заглушка (D20) в Екатеринбурге",
+#                 "price": "4",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+#                 "name": "Крестовина 20 ППРС в Екатеринбурге",
+#                 "price": "16",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+#                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+#                 "price": "102",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
 #             }
 #         ]
 #     },
 #     "search_requests": []
 # }
+
+
+
+# Данные с сайта 2
+data_input_table = {
+    "links": {
+        "simple": [
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+                "price": "16 125",
+                "article": "00017728",
+                "brand": "TRITON",
+                # "stock": "В наличии",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+                "price": "9 900 руб.",
+                "article": "УТ000001951",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+                "price": "7 990 руб.",
+                "article": "УТ000006868",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+                "price": "24 820 руб.",
+                "article": "УТ000001271",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+                "price": "15 руб.",
+                "article": "00027670",
+                "brand": "MasterProf",
+                # Не в наличии
+                # # "OutOfStock_trigger": "",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
+            }
+        ]
+    },
+    "search_requests": []
+}
 
 
 
@@ -500,6 +500,7 @@ def normalize_price(s: str) -> str:
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
+    IGNORED_SUBSTRS = ["data"]  # <-- новые подстроки для игнора
 
     # --- 1. Очистим HTML, если надо ---
     if isPriceHandle:
@@ -522,9 +523,15 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
             if element.has_attr("class"):
                 selector += "." + ".".join(element["class"])
 
-            # Если элемент имеет уникальные/значимые атрибуты — пропускаем nth-of-type
+            # Проверяем наличие значимых атрибутов
             has_significant_attr = any(
-                attr in PRIORITY_ATTRS or attr not in IGNORED_ATTRS
+                (
+                    attr in PRIORITY_ATTRS or
+                    (
+                        attr not in IGNORED_ATTRS and
+                        not any(sub in attr for sub in IGNORED_SUBSTRS)
+                    )
+                )
                 for attr in element.attrs.keys()
             )
 
@@ -547,7 +554,13 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
     def make_selector(el, base_selector, attr_name):
         parts = [base_selector]
 
-        if attr_name in IGNORED_ATTRS:
+        # проверяем, игнорируем ли атрибут по списку или по подстроке
+        is_ignored = (
+            attr_name in IGNORED_ATTRS or
+            any(sub in attr_name for sub in IGNORED_SUBSTRS)
+        )
+
+        if is_ignored:
             # если нашли игнорируемый атрибут, ищем более информативный
             for alt_attr in PRIORITY_ATTRS:
                 if el.has_attr(alt_attr):
@@ -1341,37 +1354,35 @@ def select_best_selectors(input_data, content_html):
 
 
 
-### Тест одного селектора с одной страницы
-# region Тест 1 элемента
+# ### Тест одного селектора с одной страницы
+# # region Тест 1 элемента
 
-isPrint = True
+# isPrint = True
 
-elem_number = 4
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
+# elem_number = 4
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
 
-# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article)
-selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
-print("")
-print(f"🟩 selector_result = {selector_result}")
-
-
-# # Получаем куски по подстроке
-# result = find_contexts(html, substring_name)
-# print(result)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_article)
+# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
 
 
 
@@ -1381,19 +1392,21 @@ print(f"🟩 selector_result = {selector_result}")
 
 
 
-# # region Обр всех селекторов
 
-# fill_selectors_for_items(
-#     data_input_table["links"]["simple"],
-#     get_css_selector_from_text_value_element
-# )
 
-# print_json(data_input_table["links"]["simple"])
+# region Обр всех селекторов
 
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+fill_selectors_for_items(
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
 
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
+print_json(data_input_table["links"]["simple"])
+
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
