@@ -183,29 +183,49 @@ isPrint = False
 
 
 
-# Данные с сайта 4
+# # Данные с сайта 4
+# data_input_table = {
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+#                 "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+#                 "price": "99 800 ₽",
+#                 "oldPrice": "109 780 ₽",
+#                 "article": "13455",
+#                 "brand": "Baxi",
+#                 "OutOfStock_trigger": "Предзаказ",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
+#             },
+#             {
+#                 "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
+#                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+#                 "price": "195 000 ₽",
+#                 "oldPrice": "238 150 ₽",
+#                 "article": "38354",
+#                 "brand": "Baxi",
+#                 "InStock_trigger": "В наличии",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
+
+
+
+# Данные с сайта 5
 data_input_table = {
     "links": {
         "simple": [
             {
-                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
-                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
-                "price": "99 800 ₽",
-                "oldPrice": "109 780 ₽",
-                "article": "13455",
-                "brand": "Baxi",
-                "OutOfStock_trigger": "Предзаказ",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
-            },
-            {
-                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
-                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
-                "price": "195 000 ₽",
-                "oldPrice": "238 150 ₽",
-                "article": "38354",
-                "brand": "Baxi",
-                "InStock_trigger": "В наличии",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+                "link": "https://stroytorg812.ru/catalog/vanny/vanna_akrilovaya_1_70kh0_70_ultra_170/",
+                "name": "Ванна акриловая 170х70 Ультра-170 # ТРИТОН",
+                "price": "8 390 руб.",
+                "article": "U4031689", ####
+                "brand": "ТРИТОН",
+                "InStock_trigger": "есть на складе",
+                "imageLink": "https://stroytorg812.ru/upload/iblock/db8/4db0f322_ffe9_11e6_94b1_002590746688_bed22781_05a3_11e7_94b1_002590746688.jpeg"
             }
         ]
     },
@@ -632,7 +652,7 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
         # Проверяем наличие подстроки — строгое совпадение по содержанию
         if finding_element.strip() in result_text.strip():
             match_score = 1.0
-            if isPrint: print(f"✅ Строгое совпадение: [{result_text}]")
+            if isPrint: print(f"✅ Строгое совпадение: [{result_text[:250]}]")
         else:
             # Если нет прямого вхождения — оцениваем схожесть
             match_score = compute_match_score(result_text, finding_element)
@@ -909,10 +929,11 @@ def select_best_selectors(input_data, content_html):
                 if field in ("price", "oldPrice"):
                     match = normalize_price(expected) == normalize_price(extracted_any)
                 else:
-                    # match = normalize_text(expected) == normalize_text(extracted_any)
-                    # match = compute_match_score(expected, extracted_any) >= 0.7
-                    score_match = compute_match_score(expected, extracted_any)
-                    match = True if score_match >= 0.7 else False 
+                    # # match = normalize_text(expected) == normalize_text(extracted_any)
+                    # # match = compute_match_score(expected, extracted_any) >= 0.7
+                    # score_match = compute_match_score(expected, extracted_any)
+                    # match = True if score_match >= 0.7 else False 
+                    match = expected in extracted_any
 
                 if not match:
                     if not expected and not extracted_any:
@@ -924,7 +945,7 @@ def select_best_selectors(input_data, content_html):
                         print(f"  искали: '{str(expected)[:200]}' ")
                         print(f"  нашли:  '{str(extracted_any)[:200]}' ")
                         print(f"  селектор: {str(sel_set)[:200]}")
-                        print(f"  score_match = '{score_match:.3f}' ")                        
+                        # print(f"  score_match = '{score_match:.3f}' ")                        
 
             return fails == 0
 
@@ -1026,35 +1047,36 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# ### Тест одного селектора с одной страницы
-# # region Тест 1 элемента
+### Тест одного селектора с одной страницы
+# region Тест 1 элемента
 
-# isPrint = True
+isPrint = True
 
 # elem_number = 0
 # html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
 # # print(html[:500])
 
-# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
 # # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
 # # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
 # # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
 # # substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_article)
+# selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
 # print("")
 # print(f"🟩 selector_result = {selector_result}")
 
 
-# # # Получаем куски по подстроке
-# # result = find_contexts(html, substring_name)
-# # print(result)
+# # Получаем куски по подстроке
+# result = find_contexts(html, substring_name)
+# print(result)
 
 
 
