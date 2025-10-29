@@ -1151,11 +1151,12 @@ def select_best_selectors(input_data, content_html):
             if not examples:
                 raise ValueError("Список examples пуст — невозможно определить поля автоматически.")
             # Собираем все уникальные поля из всех примеров
-            all_fields = set()
+            all_fields = []
             for ex in examples:
-                all_fields.update(ex.keys())
-            # Исключаем служебные
-            fields = [f for f in all_fields if f != "link" and not f.startswith("_")]
+                for k in ex.keys():
+                    if k not in all_fields and k != "link" and not k.startswith("_"):
+                        all_fields.append(k)
+            fields = all_fields
 
         if verbose:
             print(f"Используемые поля: {fields}")
@@ -1327,43 +1328,46 @@ def select_best_selectors(input_data, content_html):
         verbose=True
     )
 
+    # Собираю результаты селекторы по каждому полю в строку, через запятую
+    for key, value in result["result_selectors"].items():
+        if isinstance(value, list):
+            result["result_selectors"][key] = ", ".join(value) if value else ""
+
     return result
 
 
 
 
 
-### Тест одного селектора с одной страницы
-# region Тест 1 элемента
+# ### Тест одного селектора с одной страницы
+# # region Тест 1 элемента
 
-isPrint = True
+# isPrint = True
 
-elem_number = 1
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
+# elem_number = 1
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
 
-# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article)
-selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
-print("")
-print(f"🟩 selector_result = {selector_result}")
-
-
-# # Получаем куски по подстроке
-# result = find_contexts(html, substring_name)
-# print(result)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_article)
+# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
 
 
 
@@ -1373,21 +1377,21 @@ print(f"🟩 selector_result = {selector_result}")
 
 
 
-# # region Обр всех селекторов
-
-# fill_selectors_for_items(
-#     data_input_table["links"]["simple"],
-#     get_css_selector_from_text_value_element
-# )
-
-# print_json(data_input_table["links"]["simple"])
-
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
-
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
 
 
+# region Обр всех селекторов
+
+fill_selectors_for_items(
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
+
+print_json(data_input_table["links"]["simple"])
+
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1410,7 +1414,7 @@ print(f"🟩 selector_result = {selector_result}")
 
 
 # Собирает финальный код для вставки в шаблон
-def selectorChecker():
+def selectorChecker(result_selectors):
     """
     Проверяет, что все селекторы действительно извлекают то что нужно
     И если нужно, то собирает код, который правит их результаты, или как-то
@@ -1429,9 +1433,40 @@ def selectorChecker():
 
     """
 
+    print("Проверяем селекторы, и генерируем parseCard")
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Для примера
+result_selectors = {
+    "price": "meta[itemprop=\"price\"][content]",
+    "name": "#pagetitle",
+    "imageLink": "",
+    "brand": "meta[itemprop=\"brand\"][content]",
+    "stock": "div.catalog-element-panel-quantity-wrap"
+}
+
+
+selectorChecker(result_selectors)
 
 
 
