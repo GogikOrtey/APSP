@@ -108,57 +108,57 @@ isPrint = False
 
 
 
-# Данные с сайта 2
-data_input_table = {
-    "links": {
-        "simple": [
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
-                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
-                "price": "16 125",
-                "article": "00017728",
-                "brand": "TRITON",
-                # "stock": "В наличии",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-                "price": "9 900 руб.",
-                "article": "УТ000001951",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-                "price": "7 990 руб.",
-                "article": "УТ000006868",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-                "price": "24 820 руб.",
-                "article": "УТ000001271",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
-                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
-                "price": "15 руб.",
-                "article": "00027670",
-                "brand": "MasterProf",
-                # Не в наличии
-                # # "OutOfStock_trigger": "",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Данные с сайта 2
+# data_input_table = {
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+#                 "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+#                 "price": "16 125",
+#                 "article": "00017728",
+#                 "brand": "TRITON",
+#                 # "stock": "В наличии",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+#                 "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+#                 "price": "9 900 руб.",
+#                 "article": "УТ000001951",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+#                 "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+#                 "price": "7 990 руб.",
+#                 "article": "УТ000006868",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+#                 "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+#                 "price": "24 820 руб.",
+#                 "article": "УТ000001271",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+#                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+#                 "price": "15 руб.",
+#                 "article": "00027670",
+#                 "brand": "MasterProf",
+#                 # Не в наличии
+#                 # # "OutOfStock_trigger": "",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -183,34 +183,34 @@ data_input_table = {
 
 
 
-# # Данные с сайта 4
-# data_input_table = {
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
-#                 "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
-#                 "price": "99 800 ₽",
-#                 "oldPrice": "109 780 ₽",
-#                 "article": "13455",
-#                 "brand": "Baxi",
-#                 "OutOfStock_trigger": "Предзаказ",
-#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
-#             },
-#             {
-#                 "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
-#                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
-#                 "price": "195 000 ₽",
-#                 "oldPrice": "238 150 ₽",
-#                 "article": "38354",
-#                 "brand": "Baxi",
-#                 "InStock_trigger": "В наличии",
-#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
+# Данные с сайта 4
+data_input_table = {
+    "links": {
+        "simple": [
+            {
+                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+                "price": "99 800 ₽",
+                "oldPrice": "109 780 ₽",
+                "article": "13455",
+                "brand": "Baxi",
+                "OutOfStock_trigger": "Предзаказ",
+                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
+            },
+            {
+                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
+                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+                "price": "195 000 ₽",
+                "oldPrice": "238 150 ₽",
+                "article": "38354",
+                "brand": "Baxi",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+            }
+        ]
+    },
+    "search_requests": []
+}
 
 
 
@@ -248,234 +248,6 @@ def print_json(input_json):
 
 # Проверяю, что html-страница доступна, и данные первого товара на ней есть
 check_avialible_html()
-
-
-
-
-
-# region find_text_selector
-
-# # Находит и возвращает css селекторы элементов по содержимому
-# def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
-#     def get_css_path(element):
-#         path = []
-#         while element and element.name and element.name != "[document]":
-#             selector = element.name
-#             if element.has_attr("id"):
-#                 selector = f"#{element['id']}"
-#                 path.append(selector)
-#                 break
-#             elif element.has_attr("class"):
-#                 selector += "." + ".".join(element["class"])
-#             siblings = element.find_previous_siblings(element.name)
-#             if siblings:
-#                 selector += f":nth-of-type({len(siblings) + 1})"
-#             path.append(selector)
-#             element = element.parent
-#         return " > ".join(reversed(path))
-
-#     def normalize_text(s):
-#         return " ".join(s.split())
-
-#     def similarity(a, b):
-#         return SequenceMatcher(None, normalize_text(a), normalize_text(b)).ratio()
-
-#     soup = BeautifulSoup(html, "html.parser")
-#     selectors = []
-
-#     # Этап 1. Прямой поиск (строгий / частичный)
-#     for el in soup.find_all(True):
-#         element_text = el.get_text(strip=True)
-#         if element_text:
-#             match = (text == element_text) if exact else (text in element_text)
-#             if match:
-#                 selector = get_css_path(el)
-#                 if return_all_selectors:
-#                     selectors.append(selector)
-#                 else:
-#                     return selector
-
-#         # Проверяем атрибуты
-#         for attr_name, attr_val in el.attrs.items():
-#             if isinstance(attr_val, list):
-#                 attr_val = " ".join(attr_val)
-#             if isinstance(attr_val, str):
-#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
-#                 if match:
-#                     selector = get_css_path(el) + f"[{attr_name}]"
-#                     if return_all_selectors:
-#                         selectors.append(selector)
-#                     else:
-#                         return selector
-
-#     # Этап 2. Нестрогий (fuzzy) поиск
-#     if not selectors:
-#         threshold = 0.7
-#         for el in soup.find_all(True):
-#             # Проверка текста элемента
-#             element_text = el.get_text(strip=True)
-#             if element_text:
-#                 score = similarity(text, element_text)
-#                 if score >= threshold:
-#                     selector = get_css_path(el)
-#                     if return_all_selectors:
-#                         selectors.append(selector)
-#                     else:
-#                         return selector
-
-#             # Проверка атрибутов
-#             for attr_name, attr_val in el.attrs.items():
-#                 if isinstance(attr_val, list):
-#                     attr_val = " ".join(attr_val)
-#                 if isinstance(attr_val, str):
-#                     score = similarity(text, attr_val)
-#                     if score >= threshold:
-#                         selector = get_css_path(el) + f"[{attr_name}]"
-#                         if return_all_selectors:
-#                             selectors.append(selector)
-#                         else:
-#                             return selector
-
-#     if return_all_selectors:
-#         return selectors if selectors else None
-#     return None
-
-
-
-
-
-
-
-
-
-# # Находит и возвращает css селекторы элементов по содержимому
-# # Принимает один элемент, находит и возвращает набор селекторов, по которым этот элемент можно получить
-# # Если exact = True, то ...
-# def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False):
-#     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
-#     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
-
-#     def get_css_path(element):
-#         path = []
-#         while element and element.name and element.name != "[document]":
-#             selector = element.name
-
-#             # Если есть id — это всегда уникально
-#             if element.has_attr("id"):
-#                 selector = f"#{element['id']}"
-#                 path.append(selector)
-#                 break
-
-#             # Добавляем классы, если есть
-#             if element.has_attr("class"):
-#                 selector += "." + ".".join(element["class"])
-
-#             # Если элемент имеет уникальные/значимые атрибуты — пропускаем nth-of-type
-#             has_significant_attr = any(
-#                 attr in PRIORITY_ATTRS or attr not in IGNORED_ATTRS
-#                 for attr in element.attrs.keys()
-#             )
-
-#             if not has_significant_attr:
-#                 siblings = element.find_previous_siblings(element.name)
-#                 if siblings:
-#                     selector += f":nth-of-type({len(siblings) + 1})"
-
-#             path.append(selector)
-#             element = element.parent
-
-#         return " > ".join(reversed(path))
-
-#     def normalize_text(s):
-#         return " ".join(s.split())
-
-#     def similarity(a, b):
-#         return SequenceMatcher(None, normalize_text(a), normalize_text(b)).ratio()
-
-#     soup = BeautifulSoup(html, "html.parser")
-#     selectors = []
-
-#     def make_selector(el, base_selector, attr_name):
-#         parts = [base_selector]
-
-#         if attr_name in IGNORED_ATTRS:
-#             # если нашли игнорируемый атрибут, ищем более информативный
-#             for alt_attr in PRIORITY_ATTRS:
-#                 if el.has_attr(alt_attr):
-#                     val = el.get(alt_attr)
-#                     if isinstance(val, list):
-#                         val = " ".join(val)
-#                     if isinstance(val, str):
-#                         parts.append(f'[{alt_attr}="{val.strip()}"]')
-#                     break
-#             # добавляем сам matched-атрибут без значения
-#             parts.append(f'[{attr_name}]')
-#         else:
-#             val = el.get(attr_name)
-#             if isinstance(val, list):
-#                 val = " ".join(val)
-#             if isinstance(val, str):
-#                 parts.append(f'[{attr_name}="{val.strip()}"]')
-#             else:
-#                 parts.append(f'[{attr_name}]')
-
-#         return "".join(parts)
-
-#     # --- Этап 1. Прямой поиск ---
-#     for el in soup.find_all(True):
-#         element_text = el.get_text(strip=True)
-#         if element_text:
-#             match = (text == element_text) if exact else (text in element_text)
-#             if match:
-#                 selector = get_css_path(el)
-#                 if return_all_selectors:
-#                     selectors.append(selector)
-#                 else:
-#                     return selector
-
-#         for attr_name, attr_val in el.attrs.items():
-#             if isinstance(attr_val, list):
-#                 attr_val = " ".join(attr_val)
-#             if isinstance(attr_val, str):
-#                 match = (text == attr_val.strip()) if exact else (text in attr_val)
-#                 if match:
-#                     base_selector = get_css_path(el)
-#                     selector = make_selector(el, base_selector, attr_name)
-#                     if return_all_selectors:
-#                         selectors.append(selector)
-#                     else:
-#                         return selector
-
-#     # --- Этап 2. Fuzzy поиск ---
-#     if not selectors:
-#         threshold = 0.7
-#         for el in soup.find_all(True):
-#             element_text = el.get_text(strip=True)
-#             if element_text:
-#                 score = similarity(text, element_text)
-#                 if score >= threshold:
-#                     selector = get_css_path(el)
-#                     if return_all_selectors:
-#                         selectors.append(selector)
-#                     else:
-#                         return selector
-
-#             for attr_name, attr_val in el.attrs.items():
-#                 if isinstance(attr_val, list):
-#                     attr_val = " ".join(attr_val)
-#                 if isinstance(attr_val, str):
-#                     score = similarity(text, attr_val)
-#                     if score >= threshold:
-#                         base_selector = get_css_path(el)
-#                         selector = make_selector(el, base_selector, attr_name)
-#                         if return_all_selectors:
-#                             selectors.append(selector)
-#                         else:
-#                             return selector
-
-#     if return_all_selectors:
-#         return selectors if selectors else None
-#     return None
 
 
 
@@ -522,7 +294,8 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
 
             # Добавляем классы, если есть
             if element.has_attr("class"):
-                selector += "." + ".".join(element["class"])
+                # добавляем только классы через точки, но без лишней точки в конце
+                selector += "".join(f".{cls}" for cls in element["class"] if cls)
 
             # Проверяем наличие значимых атрибутов
             has_significant_attr = any(
@@ -919,108 +692,6 @@ def compute_match_score(found_text, target_text):
 
 
 
-
-
-# # region handle_selector_price
-
-# # Извлекает селекторы цены
-# # Перед этим очистив html от мусорных спецсимволов
-# def handle_selector_price(html, finding_element):
-#     # # 1. Очистка HTML
-#     # def clean_html(text: str) -> str:
-#     #     text = text.replace("&nbsp;", " ").replace("\xa0", " ")
-#     #     text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
-#     #     return text.strip()
-
-#     # # 2. Нормализация чисел/цен
-#     # def normalize_price(s: str) -> str:
-#     #     if not s:
-#     #         return ""
-#     #     s = s.strip().lower()
-#     #     s = re.sub(r"[^\d,\.]", "", s)
-#     #     s = re.sub(r"[^\d]", "", s)
-#     #     return s
-
-#     # 3. Функция построения CSS-пути для элемента
-#     def get_css_path(element):
-#         path = []
-#         while element is not None and isinstance(element.tag, str):
-#             selector = element.tag
-
-#             # Если есть ID — уникальный селектор
-#             if 'id' in element.attrib:
-#                 selector = f"#{element.attrib['id']}"
-#                 path.append(selector)
-#                 break
-
-#             # Если есть классы
-#             if 'class' in element.attrib:
-#                 classes = element.attrib['class'].split()
-#                 selector += '.' + '.'.join(classes)
-
-#             # nth-of-type среди сиблингов
-#             parent = element.getparent()
-#             if parent is not None:
-#                 same_tag_siblings = [sib for sib in parent if isinstance(sib.tag, str) and sib.tag == element.tag]
-#                 if len(same_tag_siblings) > 1:
-#                     index = same_tag_siblings.index(element) + 1
-#                     selector += f":nth-of-type({index})"
-
-#             path.append(selector)
-#             element = parent
-
-#         return " > ".join(reversed(path))
-
-#     # 4. Основная функция поиска селекторов по цене
-#     def find_price_selectors(html: str, finding_element: str, return_all_selectors: bool = False):
-#         html = clean_html(html)
-#         target_norm = normalize_price(finding_element)
-
-#         tree = html_lx.fromstring(html)
-#         selectors = []
-
-#         for elem in tree.iter():
-#             # Пропускаем комментарии, доктайпы
-#             if not isinstance(elem.tag, str):
-#                 continue
-
-#             # Проверяем текст
-#             text = elem.text_content().strip() if elem.text_content() else ""
-#             if text and normalize_price(text) == target_norm:
-#                 selector = get_css_path(elem)
-#                 if return_all_selectors:
-#                     selectors.append(selector)
-#                 else:
-#                     return selector
-
-#             # Проверяем все атрибуты
-#             for attr_name, attr_val in elem.attrib.items():
-#                 if isinstance(attr_val, str) and normalize_price(attr_val) == target_norm:
-#                     selector = f"{get_css_path(elem)}[{attr_name}]"
-#                     if return_all_selectors:
-#                         selectors.append(selector)
-#                     else:
-#                         return selector
-
-#         if return_all_selectors:
-#             return selectors if selectors else None
-
-#         return None
-    
-#     # Вернуть все селекторы
-#     all_selectors = find_price_selectors(html, finding_element, return_all_selectors=True)
-#     # print(all_selectors)
-
-#     # # Вернуть первый найденный селектор
-#     # first_selector = find_price_selectors(html, finding_element)
-#     # print(first_selector)
-
-#     return all_selectors
-
-
-
-
-
 content_html = {
     "simple": [
         # {
@@ -1355,59 +1026,61 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# ### Тест одного селектора с одной страницы
-# # region Тест 1 элемента
+### Тест одного селектора с одной страницы
+# region Тест 1 элемента
 
-# isPrint = True
+isPrint = True
 
-# elem_number = 4
-# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# # print(html[:500])
+elem_number = 0
+html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# print(html[:500])
 
-# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
 # substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_article)
+selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# selector_result = get_css_selector_from_text_value_element(html, substring_article)
 # selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+print("")
+print(f"🟩 selector_result = {selector_result}")
+
+
+# # Получаем куски по подстроке
+# result = find_contexts(html, substring_name)
+# print(result)
+
+
+
+
+
+
+
+
+
+
+
+# # region Обр всех селекторов
+
+# fill_selectors_for_items(
+#     data_input_table["links"]["simple"],
+#     get_css_selector_from_text_value_element
+# )
+
+# print_json(data_input_table["links"]["simple"])
+
+# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
 # print("")
-# print(f"🟩 selector_result = {selector_result}")
-
-
-# # # Получаем куски по подстроке
-# # result = find_contexts(html, substring_name)
-# # print(result)
-
-
-
-
-
-
-
-
-
-
-
-# region Обр всех селекторов
-
-fill_selectors_for_items(
-    data_input_table["links"]["simple"],
-    get_css_selector_from_text_value_element
-)
-
-print_json(data_input_table["links"]["simple"])
-
-result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
-
-print("✅ Итоговые селекторы:")
-print_json(result_select_best_selectors["result_selectors"])
+# print("")
+# print("✅ Итоговые селекторы:")
+# print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1534,10 +1207,14 @@ get_css_selector_from_text_value_element - принимает массив, ва
 После этого:
 
 Починить всё, на тех примерах что у меня есть
-    На 1м сайте не работают imageLink, остальные ещё не проверил
-    Надо всё починить на всех примерах что у меня есть
+    На 1м сайте не работают imageLink
+    2й Ок
+    3й ок, но надо больше страниц добавить
+    - 4й не ок
 
 Протестировать на разных других сайтах
+
+В imageLink можно попробовать искать подстроку, без хоста
 
 С oldPrice - извлекать селекторы напрямую, остальную логику напишу позже в selectorChecker()
 
