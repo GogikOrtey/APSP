@@ -1224,7 +1224,8 @@ def select_best_selectors(input_data, content_html):
                 if field in ("price", "oldPrice"):
                     match = normalize_price(expected) == normalize_price(extracted_any)
                 else:
-                    match = normalize_text(expected) == normalize_text(extracted_any)
+                    # match = normalize_text(expected) == normalize_text(extracted_any)
+                    match = compute_match_score(expected, extracted_any) >= 0.7
 
                 if not match:
                     if not expected and not extracted_any:
@@ -1593,3 +1594,8 @@ TODO Сложная обработка - потоковая загрузка с�
 
 
 """
+
+
+
+
+############### imageLink Не отрабатывает у 1го сайта
