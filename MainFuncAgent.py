@@ -1235,13 +1235,11 @@ def select_best_selectors(input_data, content_html):
                     
                     fails += 1
                     if verbose and print_fail_report:
-                        print(
-                            f"  [🟧 FAIL] {field} on {url}: "
-                            f"expected '{str(expected)[:70]}' "
-                            f"got '{str(extracted_any)[:70]}' "
-                            f"score_match = '{score_match:.3f}' "
-                            f"using {str(sel_set)[:70]}"
-                        )
+                        print(f"[🟧 FAIL] {field} on {url}: ")
+                        print(f"  искали: '{str(expected)[:200]}' ")
+                        print(f"  нашли:  '{str(extracted_any)[:200]}' ")
+                        print(f"  селектор: {str(sel_set)[:200]}")
+                        print(f"  score_match = '{score_match:.3f}' ")                        
 
             return fails == 0
 
@@ -1343,37 +1341,35 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# ### Тест одного селектора с одной страницы
-# # region Тест 1 элемента
+### Тест одного селектора с одной страницы
+# region Тест 1 элемента
 
-# isPrint = True
+isPrint = True
 
-# elem_number = 1
-# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# # print(html[:500])
+elem_number = 4
+html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# print(html[:500])
 
-# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
-# print("")
-# print(f"🟩 selector_result = {selector_result}")
-
-
-# # # Получаем куски по подстроке
-# # result = find_contexts(html, substring_name)
-# # print(result)
+# selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# selector_result = get_css_selector_from_text_value_element(html, substring_article)
+selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+print("")
+print(f"🟩 selector_result = {selector_result}")
 
 
+# # Получаем куски по подстроке
+# result = find_contexts(html, substring_name)
+# print(result)
 
 
 
@@ -1383,19 +1379,21 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# region Обр всех селекторов
 
-fill_selectors_for_items(
-    data_input_table["links"]["simple"],
-    get_css_selector_from_text_value_element
-)
 
-print_json(data_input_table["links"]["simple"])
+# # region Обр всех селекторов
 
-result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+# fill_selectors_for_items(
+#     data_input_table["links"]["simple"],
+#     get_css_selector_from_text_value_element
+# )
 
-print("✅ Итоговые селекторы:")
-print_json(result_select_best_selectors["result_selectors"])
+# print_json(data_input_table["links"]["simple"])
+
+# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
+# print("✅ Итоговые селекторы:")
+# print_json(result_select_best_selectors["result_selectors"])
 
 
 
