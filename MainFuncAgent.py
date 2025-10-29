@@ -498,9 +498,10 @@ def normalize_price(s: str) -> str:
 
 
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
-    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
-    PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
-    IGNORED_SUBSTRS = ["data"]  # <-- новые подстроки для игнора
+    # Игнорируем в подборе пути селекторы в [] в этими названиями
+    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"} 
+    IGNORED_SUBSTRS = ["data", "src", "href"] # А также соержащие такие подстроки
+    PRIORITY_ATTRS = ["name", "property", "itemprop", "id"] # При создании пути этим селекторам отдаём приоритет
 
     # --- 1. Очистим HTML, если надо ---
     if isPriceHandle:
