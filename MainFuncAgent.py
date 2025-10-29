@@ -497,31 +497,16 @@ def normalize_price(s: str) -> str:
     return s
 
 
-def find_text_selector(html: str, text: str, exact: bool = False, return_all_selectors: bool = False, isPriceHandle: bool = False):
+def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"}
     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
 
-    # # --- 1. Очистка HTML ---
-    # def clean_html(text: str) -> str:
-    #     text = text.replace("&nbsp;", " ").replace("\xa0", " ")
-    #     text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
-    #     return text.strip()
-
-    # # --- 2. Нормализация чисел/цен ---
-    # def normalize_price(s: str) -> str:
-    #     if not s:
-    #         return ""
-    #     s = s.strip().lower()
-    #     s = re.sub(r"[^\d,\.]", "", s)
-    #     s = re.sub(r"[^\d]", "", s)
-    #     return s
-
-    # --- 3. Очистим HTML, если надо ---
+    # --- 1. Очистим HTML, если надо ---
     if isPriceHandle:
         html = clean_html(html)
         text = normalize_price(text)
 
-    # --- 4. Вспомогательные функции ---
+    # --- 2. Вспомогательные функции ---
     def get_css_path(element):
         path = []
         while element and element.name and element.name != "[document]":
@@ -584,11 +569,11 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
 
         return "".join(parts)
 
-    # --- 5. Парсим HTML ---
+    # --- 3. Парсим HTML ---
     soup = BeautifulSoup(html, "html.parser")
     selectors = []
 
-    # --- 6. Основной поиск ---
+    # --- 4. Основной поиск (прямое совпадение подстроки) ---
     for el in soup.find_all(True):
         element_text = el.get_text(strip=True)
         if element_text:
@@ -615,7 +600,7 @@ def find_text_selector(html: str, text: str, exact: bool = False, return_all_sel
                     else:
                         return selector
 
-    # --- 7. Fuzzy-поиск ---
+    # --- 5. Нестрогий поиск (частичное совпадение подстроки) ---
     if not selectors:
         threshold = 0.7
         for el in soup.find_all(True):
@@ -837,7 +822,7 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
 def get_css_selector_from_text_value_element(html, finding_element, is_price = False, is_exact = True):
     print("")
     if isPrint: print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
-    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True, isPriceHandle=is_price)
+    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True, isPriceHandle=is_price, exact=is_exact)
 
     if not all_selectors:
         if isPrint: print("🟡 Не найдено ни одного подходящего селектора")
@@ -894,7 +879,7 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
 
     best = valid_selectors[0]
     if isPrint: print("")
-    if isPrint: print(f"🏆 Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
+    if isPrint: print(f"Лучший селектор: {best['selector']} (совпадение {best['score']*100:.1f}%)")
 
     # Дистилляция пути
     # result_distill_selector = distill_selector(html, best["selector"], get_element_from_selector, finding_element)
@@ -1357,20 +1342,19 @@ elem_number = 1
 html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
 # print(html[:500])
 
-substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
 # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
 # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
 # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
 # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_stock)
+# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
 # selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
 print("")
 print(f"🟩 selector_result = {selector_result}")
 
