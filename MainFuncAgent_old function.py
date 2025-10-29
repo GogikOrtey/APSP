@@ -838,6 +838,13 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
     print("")
     if isPrint: print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
     all_selectors = find_text_selector(html, finding_element, return_all_selectors=True, isPriceHandle=is_price)
+    # if(is_price):
+    #     # Для извлечения price и oldPrice - отдельный обработчик
+    #     all_selectors = handle_selector_price(html, finding_element)
+    # # elif finding_element.strip().lower() == "в наличии" or is_exact:
+    # #     all_selectors = find_text_selector(html, finding_element, exact=True, return_all_selectors=True)
+    # else:
+    #     all_selectors = find_text_selector(html, finding_element, return_all_selectors=True)
 
     if not all_selectors:
         if isPrint: print("🟡 Не найдено ни одного подходящего селектора")
@@ -878,19 +885,9 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
         return ""
 
     # Сортируем:
-    # 1️⃣ По совпадению (по убыванию score)
-    # 2️⃣ Сначала селекторы, начинающиеся с '#', потом остальные
-    # 3️⃣ Для '#' — по возрастанию длины, для остальных — по убыванию длины
-    def sort_key(x):
-        selector = x["selector"]
-        score = x["score"]
-        starts_with_id = selector.strip().startswith("#")
-        length = len(selector)
-        # Для селекторов с '#' сортируем по возрастанию длины, иначе по убыванию
-        # starts_with_id ставим с минусом, чтобы '#' шли первыми (True > False)
-        return (-score, not starts_with_id, length if starts_with_id else -length)
-
-    valid_selectors.sort(key=sort_key)
+    # 1️⃣ по совпадению (по убыванию)
+    # 2️⃣ при равных — по длине селектора (по возрастанию)
+    valid_selectors.sort(key=lambda x: (-x["score"], -len(x["selector"])))
 
     best = valid_selectors[0]
     if isPrint: print("")
@@ -1104,6 +1101,13 @@ def select_best_selectors(input_data, content_html):
         s = re.sub(r"\s+", " ", s).strip()
         return s.lower()
 
+    # def normalize_price(s: str) -> str:
+    #     if s is None:
+    #         return ""
+    #     # извлечь цифры и разделители
+    #     digits = re.findall(r"[\d]+", s.replace(",", ""))
+    #     return "".join(digits)
+
     def extract_using_selector(tree: html_lx.HtmlElement, selector: str) -> str:
         """
         Пытается выполнить CSS селектор на дереве lxml и вернуть строковое значение.
@@ -1152,6 +1156,10 @@ def select_best_selectors(input_data, content_html):
             if text and text.strip():
                 return text.strip()
         return ""
+
+    def score_selector(selector: str, count: int) -> float:
+        # чем чаще встречается и короче — тем лучше
+        return count / (1 + len(selector))
 
     def resolve_selectors_across_examples(
             examples: List[Dict[str, Any]],
@@ -1348,60 +1356,38 @@ def select_best_selectors(input_data, content_html):
 
 
 
-### Тест одного селектора с одной страницы
-# region Тест 1 элемента
+# ## Тест одного селектора с одной страницы
 
-isPrint = True
+# # region Тест 1 элемента
 
-elem_number = 1
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
+# isPrint = True
 
-substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# elem_number = 1
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
+
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["article"]
+# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
 # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# # substring_stock = data_input_table["links"]["simple"][elem_number]["stock"]
+# # substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_stock)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand, is_exact = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_stock)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
-print("")
-print(f"🟩 selector_result = {selector_result}")
+# # selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
 
 
-# # Получаем куски по подстроке
-# result = find_contexts(html, substring_name)
-# print(result)
-
-
-
-
-
-
-
-
-
-
-
-# # region Обр всех селекторов
-
-# fill_selectors_for_items(
-#     data_input_table["links"]["simple"],
-#     get_css_selector_from_text_value_element
-# )
-
-# print_json(data_input_table["links"]["simple"])
-
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
-
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
+# # # Получаем куски по подстроке
+# # result = find_contexts(html, substring_name)
+# # print(result)
 
 
 
@@ -1416,6 +1402,70 @@ print(f"🟩 selector_result = {selector_result}")
 
 
 
+
+
+# region Обр всех селекторов
+
+
+fill_selectors_for_items(
+    data_input_table["links"]["simple"],
+    get_css_selector_from_text_value_element
+)
+
+# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
+print_json(data_input_table["links"]["simple"])
+# print(json.dumps(content_html, indent=4, ensure_ascii=False))
+
+
+
+
+
+# #  Сохраняем эти 2 json локально (по большей части для теста)
+
+# import os
+
+# # Создаём папку "cache", если её нет
+# os.makedirs("cache", exist_ok=True)
+
+# # --- Сохранение в JSON ---
+# with open("cache/data_input_table.json", "w", encoding="utf-8") as f:
+#     json.dump(data_input_table, f, ensure_ascii=False, indent=4)
+
+# with open("cache/content_html.json", "w", encoding="utf-8") as f:
+#     json.dump(content_html, f, ensure_ascii=False, indent=4)
+
+# print("✅ Файлы сохранены")
+
+
+
+# ### Загрузка файлов обратно
+
+# with open("cache/data_input_table.json", "r", encoding="utf-8") as f:
+#     data_input_table = json.load(f)
+
+# with open("cache/content_html.json", "r", encoding="utf-8") as f:
+#     content_html = json.load(f)
+
+# print("✅ Файлы загружены обратно")
+# # print("data_input_table:", data_input_table)
+# # print("content_html:", content_html)
+
+
+# print(json.dumps(data_input_table["links"]["simple"], indent=4, ensure_ascii=False))
+# # print(json.dumps(content_html, indent=4, ensure_ascii=False))
+
+
+
+
+
+
+
+### На данный момент это конечная точка программы
+
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1504,8 +1554,10 @@ get_css_selector_from_text_value_element - принимает массив, ва
 
 С oldPrice - извлекать селекторы напрямую, остальную логику напишу позже в selectorChecker()
 
-Написать реализацию selectorChecker(), которая будет возвращать текст уже для финального шаблона кода
 
+
+И далее нужно будет выписать вставку кода в шаблон
+и генерацию финального кода parseCard
 
 
 Позже:
