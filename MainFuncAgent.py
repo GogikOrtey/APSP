@@ -1225,7 +1225,9 @@ def select_best_selectors(input_data, content_html):
                     match = normalize_price(expected) == normalize_price(extracted_any)
                 else:
                     # match = normalize_text(expected) == normalize_text(extracted_any)
-                    match = compute_match_score(expected, extracted_any) >= 0.7
+                    # match = compute_match_score(expected, extracted_any) >= 0.7
+                    score_match = compute_match_score(expected, extracted_any)
+                    match = True if score_match >= 0.7 else False 
 
                 if not match:
                     if not expected and not extracted_any:
@@ -1237,6 +1239,7 @@ def select_best_selectors(input_data, content_html):
                             f"  [🟧 FAIL] {field} on {url}: "
                             f"expected '{str(expected)[:70]}' "
                             f"got '{str(extracted_any)[:70]}' "
+                            f"score_match = '{score_match:.4f}' "
                             f"using {str(sel_set)[:70]}"
                         )
 
