@@ -184,6 +184,11 @@ def find_contexts(text: str, substring: str, context_size: int = 300) -> list[st
     return contexts
 
 
+# # Получаем куски по подстроке
+# result = find_contexts(html, substring_name)
+# print(result)
+
+
 
 
 ### Очистка html ответа

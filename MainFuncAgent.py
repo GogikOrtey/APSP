@@ -60,6 +60,7 @@ isPrint = False
 
 # # Данные извлечённые из таблицы, например:
 # data_input_table = {
+#     "host": "",
 #     "links": {
 #         "simple": [
 #             {
@@ -111,6 +112,7 @@ isPrint = False
 
 # # Данные с сайта 2
 # data_input_table = {
+#     "host": "",
 #     "links": {
 #         "simple": [
 #             {
@@ -166,6 +168,7 @@ isPrint = False
 
 # # Данные с сайта 3
 # data_input_table = {
+#     "host": "",
 #     "links": {
 #         "simple": [
 #             {
@@ -184,75 +187,76 @@ isPrint = False
 
 
 
-# # Данные с сайта 4
-# data_input_table = {
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
-#                 "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
-#                 "price": "99 800 ₽",
-#                 "oldPrice": "109 780 ₽",
-#                 "article": "13455",
-#                 "brand": "Baxi",
-#                 "OutOfStock_trigger": "Предзаказ",
-#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
-#             },
-#             {
-#                 "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
-#                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
-#                 "price": "195 000 ₽",
-#                 "oldPrice": "238 150 ₽",
-#                 "article": "38354",
-#                 "brand": "Baxi",
-#                 "InStock_trigger": "В наличии",
-#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
-
-
-
-# Данные с сайта 5
+# Данные с сайта 4
 data_input_table = {
     "host": "",
     "links": {
         "simple": [
             {
-                "link": "https://stroytorg812.ru/catalog/vanny/vanna_akrilovaya_1_70kh0_70_ultra_170/",
-                "name": "Ванна акриловая 170х70 Ультра-170 # ТРИТОН",
-                "price": "8 390 руб.",
-                "article": "U4031689", 
-                "brand": "ТРИТОН",
-                "InStock_trigger": "есть на складе",
-                "imageLink": "https://stroytorg812.ru/upload/iblock/db8/4db0f322_ffe9_11e6_94b1_002590746688_bed22781_05a3_11e7_94b1_002590746688.jpeg"
+                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+                "price": "99 800 ₽",
+                "oldPrice": "109 780 ₽",
+                "article": "13455",
+                "brand": "Baxi",
+                "OutOfStock_trigger": "Предзаказ",
+                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
             },
             {
-                "link": "https://stroytorg812.ru/catalog/mozaika/32_7kh32_7_mozaika_aqua_100_na_bumage/",
-                "name": "32,7х32,7 Мозаика Aqua 100 (на бумаге) 20*20*4 Bonaparte",
-                "price": "1 860,10",
-                "oldPrice": "1 958",
-                "article": "B2508830", 
-                "brand": "Bonaparte",
-                "InStock_trigger": "есть на складе",
-                "imageLink": "https://stroytorg812.ru/upload/iblock/672/fe473651_57f3_11e3_a425_00148557b27c_f22d79df_bddb_11e3_beaf_a65927533166.jpeg"
-            },
-            {
-                "link": "https://stroytorg812.ru/catalog/mebel_dlya_vannoy/tumba_napolnaya_agata_55_s_umyvalnikom_vizit_55_belaya/",
-                "name": "Тумба напольная Агата 55 с умывальником Визит-55, белая EMMY",
-                "price": "9 400,00",
-                "oldPrice": "12 450,00",
-                "article": "U4079315", 
-                "brand": "EMMY",
-                "InStock_trigger": "есть на складе",
-                "imageLink": "https://stroytorg812.ru/upload/iblock/6f8/103ef337_79a5_11f0_8c17_002590746688_b21dfec2_7e5d_11f0_8c17_002590746688.jpeg"
+                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
+                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+                "price": "195 000 ₽",
+                "oldPrice": "238 150 ₽",
+                "article": "38354",
+                "brand": "Baxi",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
             }
         ]
     },
     "search_requests": []
 }
+
+
+
+# # Данные с сайта 5
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://stroytorg812.ru/catalog/vanny/vanna_akrilovaya_1_70kh0_70_ultra_170/",
+#                 "name": "Ванна акриловая 170х70 Ультра-170 # ТРИТОН",
+#                 "price": "8 390 руб.",
+#                 "article": "U4031689", 
+#                 "brand": "ТРИТОН",
+#                 "InStock_trigger": "есть на складе",
+#                 "imageLink": "https://stroytorg812.ru/upload/iblock/db8/4db0f322_ffe9_11e6_94b1_002590746688_bed22781_05a3_11e7_94b1_002590746688.jpeg"
+#             },
+#             {
+#                 "link": "https://stroytorg812.ru/catalog/mozaika/32_7kh32_7_mozaika_aqua_100_na_bumage/",
+#                 "name": "32,7х32,7 Мозаика Aqua 100 (на бумаге) 20*20*4 Bonaparte",
+#                 "price": "1 860,10",
+#                 "oldPrice": "1 958",
+#                 "article": "B2508830", 
+#                 "brand": "Bonaparte",
+#                 "InStock_trigger": "есть на складе",
+#                 "imageLink": "https://stroytorg812.ru/upload/iblock/672/fe473651_57f3_11e3_a425_00148557b27c_f22d79df_bddb_11e3_beaf_a65927533166.jpeg"
+#             },
+#             {
+#                 "link": "https://stroytorg812.ru/catalog/mebel_dlya_vannoy/tumba_napolnaya_agata_55_s_umyvalnikom_vizit_55_belaya/",
+#                 "name": "Тумба напольная Агата 55 с умывальником Визит-55, белая EMMY",
+#                 "price": "9 400,00",
+#                 "oldPrice": "12 450,00",
+#                 "article": "U4079315", 
+#                 "brand": "EMMY",
+#                 "InStock_trigger": "есть на складе",
+#                 "imageLink": "https://stroytorg812.ru/upload/iblock/6f8/103ef337_79a5_11f0_8c17_002590746688_b21dfec2_7e5d_11f0_8c17_002590746688.jpeg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -313,8 +317,8 @@ def normalize_price(s: str) -> str:
 
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
     # Игнорируем в подборе пути селекторы в [] в этими названиями
-    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data"} 
-    IGNORED_SUBSTRS = ["data", "src", "href"] # А также соержащие такие подстроки
+    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"} 
+    IGNORED_SUBSTRS = ["data", "src", "href", "alt"] # А также соержащие такие подстроки
     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"] # При создании пути этим селекторам отдаём приоритет
 
     # --- 1. Очистим HTML, если надо ---
@@ -691,18 +695,26 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
         if isPrint: print("🔴 Не найдено корректных селекторов")
         return ""
 
-    # Сортируем:
-    # 1️⃣ По совпадению (по убыванию score)
-    # 2️⃣ Сначала селекторы, начинающиеся с '#', потом остальные
-    # 3️⃣ Для '#' — по возрастанию длины, для остальных — по убыванию длины
     def sort_key(x):
         selector = x["selector"]
         score = x["score"]
         starts_with_id = selector.strip().startswith("#")
         length = len(selector)
-        # Для селекторов с '#' сортируем по возрастанию длины, иначе по убыванию
-        # starts_with_id ставим с минусом, чтобы '#' шли первыми (True > False)
-        return (-score, not starts_with_id, length if starts_with_id else -length)
+        # Проверяем, заканчивается ли селектор на атрибут (например, [data-id], [href])
+        ends_with_attr = selector.strip().endswith("]")
+
+        # Сортируем:
+        # 1️⃣ По убыванию score
+        # 2️⃣ Сначала селекторы, начинающиеся с '#'
+        # 3️⃣ Для '#' — по возрастанию длины, для остальных — по убыванию
+        # 4️⃣ В конце селекторы, у которых в конце есть атрибуты в []
+        return (
+            -score,
+            not starts_with_id,            
+            ends_with_attr,  # False (нет атрибута) < True (есть атрибут)
+            length if starts_with_id else -length,
+        )
+
 
     valid_selectors.sort(key=sort_key)
 
@@ -1089,36 +1101,31 @@ def select_best_selectors(input_data, content_html):
 
 
 
-### Тест одного селектора с одной страницы
-# region Тест 1 элемента
+# ### Тест одного селектора с одной страницы
+# # region Тест 1 элемента
 
-isPrint = True
+# isPrint = True
 
 # elem_number = 0
 # html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
 # # print(html[:500])
 
-# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
 # # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
 # # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
 # # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
 # # substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# selector_result = get_css_selector_from_text_value_element(html, substring_name)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
 # # selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
 # print("")
 # print(f"🟩 selector_result = {selector_result}")
-
-
-# # Получаем куски по подстроке
-# result = find_contexts(html, substring_name)
-# print(result)
 
 
 
