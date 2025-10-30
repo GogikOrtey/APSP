@@ -265,6 +265,7 @@ def compute_match_score(found_text, target_text):
 
 from difflib import SequenceMatcher
 
+# Сравнение перестановками. Сравнивает строки более точно
 def compute_match_score_2(found_text, target_text):
     found_text = found_text.strip().lower()
     target_text = target_text.strip().lower()
@@ -274,6 +275,7 @@ def compute_match_score_2(found_text, target_text):
 
     return SequenceMatcher(None, found_text, target_text).ratio()
 
+# TODO Можно заменить compute_match_score на compute_match_score_2, если будет работать ок
 
 # Здесь хранятся html страницы (типо кеша)
 content_html = {
@@ -960,11 +962,11 @@ def select_best_selectors(input_data, content_html):
                     # # match = compute_match_score(expected, extracted_any) >= 0.7
                     # score_match = compute_match_score(expected, extracted_any)
                     score_match = compute_match_score_2(expected, extracted_any)
-                    if(field == "imageLink"): # Пониженный порог соответствия для imageLink
-                        print(f"score_match imageLink = {score_match}")
-                        if score_match >= 0.5:
-                            score_match = 1
-                    match = expected in extracted_any or extracted_any in expected or score_match >= 0.7
+                    # if(field == "imageLink"): # Пониженный порог соответствия для imageLink
+                    #     print(f"score_match imageLink = {score_match}")
+                    #     if score_match >= 0.5:
+                    #         score_match = 1
+                    match = expected in extracted_any or extracted_any in expected or score_match >= 0.8
 
                 if not match:
                     if not expected and not extracted_any:
