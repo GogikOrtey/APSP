@@ -217,6 +217,7 @@ isPrint = False
 
 # Данные с сайта 5
 data_input_table = {
+    "host": "",
     "links": {
         "simple": [
             {
@@ -726,8 +727,12 @@ content_html = {
 # region fill_selectors_for_items
 
 # Обрабатываем все элементы из полученного массива - находим для каждого селектор
-def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
-    print(f"Обработаем {len(data_input_table['links']['simple'])} страниц")
+def fill_selectors_for_items(input_items, get_css_selector_from_text_value_element):
+    items = input_items["links"]["simple"] # Проходимся по простым ссылкам
+    # TODO В будущем доработать логику - возомжно здесь проходиться по всем массивам ссылок что есть
+    host = ""
+    
+    print(f"Обработаем {len(items)} страниц")
     for item in items:
         # Если нет поля _selectors — создаём
         selectors = {}
@@ -745,14 +750,16 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
             link_host = urlparse(item["link"]).scheme + "://" + urlparse(item["link"]).netloc
             image_host = urlparse(item["imageLink"]).scheme + "://" + urlparse(item["imageLink"]).netloc
 
-            # Проверяем, совпадает ли домен (host)
+            # Проверяем, совпадает ли host у ссылки, и ссылки на изображение
             if link_host == image_host:
                 host = link_host  # максимум до третьего слеша
                 item["_original_imageLink"] = item["imageLink"]
                 item["imageLink"] = item["imageLink"].replace(host, "")
             else:
-                host = None
-        print("host:", host)
+                host = link_host
+        if input_items.get("host", "") == "" and host:
+            print("🔵 host:", host)
+            input_items["host"] = host
 
         # Проходим по всем ключам, кроме служебных и ссылки
         for key, value in item.items():
@@ -1106,7 +1113,7 @@ isPrint = True
 # region Обр всех селекторов
 
 fill_selectors_for_items(
-    data_input_table["links"]["simple"],
+    data_input_table,
     get_css_selector_from_text_value_element
 )
 
