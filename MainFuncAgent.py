@@ -19,150 +19,116 @@ import requests
 import json
 import re
 
-
-
-
-
 isPrint = False
-
-
-
-# Этапы работы:
-# 1. Получение:
-#   * ТЗ в виде текста по пунктам
-#   * Ссылки на сайт
-#   * Таблички с найденными на странице данными
-# 2. Агент пробует зайти на страницу, и получить валидный html
-# 3. Агент разбирает табличку и ТЗ в JSON формат
-
-# # ------------------
-
-# print("Стадия 2: Пробуем зайти на страницу, и получить валидный html")
-
-# url = "https://vodomirural.ru"
-# html = get_html(url)
-# print(html[:500])  # Выведем первые 500 символов, чтобы не засорять консоль
-# # print(html) 
-# if(len(html) < 500): print("Ответ невалиден: Слишком малая длина")
-# # Проверить на сайтах с куратором
-
-# # ------------------
-
-# 4. Заходим на страницу первого товара, пробуем найти его название, или часть. Если да - то ок, идём дальше
-# Это проверка на то, что на страницу товара можно попасть без защиты
-
-# url_first_item = "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/"
-
-
 
 
 # region Входные данные
 
-# # Данные извлечённые из таблицы, например:
-# data_input_table = {
-#     "host": "",
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
-#                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
-#                 "price": "10 320",
-#                 "brand": "Аntika",
-#                 "stock": "В наличии",
-#                 "imageLink": ""
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
-#                 "name": "Опора ППРС D25 в Екатеринбурге",
-#                 "price": "5",
-#                 "brand": "",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-#                 "name": "Заглушка (D20) в Екатеринбурге",
-#                 "price": "4",
-#                 "brand": "MeerPlast",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-#                 "name": "Крестовина 20 ППРС в Екатеринбурге",
-#                 "price": "16",
-#                 "brand": "MeerPlast",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
-#             },
-#             {
-#                 "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-#                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-#                 "price": "102",
-#                 "brand": "MeerPlast",
-#                 "stock": "В наличии",
-#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
-
-
-
-# Данные с сайта 2
-# Здесь битые значения для поля imageLink на сайте
+# Данные извлечённые из таблицы, например:
 data_input_table = {
     "host": "",
     "links": {
         "simple": [
             {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
-                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
-                "price": "16 125",
-                "article": "00017728",
-                "brand": "TRITON",
-                # "stock": "В наличии",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+                "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
+                "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
+                "price": "10 320",
+                "brand": "Аntika",
+                "stock": "В наличии",
+                "imageLink": ""
             },
             {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-                "price": "9 900 руб.",
-                "article": "УТ000001951",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+                "name": "Опора ППРС D25 в Екатеринбурге",
+                "price": "5",
+                "brand": "",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
             },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-                "price": "7 990 руб.",
-                "article": "УТ000006868",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-                "price": "24 820 руб.",
-                "article": "УТ000001271",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
-                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
-                "price": "15 руб.",
-                "article": "00027670",
-                "brand": "MasterProf",
-                # Не в наличии
-                # # "OutOfStock_trigger": "",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
-            }
+            # {
+            #     "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+            #     "name": "Заглушка (D20) в Екатеринбурге",
+            #     "price": "4",
+            #     "brand": "MeerPlast",
+            #     "stock": "В наличии",
+            #     "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
+            # },
+            # {
+            #     "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+            #     "name": "Крестовина 20 ППРС в Екатеринбурге",
+            #     "price": "16",
+            #     "brand": "MeerPlast",
+            #     "stock": "В наличии",
+            #     "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
+            # },
+            # {
+            #     "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+            #     "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+            #     "price": "102",
+            #     "brand": "MeerPlast",
+            #     "stock": "В наличии",
+            #     "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
+            # }
         ]
     },
     "search_requests": []
 }
+
+
+
+# # Данные с сайта 2
+# # Здесь битые значения для поля imageLink на сайте
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+#                 "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+#                 "price": "16 125",
+#                 "article": "00017728",
+#                 "brand": "TRITON",
+#                 # "stock": "В наличии",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+#                 "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+#                 "price": "9 900 руб.",
+#                 "article": "УТ000001951",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+#                 "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+#                 "price": "7 990 руб.",
+#                 "article": "УТ000006868",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+#                 "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+#                 "price": "24 820 руб.",
+#                 "article": "УТ000001271",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+#                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+#                 "price": "15 руб.",
+#                 "article": "00027670",
+#                 "brand": "MasterProf",
+#                 # Не в наличии
+#                 # # "OutOfStock_trigger": "",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -260,7 +226,7 @@ data_input_table = {
 # }
 
 
-# Доп. методы
+# region Доп. методы
 
 def print_json(input_json):
     text = json.dumps(input_json, indent=4, ensure_ascii=False)
@@ -282,6 +248,31 @@ def normalize_price(s: str) -> str:
     s = re.sub(r"[^\d,\.]", "", s)
     s = re.sub(r"[^\d]", "", s)
     return s
+
+# Вспомогательная функция для оценки схожести
+def compute_match_score(found_text, target_text):
+    """Оценка схожести строк по количеству совпадающих символов"""
+    found_text = found_text.strip().lower()
+    target_text = target_text.strip().lower()
+
+    if not found_text or not target_text:
+        return 0.0
+
+    # Длина совпадающих символов (по порядку)
+    common = sum(1 for a, b in zip(found_text, target_text) if a == b)
+    score = common / max(len(target_text), len(found_text))
+    return score
+
+# Здесь хранятся html страницы (типо кеша)
+content_html = {
+    "simple": [
+        # {
+        #     "link": "",
+        #     "html_content": ""  
+        # },    
+    ]
+}
+
 
 # region Check html
 # Проверяю, что html-страница доступна, и данные первого товара на ней есть
@@ -305,7 +296,7 @@ def check_avialible_html():
 # Проверяю, что html-страница доступна, и данные первого товара на ней есть
 check_avialible_html()
 
-# region find_text_selector
+# region Поиск селекторов
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
     # Игнорируем в подборе пути селекторы в [] в этими названиями
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"} 
@@ -467,16 +458,6 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
     if return_all_selectors:
         return selectors if selectors else None
     return None
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -646,7 +627,7 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
 
 
 
-# region get_css_selector_from_text_value_element
+# region Выбирает один sel
 
 # Основная функция: Получает css селектор, по текстовому содержанию элемента
 # Эта функция get_css_selector_from_text_value_element получает на вход один элемент
@@ -730,35 +711,12 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
     return result_distill_selector
 
 
-# Вспомогательная функция для оценки схожести
-def compute_match_score(found_text, target_text):
-    """Оценка схожести строк по количеству совпадающих символов"""
-    found_text = found_text.strip().lower()
-    target_text = target_text.strip().lower()
-
-    if not found_text or not target_text:
-        return 0.0
-
-    # Длина совпадающих символов (по порядку)
-    common = sum(1 for a, b in zip(found_text, target_text) if a == b)
-    score = common / max(len(target_text), len(found_text))
-    return score
 
 
 
 
 
-content_html = {
-    "simple": [
-        # {
-        #     "link": "",
-        #     "html_content": ""  
-        # },    
-    ]
-}
-
-
-# region fill_selectors_for_items
+# region Обр. всех ссылок
 
 # Обрабатываем все элементы из полученного массива - находим для каждого селектор
 def fill_selectors_for_items(input_items, get_css_selector_from_text_value_element):
@@ -837,7 +795,7 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
 
 
 
-# region select_best_selectors
+# region Результ. sel
 
 # Перебирает все селекторы которые мы собрали со всех страничек, 
 # и выбирает наилучший, для каждого поля
@@ -988,9 +946,8 @@ def select_best_selectors(input_data, content_html):
                 else:
                     # # match = normalize_text(expected) == normalize_text(extracted_any)
                     # # match = compute_match_score(expected, extracted_any) >= 0.7
-                    # score_match = compute_match_score(expected, extracted_any)
-                    # match = True if score_match >= 0.7 else False 
-                    match = expected in extracted_any
+                    score_match = compute_match_score(expected, extracted_any)
+                    match = expected in extracted_any or extracted_any in expected or score_match >= 0.7
 
                 if not match:
                     if not expected and not extracted_any:
@@ -1104,8 +1061,14 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# ### Тест одного селектора с одной страницы
-# # region Тест 1 элемента
+### Тест одного селектора с одной страницы
+# region Тест 1 элемента
+
+
+
+
+
+
 
 # isPrint = True
 
@@ -1140,7 +1103,7 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# region Обр всех селекторов
+# region Обр. всех sel
 
 fill_selectors_for_items(
     data_input_table,
