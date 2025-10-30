@@ -228,6 +228,26 @@ data_input_table = {
                 "brand": "ТРИТОН",
                 "InStock_trigger": "есть на складе",
                 "imageLink": "https://stroytorg812.ru/upload/iblock/db8/4db0f322_ffe9_11e6_94b1_002590746688_bed22781_05a3_11e7_94b1_002590746688.jpeg"
+            },
+            {
+                "link": "https://stroytorg812.ru/catalog/mozaika/32_7kh32_7_mozaika_aqua_100_na_bumage/",
+                "name": "32,7х32,7 Мозаика Aqua 100 (на бумаге) 20*20*4 Bonaparte",
+                "price": "1 860,10",
+                "oldPrice": "1 958",
+                "article": "B2508830", 
+                "brand": "Bonaparte",
+                "InStock_trigger": "есть на складе",
+                "imageLink": "https://stroytorg812.ru/upload/iblock/672/fe473651_57f3_11e3_a425_00148557b27c_f22d79df_bddb_11e3_beaf_a65927533166.jpeg"
+            },
+            {
+                "link": "https://stroytorg812.ru/catalog/mebel_dlya_vannoy/tumba_napolnaya_agata_55_s_umyvalnikom_vizit_55_belaya/",
+                "name": "Тумба напольная Агата 55 с умывальником Визит-55, белая EMMY",
+                "price": "9 400,00",
+                "oldPrice": "12 450,00",
+                "article": "U4079315", 
+                "brand": "EMMY",
+                "InStock_trigger": "есть на складе",
+                "imageLink": "https://stroytorg812.ru/upload/iblock/6f8/103ef337_79a5_11f0_8c17_002590746688_b21dfec2_7e5d_11f0_8c17_002590746688.jpeg"
             }
         ]
     },
