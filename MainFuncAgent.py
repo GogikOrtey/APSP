@@ -10,6 +10,7 @@ from typing import Callable, Dict, List, Any, Iterable, Tuple
 from collections import Counter, defaultdict
 from addedFunc import ErrorHandler
 from difflib import SequenceMatcher
+from urllib.parse import urlparse
 from lxml import html as html_lx
 from bs4 import BeautifulSoup
 from pprint import pprint
@@ -222,7 +223,7 @@ data_input_table = {
                 "link": "https://stroytorg812.ru/catalog/vanny/vanna_akrilovaya_1_70kh0_70_ultra_170/",
                 "name": "Ванна акриловая 170х70 Ультра-170 # ТРИТОН",
                 "price": "8 390 руб.",
-                "article": "U4031689", ####
+                "article": "U4031689", 
                 "brand": "ТРИТОН",
                 "InStock_trigger": "есть на складе",
                 "imageLink": "https://stroytorg812.ru/upload/iblock/db8/4db0f322_ffe9_11e6_94b1_002590746688_bed22781_05a3_11e7_94b1_002590746688.jpeg"
@@ -739,6 +740,20 @@ def fill_selectors_for_items(items, get_css_selector_from_text_value_element):
         }
         content_html["simple"].append(new_item)
 
+        # Извлекаю host, и изменяю imageLink
+        if "imageLink" in item and item["imageLink"]:
+            link_host = urlparse(item["link"]).scheme + "://" + urlparse(item["link"]).netloc
+            image_host = urlparse(item["imageLink"]).scheme + "://" + urlparse(item["imageLink"]).netloc
+
+            # Проверяем, совпадает ли домен (host)
+            if link_host == image_host:
+                host = link_host  # максимум до третьего слеша
+                item["_original_imageLink"] = item["imageLink"]
+                item["imageLink"] = item["imageLink"].replace(host, "")
+            else:
+                host = None
+        print("host:", host)
+
         # Проходим по всем ключам, кроме служебных и ссылки
         for key, value in item.items():
             # TODO Позже сделать условие покрасивее, пока что оставлю так
@@ -1242,6 +1257,8 @@ get_css_selector_from_text_value_element - принимает массив, ва
 
 Написать реализацию selectorChecker(), которая будет возвращать текст уже для финального шаблона кода
 
+
+Можно тестировать на сайтах для ЗКС
 
 
 Позже:
