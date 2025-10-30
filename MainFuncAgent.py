@@ -45,30 +45,30 @@ data_input_table = {
                 "stock": "В наличии",
                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
             },
-            # {
-            #     "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-            #     "name": "Заглушка (D20) в Екатеринбурге",
-            #     "price": "4",
-            #     "brand": "MeerPlast",
-            #     "stock": "В наличии",
-            #     "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
-            # },
-            # {
-            #     "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-            #     "name": "Крестовина 20 ППРС в Екатеринбурге",
-            #     "price": "16",
-            #     "brand": "MeerPlast",
-            #     "stock": "В наличии",
-            #     "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
-            # },
-            # {
-            #     "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-            #     "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-            #     "price": "102",
-            #     "brand": "MeerPlast",
-            #     "stock": "В наличии",
-            #     "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
-            # }
+            {
+                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+                "name": "Заглушка (D20) в Екатеринбурге",
+                "price": "4",
+                "brand": "MeerPlast",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+                "name": "Крестовина 20 ППРС в Екатеринбурге",
+                "price": "16",
+                "brand": "MeerPlast",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
+            },
+            {
+                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+                "price": "102",
+                "brand": "MeerPlast",
+                "stock": "В наличии",
+                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
+            }
         ]
     },
     "search_requests": []
@@ -947,6 +947,10 @@ def select_best_selectors(input_data, content_html):
                     # # match = normalize_text(expected) == normalize_text(extracted_any)
                     # # match = compute_match_score(expected, extracted_any) >= 0.7
                     score_match = compute_match_score(expected, extracted_any)
+                    if(field == "imageLink"): # Пониженный порог соответствия для imageLink
+                        print(f"score_match imageLink = {score_match}")
+                        if score_match >= 0.5:
+                            score_match = 1
                     match = expected in extracted_any or extracted_any in expected or score_match >= 0.7
 
                 if not match:
