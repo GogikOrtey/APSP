@@ -263,6 +263,18 @@ def compute_match_score(found_text, target_text):
     score = common / max(len(target_text), len(found_text))
     return score
 
+from difflib import SequenceMatcher
+
+def compute_match_score_2(found_text, target_text):
+    found_text = found_text.strip().lower()
+    target_text = target_text.strip().lower()
+
+    if not found_text or not target_text:
+        return 0.0
+
+    return SequenceMatcher(None, found_text, target_text).ratio()
+
+
 # Здесь хранятся html страницы (типо кеша)
 content_html = {
     "simple": [
@@ -946,7 +958,8 @@ def select_best_selectors(input_data, content_html):
                 else:
                     # # match = normalize_text(expected) == normalize_text(extracted_any)
                     # # match = compute_match_score(expected, extracted_any) >= 0.7
-                    score_match = compute_match_score(expected, extracted_any)
+                    # score_match = compute_match_score(expected, extracted_any)
+                    score_match = compute_match_score_2(expected, extracted_any)
                     if(field == "imageLink"): # Пониженный порог соответствия для imageLink
                         print(f"score_match imageLink = {score_match}")
                         if score_match >= 0.5:
