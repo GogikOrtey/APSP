@@ -110,80 +110,81 @@ isPrint = False
 
 
 
-# # Данные с сайта 2
-# data_input_table = {
-#     "host": "",
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
-#                 "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
-#                 "price": "16 125",
-#                 "article": "00017728",
-#                 "brand": "TRITON",
-#                 # "stock": "В наличии",
-#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-#             },
-#             {
-#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-#                 "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-#                 "price": "9 900 руб.",
-#                 "article": "УТ000001951",
-#                 "brand": "TRITON",
-#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-#             },
-#             {
-#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-#                 "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-#                 "price": "7 990 руб.",
-#                 "article": "УТ000006868",
-#                 "brand": "TRITON",
-#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-#             },
-#             {
-#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-#                 "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-#                 "price": "24 820 руб.",
-#                 "article": "УТ000001271",
-#                 "brand": "TRITON",
-#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-#             },
-#             {
-#                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
-#                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
-#                 "price": "15 руб.",
-#                 "article": "00027670",
-#                 "brand": "MasterProf",
-#                 # Не в наличии
-#                 # # "OutOfStock_trigger": "",
-#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
-
-
-
-
-# Данные с сайта 3
+# Данные с сайта 2
+# Здесь битые значения для поля imageLink на сайте
 data_input_table = {
     "host": "",
     "links": {
         "simple": [
             {
-                "link": "https://keramix-ekb.ru/keramogranit/gracia-ceramica-rossiya/monocolor.html",
-                "name": "Керамогранит Коллекция Monocolor производство Gracia Ceramica",
-                "price": "1 970",
-                "brand": "Gracia Ceramica",
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+                "price": "16 125",
+                "article": "00017728",
+                "brand": "TRITON",
                 # "stock": "В наличии",
-                "country": "Россия",
-                "imageLink": "https://keramix-ekb.ru/img/icons/icon6310.jpg"
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+                "price": "9 900 руб.",
+                "article": "УТ000001951",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+                "price": "7 990 руб.",
+                "article": "УТ000006868",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+                "price": "24 820 руб.",
+                "article": "УТ000001271",
+                "brand": "TRITON",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+            },
+            {
+                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+                "price": "15 руб.",
+                "article": "00027670",
+                "brand": "MasterProf",
+                # Не в наличии
+                # # "OutOfStock_trigger": "",
+                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
             }
         ]
     },
     "search_requests": []
 }
+
+
+
+
+# # Данные с сайта 3
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://keramix-ekb.ru/keramogranit/gracia-ceramica-rossiya/monocolor.html",
+#                 "name": "Керамогранит Коллекция Monocolor производство Gracia Ceramica",
+#                 "price": "1 970",
+#                 "brand": "Gracia Ceramica",
+#                 # "stock": "В наличии",
+#                 "country": "Россия",
+#                 "imageLink": "https://keramix-ekb.ru/img/icons/icon6310.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -259,7 +260,28 @@ data_input_table = {
 # }
 
 
+# Доп. методы
 
+def print_json(input_json):
+    text = json.dumps(input_json, indent=4, ensure_ascii=False)
+    text = text.replace('\\"', '"')
+    print(text)
+
+def clean_html(text: str) -> str:
+    if not text:
+        return ""
+    text = text.replace("&nbsp;", " ").replace("\xa0", " ")
+    text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
+    return text.strip()
+
+def normalize_price(s: str) -> str:
+    if not s:
+        return ""
+    s = s.strip().lower()
+    s = clean_html(s)
+    s = re.sub(r"[^\d,\.]", "", s)
+    s = re.sub(r"[^\d]", "", s)
+    return s
 
 # region Check html
 # Проверяю, что html-страница доступна, и данные первого товара на ней есть
@@ -280,41 +302,10 @@ def check_avialible_html():
         print("🟠 Подстрока не найдена.")
         raise ErrorHandler("При открытии страницы 1 товара, на ней не было обнаружено названия товара", "4-1")
 
-
-
-
-
-def print_json(input_json):
-    text = json.dumps(input_json, indent=4, ensure_ascii=False)
-    text = text.replace('\\"', '"')
-    print(text)
-
-
-
-
 # Проверяю, что html-страница доступна, и данные первого товара на ней есть
 check_avialible_html()
 
-
-
-
-def clean_html(text: str) -> str:
-    if not text:
-        return ""
-    text = text.replace("&nbsp;", " ").replace("\xa0", " ")
-    text = re.sub(r"[\u200b\u200e\u200f\r\n\t]+", " ", text)
-    return text.strip()
-
-def normalize_price(s: str) -> str:
-    if not s:
-        return ""
-    s = s.strip().lower()
-    s = clean_html(s)
-    s = re.sub(r"[^\d,\.]", "", s)
-    s = re.sub(r"[^\d]", "", s)
-    return s
-
-
+# region find_text_selector
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
     # Игнорируем в подборе пути селекторы в [] в этими названиями
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"} 
@@ -823,7 +814,8 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
                         )
                         if selector:
                             print(f"🟩 Найден селектор для поля {key}")
-                            selectors[key] = selector
+                            selector = selector.replace("div.", ".") ### Вот тут может быть ошибка
+                            selectors[key] = selector                            
                             break  # если нашли — выходим из цикла
                         elif attempt == 1:
                             print(f"🟨 Не нашли при exact=True, пробуем частичным совпадением")
@@ -1112,57 +1104,57 @@ def select_best_selectors(input_data, content_html):
 
 
 
-### Тест одного селектора с одной страницы
-# region Тест 1 элемента
+# ### Тест одного селектора с одной страницы
+# # region Тест 1 элемента
 
-isPrint = True
+# isPrint = True
 
-elem_number = 0
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
+# elem_number = 0
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
 
-# substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
-# selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
-selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_name)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_article)
+# # selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
+# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
+
+
+
+
+
+
+
+
+
+
+
+# region Обр всех селекторов
+
+fill_selectors_for_items(
+    data_input_table,
+    get_css_selector_from_text_value_element
+)
+
+print_json(data_input_table["links"]["simple"])
+
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
 print("")
-print(f"🟩 selector_result = {selector_result}")
-
-
-
-
-
-
-
-
-
-
-
-# # region Обр всех селекторов
-
-# fill_selectors_for_items(
-#     data_input_table,
-#     get_css_selector_from_text_value_element
-# )
-
-# print_json(data_input_table["links"]["simple"])
-
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
-
-# print("")
-# print("")
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
+print("")
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
