@@ -166,56 +166,56 @@ isPrint = False
 
 
 
-# # Данные с сайта 3
-# data_input_table = {
-#     "host": "",
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://keramix-ekb.ru/keramogranit/gracia-ceramica-rossiya/monocolor.html",
-#                 "name": "Керамогранит Коллекция Monocolor производство Gracia Ceramica",
-#                 "price": "1 970",
-#                 "brand": "Gracia Ceramica",
-#                 # "stock": "В наличии",
-#                 "country": "Россия",
-#                 "imageLink": "https://keramix-ekb.ru/img/icons/icon6310.jpg"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
-
-
-
-# Данные с сайта 4
+# Данные с сайта 3
 data_input_table = {
     "host": "",
     "links": {
         "simple": [
             {
-                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
-                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
-                "price": "99 800 ₽",
-                "oldPrice": "109 780 ₽",
-                "article": "13455",
-                "brand": "Baxi",
-                "OutOfStock_trigger": "Предзаказ",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
-            },
-            {
-                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
-                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
-                "price": "195 000 ₽",
-                "oldPrice": "238 150 ₽",
-                "article": "38354",
-                "brand": "Baxi",
-                "InStock_trigger": "В наличии",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+                "link": "https://keramix-ekb.ru/keramogranit/gracia-ceramica-rossiya/monocolor.html",
+                "name": "Керамогранит Коллекция Monocolor производство Gracia Ceramica",
+                "price": "1 970",
+                "brand": "Gracia Ceramica",
+                # "stock": "В наличии",
+                "country": "Россия",
+                "imageLink": "https://keramix-ekb.ru/img/icons/icon6310.jpg"
             }
         ]
     },
     "search_requests": []
 }
+
+
+
+# # Данные с сайта 4
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+#                 "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+#                 "price": "99 800 ₽",
+#                 "oldPrice": "109 780 ₽",
+#                 "article": "13455",
+#                 "brand": "Baxi",
+#                 "OutOfStock_trigger": "Предзаказ",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
+#             },
+#             {
+#                 "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
+#                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+#                 "price": "195 000 ₽",
+#                 "oldPrice": "238 150 ₽",
+#                 "article": "38354",
+#                 "brand": "Baxi",
+#                 "InStock_trigger": "В наличии",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -380,10 +380,17 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
             any(sub in attr_name for sub in IGNORED_SUBSTRS)
         )
 
+        # если элемент имеет id — проверяем, есть ли он уже в base_selector
+        element_id = el.get("id")
+        has_id_in_base = element_id and f"#{element_id}" in base_selector
+
         if is_ignored:
             # если нашли игнорируемый атрибут, ищем более информативный
             for alt_attr in PRIORITY_ATTRS:
                 if el.has_attr(alt_attr):
+                    # не добавляем id повторно, если он уже есть
+                    if alt_attr == "id" and has_id_in_base:
+                        continue
                     val = el.get(alt_attr)
                     if isinstance(val, list):
                         val = " ".join(val)
@@ -396,11 +403,15 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
             if isinstance(val, list):
                 val = " ".join(val)
             if isinstance(val, str):
+                # не добавляем id повторно
+                if attr_name == "id" and has_id_in_base:
+                    return "".join(parts)
                 parts.append(f'[{attr_name}="{val.strip()}"]')
             else:
                 parts.append(f'[{attr_name}]')
 
         return "".join(parts)
+
 
     # --- 3. Парсим HTML ---
     soup = BeautifulSoup(html, "html.parser")
@@ -815,7 +826,7 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
                             selectors[key] = selector
                             break  # если нашли — выходим из цикла
                         elif attempt == 1:
-                            print(f"🟨 Не нашли при exact=True, пробуем с exact=False...")
+                            print(f"🟨 Не нашли при exact=True, пробуем частичным совпадением")
 
                     if not selector:
                         print(f"🟧 Не удалось найти селектор для поля {key} даже при exact=False")
@@ -1101,57 +1112,57 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# ### Тест одного селектора с одной страницы
-# # region Тест 1 элемента
+### Тест одного селектора с одной страницы
+# region Тест 1 элемента
 
-# isPrint = True
+isPrint = True
 
-# elem_number = 0
-# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# # print(html[:500])
+elem_number = 0
+html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# print(html[:500])
 
 # substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# # substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# # substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# # substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# # substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-# # substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
+# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
+# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
+substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
 
 # selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
-# # selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
+# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
+# selector_result = get_css_selector_from_text_value_element(html, substring_article)
+# selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
+selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+print("")
+print(f"🟩 selector_result = {selector_result}")
+
+
+
+
+
+
+
+
+
+
+
+# # region Обр всех селекторов
+
+# fill_selectors_for_items(
+#     data_input_table,
+#     get_css_selector_from_text_value_element
+# )
+
+# print_json(data_input_table["links"]["simple"])
+
+# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
 # print("")
-# print(f"🟩 selector_result = {selector_result}")
-
-
-
-
-
-
-
-
-
-
-
-# region Обр всех селекторов
-
-fill_selectors_for_items(
-    data_input_table,
-    get_css_selector_from_text_value_element
-)
-
-print_json(data_input_table["links"]["simple"])
-
-result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
-
-print("")
-print("")
-print("✅ Итоговые селекторы:")
-print_json(result_select_best_selectors["result_selectors"])
+# print("")
+# print("✅ Итоговые селекторы:")
+# print_json(result_select_best_selectors["result_selectors"])
 
 
 
