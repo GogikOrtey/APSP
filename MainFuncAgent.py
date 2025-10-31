@@ -357,7 +357,14 @@ check_avialible_html()
 
 
 # region Поиск селекторов
-def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
+def find_text_selector(
+    html: str,
+    text: str,
+    exact: bool = True,
+    return_all_selectors: bool = False,
+    isPriceHandle: bool = False,
+    allow_complex_classes: bool = False  # Использовать ли сложные аттрибуты, типо [class*="..."]
+):
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"}
     IGNORED_SUBSTRS = ["data", "src", "href", "alt"]
     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
@@ -366,12 +373,9 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
         html = clean_html(html)
         text = normalize_price(text)
 
-    # символы, которые делают класс "небезопасным" для записи через .class
     DANGEROUS_CHARS = set(':[]/%%()#')
 
     def class_is_dangerous(cls: str) -> bool:
-        # если в имени класса есть любые "опасные" символы — будем использовать [class*="..."]
-        # также считаем опасными пробел и кавычки
         if not cls:
             return False
         if any(ch in cls for ch in DANGEROUS_CHARS):
@@ -381,7 +385,6 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
         return False
 
     def escape_attr_value(val: str) -> str:
-        # экранируем двойные кавычки внутри значения атрибута
         return val.replace('"', '\\"')
 
     def get_css_path(element):
@@ -389,23 +392,26 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
         while element and element.name and element.name != "[document]":
             selector = element.name
 
-            # Если есть id — это всегда уникально
+            # Если есть id — используем его
             if element.has_attr("id"):
                 selector = f"#{element['id']}"
                 path.append(selector)
                 break
 
-            # Добавляем классы по одному — и если класс "опасный" превращаем в [class*="..."]
+            # Классы
             if element.has_attr("class"):
                 cls_parts = []
                 for cls in element.get("class", []):
                     if not cls:
                         continue
+                    # если класс опасный
                     if class_is_dangerous(cls):
-                        cls_parts.append(f'[class*="{escape_attr_value(cls)}"]')
+                        if allow_complex_classes:
+                            cls_parts.append(f'[class*="{escape_attr_value(cls)}"]')
+                        else:
+                            continue  # ❌ пропускаем опасные классы
                     else:
                         cls_parts.append(f'.{cls}')
-                # присоединяем к селектору без дополнительной обработки всей строки
                 selector += "".join(cls_parts)
 
             # Проверяем наличие значимых атрибутов
@@ -475,7 +481,7 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
     soup = BeautifulSoup(html, "html.parser")
     selectors = []
 
-    # --- Основной поиск (прямое совпадение подстроки) ---
+    # --- Основной поиск (точное совпадение) ---
     for el in soup.find_all(True):
         element_text = el.get_text(strip=True)
         if element_text:
@@ -502,7 +508,7 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
                     else:
                         return selector
 
-    # --- Нестрогий поиск (частичное совпадение) ---
+    # --- Нестрогий поиск ---
     if not selectors:
         threshold = 0.7
         for el in soup.find_all(True):
@@ -540,7 +546,7 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
 
 
 
-
+# region Поиск по селектору
 # Получает и возвращает значение элемента по селектору
 def get_element_from_selector(html, selector):
     tree = html_lx.fromstring(html)
@@ -716,7 +722,12 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
 def get_css_selector_from_text_value_element(html, finding_element, is_price = False, is_exact = True):
     print("")
     if isPrint: print(f"🟦 Извлекли такие селекторы для поля \"{finding_element}\":")
-    all_selectors = find_text_selector(html, finding_element, return_all_selectors=True, isPriceHandle=is_price, exact=is_exact)
+    all_selectors = find_text_selector(html, 
+                                       finding_element, 
+                                       return_all_selectors=True, 
+                                       isPriceHandle=is_price, 
+                                       exact=is_exact,
+                                       allow_complex_classes=False)
 
     if not all_selectors:
         if isPrint: print("🟡 Не найдено ни одного подходящего селектора")
@@ -732,9 +743,12 @@ def get_css_selector_from_text_value_element(html, finding_element, is_price = F
         if isPrint: print(f"🟢 Проверка селектора: {selector}")
         result_text = get_element_from_selector(html, selector)
 
-        if result_text == "":
-            if isPrint: print("❌ Элемент по селектору не найден")
+        if not result_text:
+            if isPrint: print("❌ Элемент по селектору не найден или текст пуст")
             continue
+
+        # Безопасно приводим к строке
+        result_text = str(result_text)
 
         # Проверяем наличие подстроки — строгое совпадение по содержанию
         if finding_element.strip() in result_text.strip():
