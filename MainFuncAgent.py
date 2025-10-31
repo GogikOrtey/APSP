@@ -14,6 +14,7 @@ from difflib import SequenceMatcher
 from urllib.parse import urlparse
 from lxml import html as html_lx
 from bs4 import BeautifulSoup
+from string import Template
 from pprint import pprint
 import itertools
 import requests
@@ -953,21 +954,21 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# region Обр. всех sel
+# # region Обр. всех sel
 
-fill_selectors_for_items(
-    data_input_table,
-    get_css_selector_from_text_value_element
-)
+# fill_selectors_for_items(
+#     data_input_table,
+#     get_css_selector_from_text_value_element
+# )
 
-print_json(data_input_table["links"]["simple"])
+# print_json(data_input_table["links"]["simple"])
 
-result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
-print("")
-print("")
-print("✅ Итоговые селекторы:")
-print_json(result_select_best_selectors["result_selectors"])
+# print("")
+# print("")
+# print("✅ Итоговые селекторы:")
+# print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1000,10 +1001,10 @@ print_json(result_select_best_selectors["result_selectors"])
 
 
 
-
+# region Создаю parseCard
 
 # Собирает финальный код для вставки в шаблон
-def selectorChecker(result_selectors):
+def selector_checker_and_parseCard_gen(result_selectors):
     """
     Проверяет, что все селекторы действительно извлекают то что нужно
     И если нужно, то собирает код, который правит их результаты, или как-то
@@ -1026,10 +1027,36 @@ def selectorChecker(result_selectors):
     """
 
     print("Проверяем селекторы, и генерируем parseCard")
+    print_json(result_selectors)
 
+    template_parseCard = Template("""
+    async parseCard(set: SetType, cacher: Cacher<ResultItem[]>) {
+        let items: ResultItem[] = []
 
+        const data = await this.makeRequest(set.query);
+        $cherrioLoad
 
+        $varFromSelector
+        const timestamp = getTimestamp()
 
+        const item: ResultItem = {
+            $itemsFieds
+        }
+        items.push(item);
+
+        cacher.cache = items
+        return items;
+    }
+    """)
+
+    result = template_parseCard.substitute(
+        itemsFieds="__itemsFieds__",
+        varFromSelector="__varFromSelector__",
+        cherrioLoad="const $ = cheerio.load(data);",
+    )
+
+    print("")
+    print(result)
 
 
 
@@ -1050,11 +1077,13 @@ def selectorChecker(result_selectors):
 
 # Для примера
 result_selectors = {
-    "price": "meta[itemprop=\"price\"][content]",
-    "name": "#pagetitle",
-    "imageLink": "",
-    "brand": "meta[itemprop=\"brand\"][content]",
-    "stock": "div.catalog-element-panel-quantity-wrap"
+    "name": "h1.name",
+    "price": ".b",
+    "article": ".char > p",
+    "brand": "li:nth-of-type(4) > a",
+    "InStock_trigger": ".nal.y",
+    "imageLink": "a.fancybox[href]",
+    "oldPrice": ".thr"
 }
 
 
