@@ -130,7 +130,7 @@ def find_text_selector(
         html = clean_html(html)
         text = normalize_price(text)
 
-    DANGEROUS_CHARS = set(':[]/%%()#')
+    DANGEROUS_CHARS = set(':[]/%%()#') 
 
     def class_is_dangerous(cls: str) -> bool:
         if not cls:
@@ -796,10 +796,10 @@ def select_best_selectors(input_data, content_html):
                     # # match = compute_match_score(expected, extracted_any) >= 0.7
                     # score_match = compute_match_score(expected, extracted_any)
                     score_match = compute_match_score_2(expected, extracted_any)
-                    # if(field == "imageLink"): # Пониженный порог соответствия для imageLink
-                    #     print(f"score_match imageLink = {score_match}")
-                    #     if score_match >= 0.5:
-                    #         score_match = 1
+                    if(field == "imageLink"): # Пониженный порог соответствия для imageLink
+                        print(f"score_match imageLink = {score_match}")
+                        if score_match >= 0.5:
+                            score_match = 1
                     match = expected in extracted_any or extracted_any in expected or score_match >= 0.8
 
                 if not match:
@@ -923,61 +923,64 @@ def select_best_selectors(input_data, content_html):
 
 
 
-isPrint = True
+# isPrint = True
 
-elem_number = 0
-html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
-# print(html[:500])
+# elem_number = 0
+# html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
+# # print(html[:500])
 
-substring_name = data_input_table["links"]["simple"][elem_number]["name"]
-# substring_price = data_input_table["links"]["simple"][elem_number]["price"]
-# substring_oldPrice = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# substring_brand = data_input_table["links"]["simple"][elem_number]["brand"]
-# substring_article = data_input_table["links"]["simple"][elem_number]["article"]
-# substring_imageLink = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# # substring = data_input_table["links"]["simple"][elem_number]["name"]
+# # substring = data_input_table["links"]["simple"][elem_number]["price"]
+# # substring = data_input_table["links"]["simple"][elem_number]["oldPrice"]
+# # substring = data_input_table["links"]["simple"][elem_number]["brand"]
+# # substring = data_input_table["links"]["simple"][elem_number]["article"]
+# # substring = data_input_table["links"]["simple"][elem_number]["imageLink"]
+# substring = "/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
 
-selector_result = get_css_selector_from_text_value_element(html, substring_name)
-# selector_result = get_css_selector_from_text_value_element(html, substring_price, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_oldPrice, is_price = True)
-# selector_result = get_css_selector_from_text_value_element(html, substring_brand)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article)
-# selector_result = get_css_selector_from_text_value_element(html, substring_article, is_exact=False)
-# selector_result = get_css_selector_from_text_value_element(html, substring_imageLink)
+# selector_result = get_css_selector_from_text_value_element(html, substring)
+# # selector_result = get_css_selector_from_text_value_element(html, substring, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring, is_exact=False)
+# print("")
+# print(f"🟩 selector_result = {selector_result}")
+
+
+
+
+
+
+
+
+
+
+
+# region Обр. всех sel
+
+fill_selectors_for_items(
+    data_input_table,
+    get_css_selector_from_text_value_element
+)
+
+print_json(data_input_table["links"]["simple"])
+
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+
 print("")
-print(f"🟩 selector_result = {selector_result}")
+print("")
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
 
 
 
+"""
+    🟩 selector_result = 
+    div.catalog-element-panel-gallery-picture.intec-ui-picture.intec-image-effect > img[src]
 
-
-
-
-
-# # region Обр. всех sel
-
-# fill_selectors_for_items(
-#     data_input_table,
-#     get_css_selector_from_text_value_element
-# )
-
-# print_json(data_input_table["links"]["simple"])
-
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
-
-# print("")
-# print("")
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
-
-
-
-
-
-
-
+    ['.catalog-products-viewed-image-wrapper.intec-ui-picture > img[src]', 
+     '.catalog-element-panel-gallery-picture.intec-ui-picture.intec-image-effect > img[src]']
+"""
 
 
 

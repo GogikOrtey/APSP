@@ -264,6 +264,16 @@ data_input_table = {
                 "brand": "DAKO",
                 "InStock_trigger": "В наличии",
                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/c1b/p1e31vas9p6qew6ssb9pfy0afbns6he5.webp"
+            },
+            {
+                "link": "https://plitburg.ru/catalog/plitka/dd602320r_pro_matriks_temno_seryy_obreznoy_keramogranit_60x60_kerama_marazzi/",
+                "name": "DD602320R Про Матрикс темно-серый обрезной керамогранит 60x60, Kerama Marazzi",
+                "price": "2 345 ₽ / м2",
+                "oldPrice": "",
+                "article": "DD602320R",
+                "brand": "Kerama Marazzi",
+                "OutOfStock_trigger": "Под заказ: 3-5 дней",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/ce2/r000qg0trz32gftjt8wy57g4kns4uv80.webp"
             }
         ]
     },
