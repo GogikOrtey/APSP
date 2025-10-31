@@ -73,59 +73,55 @@
 
 
 
-# Данные с сайта 2
-# Здесь битые значения для поля imageLink на сайте
-data_input_table = {
-    "host": "",
-    "links": {
-        "simple": [
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
-                "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
-                "price": "16 125",
-                "article": "00017728",
-                "brand": "TRITON",
-                # "stock": "В наличии",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
-                "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
-                "price": "9 900 руб.",
-                "article": "УТ000001951",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
-                "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
-                "price": "7 990 руб.",
-                "article": "УТ000006868",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
-                "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
-                "price": "24 820 руб.",
-                "article": "УТ000001271",
-                "brand": "TRITON",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
-            },
-            {
-                "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
-                "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
-                "price": "15 руб.",
-                "article": "00027670",
-                "brand": "MasterProf",
-                # Не в наличии
-                # # "OutOfStock_trigger": "",
-                "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Данные с сайта 2
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-aura-170-b530df76.html",
+#                 "name": "Акриловая ванна Triton Аура 170x70 (КОПЛЕКТ ванна,экрас,каркас) TRITON",
+#                 "price": "16 125",
+#                 "article": "00017728",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-160h70-ekstra-akril-cd18e8d4.html",
+#                 "name": "Акриловая ванна Triton Стандарт 160х70 Экстра TRITON",
+#                 "price": "9 900 руб.",
+#                 "article": "УТ000001951",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/b530df7630d011ec812be0d55e0811bb_b530df7730d011ec812be0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-standart-130-ekstra-akril-9767a71b.html",
+#                 "name": "Акриловая ванна Triton Стандарт 130х70 Экстра TRITON",
+#                 "price": "7 990 руб.",
+#                 "article": "УТ000006868",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/cd18e8d400d511e38427001a4d504e55_97912f653b7d11ea80e8e0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/vanny/vanny-akrilovye/vanna-izabel-pravaya-1700x1000-mm-fb2cccfd.html",
+#                 "name": "Акриловая ванна Triton Изабель 170х100 R TRITON",
+#                 "price": "24 820 руб.",
+#                 "article": "УТ000001271",
+#                 "brand": "TRITON",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/fb2cccfd42b211e2859e001a4d504e55_04a3a1a4eb5b11ee8148e0d55e0811bb.jpg"
+#             },
+#             {
+#                 "link": "https://santehnica-vodoley.ru/catalog/kotelnoe-oborudovanie/komplektuyucshie-dlya-kotelnogo-oborudovaniya/prokladka-iz-ftoroplasta-34-MasterProf-58316128.html",
+#                 "name": "Прокладка из фторопласта 3/4\" MasterProf MasterProf",
+#                 "price": "15 руб.",
+#                 "article": "00027670",
+#                 "brand": "MasterProf",
+#                 "imageLink": "https://santehnica-vodoley.ru/a/vodolei1/files/userfiles/images/catalog/583161280d2a11ef814ae0d55e0811bb_5831613b0d2a11ef814ae0d55e0811bb.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -240,42 +236,42 @@ data_input_table = {
 # }
 
 
-# # Сайт 7
-# data_input_table = {
-#     "host": "",
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://plitburg.ru/catalog/plitka/e_5020_mr_600x600x9_rock_seryy_svetlyy_matovyy_kg_60x60_dako/",
-#                 "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-5020 Rock",
-#                 "price": "1 729 ₽ / м2",
-#                 "oldPrice": "1 820 ₽",
-#                 "article": "E-5020/MR/600x600x9",
-#                 "brand": "DAKO",
-#                 "InStock_trigger": "В наличии",
-#                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
-#             },
-#             {
-#                 "link": "https://plitburg.ru/catalog/plitka/e_3032_mr_600x600x9_vita_seryy_matovyy_kg_60x60_dako/",
-#                 "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-3032 Vita",
-#                 "price": "1 729 ₽ / м2",
-#                 "oldPrice": "1 820 ₽",
-#                 "article": "E-3032/MR/600x600x9",
-#                 "brand": "DAKO",
-#                 "InStock_trigger": "В наличии",
-#                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/c1b/p1e31vas9p6qew6ssb9pfy0afbns6he5.webp"
-#             },
-#             {
-#                 "link": "https://plitburg.ru/catalog/plitka/dd602320r_pro_matriks_temno_seryy_obreznoy_keramogranit_60x60_kerama_marazzi/",
-#                 "name": "DD602320R Про Матрикс темно-серый обрезной керамогранит 60x60, Kerama Marazzi",
-#                 "price": "2 345 ₽ / м2",
-#                 "oldPrice": "",
-#                 "article": "DD602320R",
-#                 "brand": "Kerama Marazzi",
-#                 "OutOfStock_trigger": "Под заказ: 3-5 дней",
-#                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/ce2/r000qg0trz32gftjt8wy57g4kns4uv80.webp"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
+# Сайт 7
+data_input_table = {
+    "host": "",
+    "links": {
+        "simple": [
+            {
+                "link": "https://plitburg.ru/catalog/plitka/e_5020_mr_600x600x9_rock_seryy_svetlyy_matovyy_kg_60x60_dako/",
+                "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-5020 Rock",
+                "price": "1 729 ₽ / м2",
+                "oldPrice": "1 820 ₽",
+                "article": "E-5020/MR/600x600x9",
+                "brand": "DAKO",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
+            },
+            {
+                "link": "https://plitburg.ru/catalog/plitka/e_3032_mr_600x600x9_vita_seryy_matovyy_kg_60x60_dako/",
+                "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-3032 Vita",
+                "price": "1 729 ₽ / м2",
+                "oldPrice": "1 820 ₽",
+                "article": "E-3032/MR/600x600x9",
+                "brand": "DAKO",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/c1b/p1e31vas9p6qew6ssb9pfy0afbns6he5.webp"
+            },
+            {
+                "link": "https://plitburg.ru/catalog/plitka/dd602320r_pro_matriks_temno_seryy_obreznoy_keramogranit_60x60_kerama_marazzi/",
+                "name": "DD602320R Про Матрикс темно-серый обрезной керамогранит 60x60, Kerama Marazzi",
+                "price": "2 345 ₽ / м2",
+                "oldPrice": "",
+                "article": "DD602320R",
+                "brand": "Kerama Marazzi",
+                "OutOfStock_trigger": "Под заказ: 3-5 дней",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/ce2/r000qg0trz32gftjt8wy57g4kns4uv80.webp"
+            }
+        ]
+    },
+    "search_requests": []
+}
