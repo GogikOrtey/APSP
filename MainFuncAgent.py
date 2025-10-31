@@ -24,55 +24,76 @@ isPrint = False
 
 # region Входные данные
 
-# Данные извлечённые из таблицы, например:
-data_input_table = {
-    "host": "",
-    "links": {
-        "simple": [
-            {
-                "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
-                "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
-                "price": "10 320",
-                "brand": "Аntika",
-                "stock": "В наличии",
-                "imageLink": ""
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
-                "name": "Опора ППРС D25 в Екатеринбурге",
-                "price": "5",
-                "brand": "",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-                "name": "Заглушка (D20) в Екатеринбурге",
-                "price": "4",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-                "name": "Крестовина 20 ППРС в Екатеринбурге",
-                "price": "16",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-                "price": "102",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Пример данных
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "",
+#                 "name": "",
+#                 "price": "",
+#                 "oldPrice": "",
+#                 "article": "",
+#                 "brand": "",
+#                 "InStock_trigger": "",
+#                 "OutOfStock_trigger": "",
+#                 "imageLink": ""
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
+
+# # Данные извлечённые из таблицы, например:
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
+#                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
+#                 "price": "10 320",
+#                 "brand": "Аntika",
+#                 "stock": "В наличии",
+#                 "imageLink": ""
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+#                 "name": "Опора ППРС D25 в Екатеринбурге",
+#                 "price": "5",
+#                 "brand": "",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+#                 "name": "Заглушка (D20) в Екатеринбурге",
+#                 "price": "4",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+#                 "name": "Крестовина 20 ППРС в Екатеринбурге",
+#                 "price": "16",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+#                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+#                 "price": "102",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -225,6 +246,24 @@ data_input_table = {
 #     "search_requests": []
 # }
 
+# Сайт 6
+data_input_table = {
+    "host": "",
+    "links": {
+        "simple": [
+            {
+                "link": "https://mosplitka.ru/collections/creto-mono/",
+                "name": "Коллекция плитки Creto Mono",
+                "price": "от 366 ₽/м2",
+                "country": "Россия",
+                "imageLink": "https://media.mspltk.ru/1219040/conversions/1s0ze4l426xm3ji1r6abzmjrp2ksh7u4-productSingle.webp"
+            }
+        ]
+    },
+    "search_requests": []
+}
+
+
 
 # region Доп. методы
 
@@ -310,19 +349,38 @@ def check_avialible_html():
 # Проверяю, что html-страница доступна, и данные первого товара на ней есть
 check_avialible_html()
 
+
+
+
+
+
+
+
+from bs4 import BeautifulSoup
+from difflib import SequenceMatcher
+import re
+
 # region Поиск селекторов
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
-    # Игнорируем в подборе пути селекторы в [] в этими названиями
-    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"} 
-    IGNORED_SUBSTRS = ["data", "src", "href", "alt"] # А также соержащие такие подстроки
-    PRIORITY_ATTRS = ["name", "property", "itemprop", "id"] # При создании пути этим селекторам отдаём приоритет
+    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"}
+    IGNORED_SUBSTRS = ["data", "src", "href", "alt"]
+    PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
 
-    # --- 1. Очистим HTML, если надо ---
     if isPriceHandle:
         html = clean_html(html)
         text = normalize_price(text)
 
-    # --- 2. Вспомогательные функции ---
+    # --- Функция для "оборачивания" классов с двоеточием ---
+    def wrap_tailwind_classes(selector: str) -> str:
+        # Заменяет .class-name (включая с двоеточиями, скобками, процентами и т.п.) на [class*="class-name"]
+        def repl(match):
+            cls = match.group(1)
+            # Если класс содержит "опасные" символы — оборачиваем
+            if any(c in cls for c in [":", "[", "]", "/", "%", "(", ")"]):
+                return f'[class*="{cls}"]'
+            return f'.{cls}'
+        return re.sub(r'\.([a-zA-Z0-9:_\-\[\]\(\)%/]+)', repl, selector)
+
     def get_css_path(element):
         path = []
         while element and element.name and element.name != "[document]":
@@ -334,10 +392,13 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
                 path.append(selector)
                 break
 
-            # Добавляем классы, если есть
+            # Добавляем классы
             if element.has_attr("class"):
                 # добавляем только классы через точки, но без лишней точки в конце
                 selector += "".join(f".{cls}" for cls in element["class"] if cls)
+
+                # ✅ Заворачиваем классы с двоеточием
+                selector = wrap_tailwind_classes(selector)
 
             # Проверяем наличие значимых атрибутов
             has_significant_attr = any(
@@ -369,22 +430,17 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
 
     def make_selector(el, base_selector, attr_name):
         parts = [base_selector]
-
-        # проверяем, игнорируем ли атрибут по списку или по подстроке
         is_ignored = (
             attr_name in IGNORED_ATTRS or
             any(sub in attr_name for sub in IGNORED_SUBSTRS)
         )
 
-        # если элемент имеет id — проверяем, есть ли он уже в base_selector
         element_id = el.get("id")
         has_id_in_base = element_id and f"#{element_id}" in base_selector
 
         if is_ignored:
-            # если нашли игнорируемый атрибут, ищем более информативный
             for alt_attr in PRIORITY_ATTRS:
                 if el.has_attr(alt_attr):
-                    # не добавляем id повторно, если он уже есть
                     if alt_attr == "id" and has_id_in_base:
                         continue
                     val = el.get(alt_attr)
@@ -399,14 +455,15 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
             if isinstance(val, list):
                 val = " ".join(val)
             if isinstance(val, str):
-                # не добавляем id повторно
                 if attr_name == "id" and has_id_in_base:
                     return "".join(parts)
                 parts.append(f'[{attr_name}="{val.strip()}"]')
             else:
                 parts.append(f'[{attr_name}]')
 
-        return "".join(parts)
+        # ✅ Заворачиваем tailwind-классы внутри итогового селектора тоже
+        full_selector = "".join(parts)
+        return wrap_tailwind_classes(full_selector)
 
 
     # --- 3. Парсим HTML ---
@@ -1089,7 +1146,7 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# isPrint = True
+isPrint = True
 
 # elem_number = 0
 # html = get_html( data_input_table["links"]["simple"][elem_number]["link"])
