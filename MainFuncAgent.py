@@ -1005,6 +1005,9 @@ def select_best_selectors(input_data, content_html):
 
 # Собирает финальный код для вставки в шаблон
 def selector_checker_and_parseCard_gen(result_selectors):
+    print("Проверяем селекторы, и генерируем parseCard")
+    print_json(result_selectors)
+
     """
     Проверяет, что все селекторы действительно извлекают то что нужно
     И если нужно, то собирает код, который правит их результаты, или как-то
@@ -1026,15 +1029,39 @@ def selector_checker_and_parseCard_gen(result_selectors):
 
     """
 
-    print("Проверяем селекторы, и генерируем parseCard")
-    print_json(result_selectors)
+    # Проверка на наличие всех необходимых полей, и селекторов для них
+        # Обязательно должны присутствовать поля и селекторы для: name, stock, price
 
+    value_field = ""
+
+    # Поле stock
+    if (    "InStock_trigger" not in result_selectors.keys() 
+        and "OutOfStock_trigger" not in result_selectors.keys()):
+        print("Нет триггеров наличия, считаем что все товары в наличии")
+        value_field += "const stock = \"InStock\"\n"
+    elif 
+
+
+
+    # Собираю код извлечения селекторов
+
+
+
+    # Собираю поля
+    items_fields = ""
+    for key in result_selectors.keys():
+        items_fields += key + ", "
+    items_fields += "timestamp"
+
+
+
+    # Собираю и запроляю шаблон parseCard
     template_parseCard = Template("""
     async parseCard(set: SetType, cacher: Cacher<ResultItem[]>) {
         let items: ResultItem[] = []
 
         const data = await this.makeRequest(set.query);
-        $cherrioLoad
+        $cheerioLoad
 
         $varFromSelector
         const timestamp = getTimestamp()
@@ -1050,9 +1077,9 @@ def selector_checker_and_parseCard_gen(result_selectors):
     """)
 
     result = template_parseCard.substitute(
-        itemsFieds="__itemsFieds__",
-        varFromSelector="__varFromSelector__",
-        cherrioLoad="const $ = cheerio.load(data);",
+        itemsFieds=items_fields,
+        varFromSelector=value_field,
+        cheerioLoad="const $ = cheerio.load(data);",
     )
 
     print("")
@@ -1087,7 +1114,7 @@ result_selectors = {
 }
 
 
-selectorChecker(result_selectors)
+selector_checker_and_parseCard_gen(result_selectors)
 
 
 
