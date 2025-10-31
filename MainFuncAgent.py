@@ -122,8 +122,8 @@ def find_text_selector(
     isPriceHandle: bool = False,
     allow_complex_classes: bool = False  # Использовать ли сложные аттрибуты, типо [class*="..."]
 ):
-    IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"}
-    IGNORED_SUBSTRS = ["data", "src", "href", "alt", "title"]
+    # Игнорируем атрибуты, содержащие эти подстроки, при поиске css пути
+    IGNORED_SUBSTRS = ["data", "src", "href", "alt", "title", "content", "title"]
     PRIORITY_ATTRS = ["name", "property", "itemprop", "id"]
 
     if isPriceHandle:
@@ -179,11 +179,7 @@ def find_text_selector(
             # Проверяем наличие значимых атрибутов
             has_significant_attr = any(
                 (
-                    attr in PRIORITY_ATTRS or
-                    (
-                        attr not in IGNORED_ATTRS and
-                        not any(sub in attr for sub in IGNORED_SUBSTRS)
-                    )
+                    attr in PRIORITY_ATTRS or not any(sub in attr for sub in IGNORED_SUBSTRS)
                 )
                 for attr in element.attrs.keys()
             )
@@ -206,10 +202,7 @@ def find_text_selector(
 
     def make_selector(el, base_selector, attr_name):
         parts = [base_selector]
-        is_ignored = (
-            attr_name in IGNORED_ATTRS or
-            any(sub in attr_name for sub in IGNORED_SUBSTRS)
-        )
+        is_ignored = any(sub in attr_name for sub in IGNORED_SUBSTRS)
 
         element_id = el.get("id")
         has_id_in_base = element_id and f"#{element_id}" in base_selector
