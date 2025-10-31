@@ -356,10 +356,6 @@ check_avialible_html()
 
 
 
-from bs4 import BeautifulSoup
-from difflib import SequenceMatcher
-import re
-
 # region Поиск селекторов
 def find_text_selector(html: str, text: str, exact: bool = True, return_all_selectors: bool = False, isPriceHandle: bool = False):
     IGNORED_ATTRS = {"content", "data-original", "href", "data-src", "src", "data", "alt"}
@@ -370,16 +366,23 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
         html = clean_html(html)
         text = normalize_price(text)
 
-    # --- Функция для "оборачивания" классов с двоеточием ---
-    def wrap_tailwind_classes(selector: str) -> str:
-        # Заменяет .class-name (включая с двоеточиями, скобками, процентами и т.п.) на [class*="class-name"]
-        def repl(match):
-            cls = match.group(1)
-            # Если класс содержит "опасные" символы — оборачиваем
-            if any(c in cls for c in [":", "[", "]", "/", "%", "(", ")"]):
-                return f'[class*="{cls}"]'
-            return f'.{cls}'
-        return re.sub(r'\.([a-zA-Z0-9:_\-\[\]\(\)%/]+)', repl, selector)
+    # символы, которые делают класс "небезопасным" для записи через .class
+    DANGEROUS_CHARS = set(':[]/%%()#')
+
+    def class_is_dangerous(cls: str) -> bool:
+        # если в имени класса есть любые "опасные" символы — будем использовать [class*="..."]
+        # также считаем опасными пробел и кавычки
+        if not cls:
+            return False
+        if any(ch in cls for ch in DANGEROUS_CHARS):
+            return True
+        if '"' in cls or "'" in cls or " " in cls:
+            return True
+        return False
+
+    def escape_attr_value(val: str) -> str:
+        # экранируем двойные кавычки внутри значения атрибута
+        return val.replace('"', '\\"')
 
     def get_css_path(element):
         path = []
@@ -392,13 +395,18 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
                 path.append(selector)
                 break
 
-            # Добавляем классы
+            # Добавляем классы по одному — и если класс "опасный" превращаем в [class*="..."]
             if element.has_attr("class"):
-                # добавляем только классы через точки, но без лишней точки в конце
-                selector += "".join(f".{cls}" for cls in element["class"] if cls)
-
-                # ✅ Заворачиваем классы с двоеточием
-                selector = wrap_tailwind_classes(selector)
+                cls_parts = []
+                for cls in element.get("class", []):
+                    if not cls:
+                        continue
+                    if class_is_dangerous(cls):
+                        cls_parts.append(f'[class*="{escape_attr_value(cls)}"]')
+                    else:
+                        cls_parts.append(f'.{cls}')
+                # присоединяем к селектору без дополнительной обработки всей строки
+                selector += "".join(cls_parts)
 
             # Проверяем наличие значимых атрибутов
             has_significant_attr = any(
@@ -447,7 +455,7 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
                     if isinstance(val, list):
                         val = " ".join(val)
                     if isinstance(val, str):
-                        parts.append(f'[{alt_attr}="{val.strip()}"]')
+                        parts.append(f'[{alt_attr}="{escape_attr_value(val.strip())}"]')
                     break
             parts.append(f'[{attr_name}]')
         else:
@@ -457,20 +465,17 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
             if isinstance(val, str):
                 if attr_name == "id" and has_id_in_base:
                     return "".join(parts)
-                parts.append(f'[{attr_name}="{val.strip()}"]')
+                parts.append(f'[{attr_name}="{escape_attr_value(val.strip())}"]')
             else:
                 parts.append(f'[{attr_name}]')
 
-        # ✅ Заворачиваем tailwind-классы внутри итогового селектора тоже
-        full_selector = "".join(parts)
-        return wrap_tailwind_classes(full_selector)
+        return "".join(parts)
 
-
-    # --- 3. Парсим HTML ---
+    # --- Парсим HTML ---
     soup = BeautifulSoup(html, "html.parser")
     selectors = []
 
-    # --- 4. Основной поиск (прямое совпадение подстроки) ---
+    # --- Основной поиск (прямое совпадение подстроки) ---
     for el in soup.find_all(True):
         element_text = el.get_text(strip=True)
         if element_text:
@@ -497,7 +502,7 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
                     else:
                         return selector
 
-    # --- 5. Нестрогий поиск (частичное совпадение подстроки) ---
+    # --- Нестрогий поиск (частичное совпадение) ---
     if not selectors:
         threshold = 0.7
         for el in soup.find_all(True):
@@ -529,6 +534,8 @@ def find_text_selector(html: str, text: str, exact: bool = True, return_all_sele
     if return_all_selectors:
         return selectors if selectors else None
     return None
+
+
 
 
 
