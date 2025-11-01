@@ -1077,7 +1077,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         result_stock_selector = using_InStock_triggers_value(result_selectors, use_OutOfStock = True)
 
     if result_stock_selector:
-        value_field += f"\t\t{result_stock_selector}\n"
+        value_field += f"{result_stock_selector}\n"
 
 
     # Собираю поля
@@ -1088,7 +1088,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         let items: ResultItem[] = []
 
         const data = await this.makeRequest(set.query);
-        const $ = cheerio.load(data);
+        $cheerioLoad
 
         $varFromSelector
         const timestamp = getTimestamp()
@@ -1106,6 +1106,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     result = template_parseCard.substitute(
         itemsFields=items_fields,
         varFromSelector=value_field,
+        cheerioLoad="const $ = cheerio.load(data);",
     )
 
     print(result)
