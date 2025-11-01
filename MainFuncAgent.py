@@ -1033,8 +1033,6 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         # Обязательно должны присутствовать поля и селекторы для: name, stock, price
 
     value_field = "" # То что вставляю в шаблон
-    t_and_t = ""
-
 
     # Поле stock
     result_stock_selector = ""
@@ -1043,11 +1041,16 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
 
     ##### Сложная штука, надо будет ещё выписать 
     all_inStock_selectors = set()
+    count_of_unical_text_selectors = 0
     for elem in data_input_table["links"]["simple"]:
         if elem["InStock_trigger"]:
             all_inStock_selectors.add(elem["InStock_trigger"])
-    if(all_inStock_selectors.len() == 1):
-        all_inStock_selectors = f"?.includes(\"{all_inStock_selectors}\""
+    count_of_unical_text_selectors = all_inStock_selectors.len()
+
+    if(count_of_unical_text_selectors == 1):
+        all_inStock_selectors = "'" + all_inStock_selectors[0] + "'"
+    else:
+        all_inStock_selectors = "'" + "', '".join(all_inStock_selectors) + "'"
 
     if (    "InStock_trigger" not in result_selectors.keys() 
         and "OutOfStock_trigger" not in result_selectors.keys()):
@@ -1055,12 +1058,19 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         value_field += "\tconst stock = \"InStock\"\n"
     elif (  "InStock_trigger" in result_selectors.keys() 
         and "OutOfStock_trigger" in result_selectors.keys()):
+        print("Оба триггера есть")
         if (result_selectors["InStock_trigger"] == result_selectors["OutOfStock_trigger"]):
-            result_stock_selector = (
-                f"const stock = $('{result_selectors["InStock_trigger"]}).text().trim(){}")
-            #`const stock = $('.nal.y').text() === "есть на складе" ? "InStock" : "OutOfStock"`
+            print("Они одинаковые, используем InStock")
+            if(count_of_unical_text_selectors == 1):
+                print("Подстрока совпадения InStock одна")
+                result_stock_selector = (
+                f"const stock = $('{result_selectors["InStock_trigger"]}').text()?.includes({all_inStock_selectors}) ? 'InStock' : 'OutOfStock'")
+            else:
+                print("Подстрок совпадения несколько")
+                result_stock_selector = (
+                    f"const stock = [{all_inStock_selectors}].some(s => $('{result_selectors["InStock_trigger"]}')")
 
-
+    value_field += f"\t\t{result_stock_selector}"
 
 
 
