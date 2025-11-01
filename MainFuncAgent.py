@@ -1098,6 +1098,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         $cheerioLoad
 
         $varFromSelector
+        const link = set.query
         const timestamp = getTimestamp()
 
         const item: ResultItem = {
