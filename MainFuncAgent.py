@@ -1024,12 +1024,12 @@ def select_best_selectors(input_data, content_html):
 
 """
 
+
+
 # Собирает финальный код для вставки в шаблон
 def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     print("Проверяем селекторы, и генерируем parseCard")
     print_json(result_selectors)
-
-    ### Написал, но не проверил, и не исправил синтаксические и логические ошибки
 
     # Проверка на наличие всех необходимых полей, и селекторов для них
     # Обязательно должны присутствовать поля и селекторы для: name, stock, price
@@ -1063,7 +1063,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     # Обработка логики наличия
     if "InStock_trigger" not in result_selectors and "OutOfStock_trigger" not in result_selectors:
         print("Нет триггеров наличия, считаем что все товары в наличии")
-        value_field += '\tconst stock = "InStock"\n'
+        result_stock_selector = 'const stock = "InStock"\n'
     elif "InStock_trigger" in result_selectors and "OutOfStock_trigger" in result_selectors:
         print("Оба триггера есть")
         if result_selectors["InStock_trigger"] == result_selectors["OutOfStock_trigger"]:
@@ -1076,9 +1076,16 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         print("Есть только триггер OutOfStock, используем его")
         result_stock_selector = using_InStock_triggers_value(result_selectors, use_OutOfStock = True)
 
-    if result_stock_selector:
-        value_field += f"{result_stock_selector}\n"
+    value_field += f"{result_stock_selector}\n"
 
+
+
+    # OutOfStock_trigger в полях прописывается, их нужно чистит от этих объектов
+    # и заменять на stock
+
+
+    # В конце
+    value_field = value_field.rstrip("\n")
 
     # Собираю поля
     items_fields = ", ".join(result_selectors.keys()) + ", timestamp"
@@ -1110,6 +1117,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     )
 
     print(result)
+    return result
 
 
 
