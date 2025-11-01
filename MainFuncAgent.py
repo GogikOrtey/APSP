@@ -1184,6 +1184,7 @@ selector_checker_and_parseCard_gen(result_selectors, data_input_table)
 7й сайт не очень отрабатывает
 Тестировать на других сайтах
     Можно тестировать на сайтах для ЗКС (в целом, это и делаю)
+    https://elize.ru/shop/product_real/105070/
 
 Написать реализацию selectorChecker(), которая будет возвращать текст уже для финального шаблона кода
 
