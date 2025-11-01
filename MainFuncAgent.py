@@ -1037,7 +1037,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     result_stock_selector = ""
 
     # Собираем все подстроки, которые триггерят InStock 
-    all_inStock_selectors = {elem["InStock_trigger"] for elem in data_input_table["links"]["simple"] if elem["InStock_trigger"]}
+    all_inStock_selectors = {elem.get("InStock_trigger") for elem in data_input_table["links"]["simple"] if elem.get("InStock_trigger")}
     count_of_unical_text_selectors = len(all_inStock_selectors)
 
     if count_of_unical_text_selectors == 1:
@@ -1045,17 +1045,17 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     else:
         all_inStock_selectors_js = "[" + ", ".join(f'"{x}"' for x in all_inStock_selectors) + "]"
 
-    def using_InStock_triggers_value(use_OutOfStock = False):
+    def using_InStock_triggers_value(result_selectors, use_OutOfStock = False):
         key_stock = "InStock_trigger" if use_OutOfStock == False else "OutOfStock_trigger"
         result_if_stock = '"InStock" : "OutOfStock"' if use_OutOfStock == False else '"OutOfStock" : "InStock"'
         if count_of_unical_text_selectors == 1:
             result_stock_selector = (
-                f'const stock = $(" {result_selectors[key_stock]} ")'
+                f'const stock = $("{result_selectors[key_stock]}")'
                 f'.text()?.includes({all_inStock_selectors_js}) ? {result_if_stock}'
             )
         else:
             result_stock_selector = (
-                f'const stock = {all_inStock_selectors_js}.some(s => $(" {result_selectors[key_stock]} ")'
+                f'const stock = {all_inStock_selectors_js}.some(s => $("{result_selectors[key_stock]}")'
                 f'.text()?.includes(s)) ? {result_if_stock}'
             )
         return result_stock_selector
@@ -1068,23 +1068,20 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         print("Оба триггера есть")
         if result_selectors["InStock_trigger"] == result_selectors["OutOfStock_trigger"]:
             print("Они одинаковые, используем InStock")
-            result_stock_selector = using_InStock_triggers_value()
+            result_stock_selector = using_InStock_triggers_value(result_selectors)
     elif "InStock_trigger" in result_selectors and not "OutOfStock_trigger" in result_selectors:
         print("Есть только триггер InStock, используем его")
-        result_stock_selector = using_InStock_triggers_value()
-    elif not "InStock_trigger" in result_selectors and "OutOfStock_trigger" in result_selectors:
+        result_stock_selector = using_InStock_triggers_value(result_selectors)
+    elif "InStock_trigger" not in result_selectors and "OutOfStock_trigger" in result_selectors:
         print("Есть только триггер OutOfStock, используем его")
-        result_stock_selector = using_InStock_triggers_value(use_OutOfStock = True)
+        result_stock_selector = using_InStock_triggers_value(result_selectors, use_OutOfStock = True)
 
     if result_stock_selector:
         value_field += f"\t\t{result_stock_selector}\n"
 
 
     # Собираю поля
-    items_fields = ""
-    for key in result_selectors.keys():
-        items_fields += key + ", "
-    items_fields += "timestamp"
+    items_fields = ", ".join(result_selectors.keys()) + ", timestamp"
 
     template_parseCard = Template("""
     async parseCard(set: SetType, cacher: Cacher<ResultItem[]>) {
