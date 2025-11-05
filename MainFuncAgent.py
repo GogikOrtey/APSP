@@ -14,12 +14,15 @@ from difflib import SequenceMatcher
 from urllib.parse import urlparse
 from lxml import html as html_lx
 from bs4 import BeautifulSoup
+from datetime import datetime
 from string import Template
 from pprint import pprint
 import itertools
 import requests
 import json
+import time
 import re
+import os
 
 isPrint = False
 
@@ -578,10 +581,26 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
         selectors = {}
         html = get_html(item["link"])
 
-        # Храню html в отдельном массиве
+        # # Храню html в отдельном массиве
+        # new_item = {
+        #     "link": item["link"],
+        #     "html_content": html,
+        #     "timestamp": 
+        # }
+        # content_html["simple"].append(new_item)
+
+        # Текущая дата и время
+        now = datetime.now()
+        # Читаемый формат даты и времени
+        data_time_str = now.strftime("%d.%m.%Y %H:%M")
+        # Unix timestamp (целое число секунд с 1970-01-01)
+        timestamp_int = int(time.mktime(now.timetuple()))
+
         new_item = {
             "link": item["link"],
-            "html_content": html
+            "html_content": html,
+            "data_time": data_time_str,   # Например: '05.11.2025 12:22'
+            "timestamp": timestamp_int    # Например: 1760010122
         }
         content_html["simple"].append(new_item)
 
@@ -909,9 +928,55 @@ def select_best_selectors(input_data, content_html):
         if isinstance(value, list):
             result["result_selectors"][key] = ", ".join(value) if value else ""
 
+    # Сохраняем страницы в кеш
+    save_content_html_to_cache(content_html)
+
     return result
 
 
+
+# Сохраняет загруженные страницы в кеш
+def save_content_html_to_cache(content_html, cache_file="cache.json"):
+    """
+    Сохраняет content_html в JSON файл, обновляя существующие записи по ссылке.
+    Выводит сколько страниц добавлено и сколько обновлено.
+    """
+    # Загружаем существующий кеш, если есть
+    if os.path.exists(cache_file):
+        with open(cache_file, "r", encoding="utf-8") as f:
+            try:
+                existing_cache = json.load(f)
+            except json.JSONDecodeError:
+                existing_cache = {"simple": []}
+    else:
+        existing_cache = {"simple": []}
+
+    # Создаём словарь для быстрого поиска по link
+    existing_map = {item["link"]: item for item in existing_cache.get("simple", [])}
+
+    added_count = 0
+    updated_count = 0
+
+    # Обновляем или добавляем новые записи
+    for new_item in content_html.get("simple", []):
+        link = new_item.get("link")
+        if not link:
+            continue
+        if link in existing_map:
+            updated_count += 1
+        else:
+            added_count += 1
+        existing_map[link] = new_item
+
+    # Преобразуем обратно в список
+    updated_cache = {"simple": list(existing_map.values())}
+
+    # Сохраняем в файл
+    with open(cache_file, "w", encoding="utf-8") as f:
+        json.dump(updated_cache, f, ensure_ascii=False, indent=2)
+
+    print(f"\n📄 Кеш сохранён в {cache_file}, всего страниц: {len(updated_cache['simple'])}")
+    print(f"   Добавлено: {added_count}, обновлено: {updated_count}")
 
 
 
@@ -954,21 +1019,21 @@ def select_best_selectors(input_data, content_html):
 
 
 
-# # region Обр. всех sel
+# region Обр. всех sel
 
-# fill_selectors_for_items(
-#     data_input_table,
-#     get_css_selector_from_text_value_element
-# )
+fill_selectors_for_items(
+    data_input_table,
+    get_css_selector_from_text_value_element
+)
 
-# print_json(data_input_table["links"]["simple"])
+print_json(data_input_table["links"]["simple"])
 
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
-# print("")
-# print("")
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
+print("")
+print("")
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1138,19 +1203,19 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
 
 
 
-# Для примера
-result_selectors = {
-    "name": "h1.name",
-    "price": ".b",
-    "article": ".char > p",
-    "brand": "li:nth-of-type(4) > a",
-    "InStock_trigger": ".nal.y",
-    "imageLink": "a.fancybox[href]",
-    "oldPrice": ".thr"
-}
+# # Для примера
+# result_selectors = {
+#     "name": "h1.name",
+#     "price": ".b",
+#     "article": ".char > p",
+#     "brand": "li:nth-of-type(4) > a",
+#     "InStock_trigger": ".nal.y",
+#     "imageLink": "a.fancybox[href]",
+#     "oldPrice": ".thr"
+# }
 
 
-selector_checker_and_parseCard_gen(result_selectors, data_input_table)
+# selector_checker_and_parseCard_gen(result_selectors, data_input_table)
 
 
 

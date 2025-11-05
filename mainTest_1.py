@@ -9,7 +9,11 @@ from addedFunc import clearAnswerCode
 # test_p1 = "Какой сейчас год и число?"
 # test_p1 = "Почему когда я используя YandexGPT через api, ответы отличаются от тех, что я вижу, используя её через web-интерфейс?"
 test_p1 = """
-Напиши анекдот
+Есть такой код на JS: 
+const price = $(".pr_bl .b").text().trim()
+Однако он извлекает "Цена: 1 860,10 руб."
+А должен извлекать: "1860.10"
+Измени исходный код, что бы он делал это
 """
 a_test_p1 = sendMessageToYandexGPT(test_p1)
 # a_test_p1 = sendMessageToYandexGPT(prompt = test_p1, temperature = 0, maxTokens = 300)
