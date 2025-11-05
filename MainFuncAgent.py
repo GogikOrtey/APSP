@@ -27,9 +27,6 @@ import os
 
 isPrint = False
 
-CACHE_FILE = "cache.json"
-MAX_AGE_HOURS = 18
-
 # region Доп. методы
 
 def print_json(input_json):
@@ -583,38 +580,30 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
     for item in items:
         # Если нет поля _selectors — создаём
         selectors = {}
+        html = get_html(item["link"])
 
-        # html = get_html(item["link"])
-
-        # # # Храню html в отдельном массиве
-        # # new_item = {
-        # #     "link": item["link"],
-        # #     "html_content": html,
-        # #     "timestamp": 
-        # # }
-        # # content_html["simple"].append(new_item)
-
-        # # Текущая дата и время
-        # now = datetime.now()
-        # # Читаемый формат даты и времени
-        # data_time_str = now.strftime("%d.%m.%Y %H:%M")
-        # # Unix timestamp (целое число секунд с 1970-01-01)
-        # timestamp_int = int(time.mktime(now.timetuple()))
-
+        # # Храню html в отдельном массиве
         # new_item = {
         #     "link": item["link"],
         #     "html_content": html,
-        #     "data_time": data_time_str,   # Например: '05.11.2025 12:22'
-        #     "timestamp": timestamp_int    # Например: 1760010122
+        #     "timestamp": 
         # }
         # content_html["simple"].append(new_item)
 
-        cache = load_cache()
+        # Текущая дата и время
+        now = datetime.now()
+        # Читаемый формат даты и времени
+        data_time_str = now.strftime("%d.%m.%Y %H:%M")
+        # Unix timestamp (целое число секунд с 1970-01-01)
+        timestamp_int = int(time.mktime(now.timetuple()))
 
-        for item in input_items["links"]["simple"]:
-            html, data_time_str, timestamp_int = get_html_with_cache(item["link"], cache)
-            # Дальше используем html
-            selectors = get_css_selector_from_text_value_element(html)
+        new_item = {
+            "link": item["link"],
+            "html_content": html,
+            "data_time": data_time_str,   # Например: '05.11.2025 12:22'
+            "timestamp": timestamp_int    # Например: 1760010122
+        }
+        content_html["simple"].append(new_item)
 
         # Извлекаю host, и изменяю imageLink
         if "imageLink" in item and item["imageLink"]:
@@ -946,53 +935,6 @@ def select_best_selectors(input_data, content_html):
     return result
 
 # region Сохранение кеша
-
-# Загружаем кеш
-def load_cache(file=CACHE_FILE):
-    try:
-        with open(file, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return {"simple": []}
-
-# Получаем html, проверяя кеш
-def get_html_with_cache(link, cache):
-    now = int(time.time())
-    # Ищем страницу в кеше
-    for item in cache["simple"]:
-        if item["link"] == link:
-            age_hours = (now - item["timestamp"]) / 3600
-            if age_hours <= MAX_AGE_HOURS:
-                print(f"Берем из кеша: {link} (возраст {age_hours:.2f} ч.)")
-                return item["html_content"], item["data_time"], item["timestamp"]
-            break  # страница есть, но устарела — выйдем и загрузим заново
-
-    # Если страницы нет в кеше или она старая — получаем заново
-    html = get_html(link)  # твоя функция загрузки
-    data_time_str = datetime.now().strftime("%d.%m.%Y %H:%M")
-    timestamp_int = int(time.time())
-
-    # Обновляем или добавляем в кеш
-    updated = False
-    for item in cache["simple"]:
-        if item["link"] == link:
-            item.update({
-                "html_content": html,
-                "data_time": data_time_str,
-                "timestamp": timestamp_int
-            })
-            updated = True
-            break
-    if not updated:
-        cache["simple"].append({
-            "link": link,
-            "html_content": html,
-            "data_time": data_time_str,
-            "timestamp": timestamp_int
-        })
-
-    return html, data_time_str, timestamp_int
-
 # Сохраняет загруженные страницы в кеш
 def save_content_html_to_cache(content_html, cache_file="cache.json"):
     """
