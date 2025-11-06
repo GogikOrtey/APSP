@@ -1,4 +1,5 @@
-
+# Подключение всех библиотек
+from import_all_libraries import * 
 
 
 
@@ -19,31 +20,42 @@ TODO На потом: Проверять, приходят ли данные т�
 
 def generate_parsePage():
     template_parseCard = Template("""
-    async parseCard(set: SetType, cacher: Cacher<ResultItem[]>) {
-        let items: ResultItem[] = []
+    async parsePage(set: SetType) {
+        let url = new URL(`$${HOST}/search`)
+        url.searchParams.set("q", set.query)
+        url.searchParams.set("page", set.page)
 
-        const data = await this.makeRequest(set.query);
-        $cheerioLoad
+        const data = await this.makeRequest(url.href)
+        const $$ = cheerio.load(data)
 
-        $varFromSelector
-        const link = set.query
-        const timestamp = getTimestamp()
-
-        const item: ResultItem = {
-            $itemsFields
+        if (set.page === 1) {
+            let totalPages = Math.max(...$$("").get().map(item => +$$(item).text().trim()).filter(Boolean))
+            this.debugger.put(`totalPages = $${totalPages}`)
+            for (let page = 2; page <= Math.min(totalPages, +this.conf.pagesCount); page++) {
+                this.query.add({ ...set, query: set.query, type: "page", page: page, lvl: 1 });
+            }
         }
-        items.push(item);
 
-        cacher.cache = items
+        let items: ResultItem[] = [];
+        let products = $$("")
+        if (products.length == 0) {
+            this.logger.put(`По запросу $${set.query} ничего не найдено`)
+            throw new NotFoundError()
+        }
+        products.slice(0, +this.conf.itemsCount).each((i, product) => {
+            let link = $$(product)?.attr("href")
+            this.query.add({ ...set, query: link, type: "card", lvl: 1 })
+        })
         return items;
     }
     """)
 
     result = template_parseCard.substitute(
-        itemsFields=items_fields,
-        varFromSelector=value_field,
-        cheerioLoad="const $ = cheerio.load(data);",
+        # cheerioLoad="const $ = cheerio.load(data);",
     )
 
     print(result)
     return result
+
+
+generate_parsePage()
