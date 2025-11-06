@@ -425,6 +425,9 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
         # если исходный селектор уже валидный, но функция кидает — лучше вернуть исходный
         return selector
 
+    # Парсим дерево один раз для оценки уникальности совпадений
+    tree = html_lx.fromstring(html)
+
     # разбиваем селектор корректно
     parts = _split_selector_preserving_brackets(selector)
 
@@ -445,14 +448,21 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
         candidate_parts = parts[:i] + parts[i+1:]
         candidate_selector = " > ".join(candidate_parts)
 
+        # Проверяем, что кандидат возвращает ровно один элемент
         try:
-            candidate_value = get_element_from_selector(html, candidate_selector)
+            candidate_nodes = tree.cssselect(candidate_selector)
         except Exception:
-            # если селектор стал невалидным или привёл к исключению — считаем, что удаление ломает цепочку
-            candidate_value = None
+            candidate_nodes = []
 
-        # сравнение: строгая эквивалентность
-        if candidate_value == original_value:
+        candidate_value = None
+        if len(candidate_nodes) == 1:
+            try:
+                candidate_value = get_element_from_selector(html, candidate_selector)
+            except Exception:
+                candidate_value = None
+
+        # сравнение: строгая эквивалентность и уникальность (ровно один матч)
+        if len(candidate_nodes) == 1 and candidate_value == original_value:
             # удаление безопасно — применяем
             parts = candidate_parts
             # Не инкрементируем i: нужно попытаться удалить новое звено на этой же позиции
@@ -466,7 +476,6 @@ def simplify_selector_keep_value(html: str, selector: str, get_element_from_sele
     # собрать итоговый селектор
     simplified = " > ".join(parts)
     return simplified
-    # Имеется в виду, что даже если селектор возвращает несколько элементов, мы берём только первый
 
 
 
@@ -1078,15 +1087,15 @@ def save_content_html_to_cache(content_html, cache_file="cache.json"):
 # # print(html[:500])
 
 # # substring = data_input_table["links"]["simple"][elem_number]["name"]
-# # substring = data_input_table["links"]["simple"][elem_number]["price"]
+# substring = data_input_table["links"]["simple"][elem_number]["price"]
 # # substring = data_input_table["links"]["simple"][elem_number]["oldPrice"]
 # # substring = data_input_table["links"]["simple"][elem_number]["brand"]
 # # substring = data_input_table["links"]["simple"][elem_number]["article"]
 # # substring = data_input_table["links"]["simple"][elem_number]["imageLink"]
-# substring = "/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
+# # substring = "/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
 
-# selector_result = get_css_selector_from_text_value_element(html, substring)
-# # selector_result = get_css_selector_from_text_value_element(html, substring, is_price = True)
+# # selector_result = get_css_selector_from_text_value_element(html, substring)
+# selector_result = get_css_selector_from_text_value_element(html, substring, is_price = True)
 # # selector_result = get_css_selector_from_text_value_element(html, substring, is_exact=False)
 # print("")
 # print(f"🟩 selector_result = {selector_result}")
