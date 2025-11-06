@@ -592,6 +592,7 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
         selectors = {}
         # html = get_html(item["link"])
 
+        # TODO удалить эти комментарии
         # # # Храню html в отдельном массиве
         # # new_item = {
         # #     "link": item["link"],
@@ -1110,21 +1111,21 @@ def save_content_html_to_cache(content_html, cache_file="cache.json"):
 
 
 
-# region Обр. всех sel
+# # region Обр. всех sel
 
-fill_selectors_for_items(
-    data_input_table,
-    get_css_selector_from_text_value_element
-)
+# fill_selectors_for_items(
+#     data_input_table,
+#     get_css_selector_from_text_value_element
+# )
 
-print_json(data_input_table["links"]["simple"])
+# print_json(data_input_table["links"]["simple"])
 
-result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
-print("")
-print("")
-print("✅ Итоговые селекторы:")
-print_json(result_select_best_selectors["result_selectors"])
+# print("")
+# print("")
+# print("✅ Итоговые селекторы:")
+# print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1283,19 +1284,68 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
 
 
 
-# # Для примера
-# result_selectors = {
-#     "name": "h1.name",
-#     "price": ".b",
-#     "article": ".char > p",
-#     "brand": "li:nth-of-type(4) > a",
-#     "InStock_trigger": ".nal.y",
-#     "imageLink": "a.fancybox[href]",
-#     "oldPrice": ".thr"
-# }
+# Для примера
+result_selectors = {
+    "name": "h1.name",
+    "price": ".b",
+    "article": ".char > p",
+    "brand": "li:nth-of-type(4) > a",
+    "InStock_trigger": ".nal.y",
+    "imageLink": "a.fancybox[href]",
+    "oldPrice": ".thr"
+}
 
 
 # selector_checker_and_parseCard_gen(result_selectors, data_input_table)
+
+
+
+
+
+
+# Сохраняет результирующий код парсера в файл
+def result_file_JS(result_selectors, host):
+    # Собираем название для файла парсера
+
+    # Убираем схему (https:// или http://)
+    parser_file_name = host.split("://")[1].split("/")[0]
+    parser_file_name = parser_file_name.replace("www.", "")
+    parser_file_name = parser_file_name.replace(".", "").replace("-", "")
+    # TODO регионы потом удалять, но это сильно позже
+
+    base_name_part = "JS_Base_" + parser_file_name
+    print(base_name_part)
+
+    # parse_card_code = selector_checker_and_parseCard_gen(result_selectors, data_input_table)
+
+
+
+
+    # Добавить подсказку о версии APSP, который его создал
+
+
+
+
+
+
+
+result_file_JS(result_selectors, "https://megapteka.ru/basket")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1405,7 +1455,9 @@ TODO Сложная обработка - потоковая загрузка с�
 
 
 
-
+Нужно будет прогнать весь код через нейронку, что бы она почистила код, собрала нужные функции вместе
+Просмотрела на наличие возможных ошибок
+И уязвимостей
 
 
 
