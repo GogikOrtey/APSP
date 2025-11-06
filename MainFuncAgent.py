@@ -6,24 +6,28 @@ from addedFunc import get_html
 from addedFunc import find_contexts
 from gen_data_input_table import data_input_table # Входные данные вынес отдельно
 
-# Библиотеки
-from typing import Callable, Dict, List, Any, Iterable, Tuple 
-from collections import Counter, defaultdict
-from datetime import datetime, timedelta
-from addedFunc import ErrorHandler
-from difflib import SequenceMatcher
-from urllib.parse import urlparse
-from lxml import html as html_lx
-from bs4 import BeautifulSoup
-from datetime import datetime
-from string import Template
-from pprint import pprint
-import itertools
-import requests
-import json
-import time
-import re
-import os
+# # Библиотеки
+# from typing import Callable, Dict, List, Any, Iterable, Tuple 
+# from collections import Counter, defaultdict
+# from datetime import datetime, timedelta
+# from addedFunc import ErrorHandler
+# from difflib import SequenceMatcher
+# from urllib.parse import urlparse
+# from lxml import html as html_lx
+# from bs4 import BeautifulSoup
+# from datetime import datetime
+# from string import Template
+# from pprint import pprint
+# import itertools
+# import requests
+# import json
+# import time
+# import re
+# import os
+
+
+# Подключение всех библиотек
+from include_all_libraries import * 
 
 isPrint = False
 
