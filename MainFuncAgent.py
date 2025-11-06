@@ -27,7 +27,7 @@ from gen_data_input_table import data_input_table # Входные данные 
 
 
 # Подключение всех библиотек
-from include_all_libraries import * 
+from import_all_libraries import * 
 
 isPrint = False
 
