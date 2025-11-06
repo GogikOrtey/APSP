@@ -1246,7 +1246,7 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
         let items: ResultItem[] = []
 
         const data = await this.makeRequest(set.query);
-        $cheerioLoad
+        const $$ = cheerio.load(data);
 
         $varFromSelector
         const link = set.query
@@ -1265,7 +1265,6 @@ def selector_checker_and_parseCard_gen(result_selectors, data_input_table):
     result = template_parseCard.substitute(
         itemsFields=items_fields,
         varFromSelector=value_field,
-        cheerioLoad="const $ = cheerio.load(data);",
     )
 
     print(result)

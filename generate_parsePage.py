@@ -59,3 +59,7 @@ def generate_parsePage():
 
 
 generate_parsePage()
+
+
+# ctrl+L - добавить в чат
+# ctrl+K - быстрое исправление локальным чатом
