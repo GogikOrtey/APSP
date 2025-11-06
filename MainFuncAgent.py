@@ -1307,7 +1307,7 @@ result_selectors = {
 def result_file_JS(result_selectors, host):
     # Собираем название для файла парсера
 
-    # Убираем схему (https:// или http://)
+    # Как нужно чистим домен
     parser_file_name = host.split("://")[1].split("/")[0]
     parser_file_name = parser_file_name.replace("www.", "")
     parser_file_name = parser_file_name.replace(".", "").replace("-", "")
@@ -1418,6 +1418,8 @@ result_file_JS(result_selectors, "https://megapteka.ru/basket")
 Тестировать на других сайтах
     Можно тестировать на сайтах для ЗКС (в целом, это и делаю)
     https://elize.ru/shop/product_real/105070/
+
+    https://stroytorg812.ru/catalog/sanitarnaya_keramika/unitaz_podvesnoy_brasko_smart_bezobodkovyy_sidene_slim_dyuroplast_mikrolift/
 
 Написать реализацию selectorChecker(), которая будет возвращать текст уже для финального шаблона кода
 
