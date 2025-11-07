@@ -1058,7 +1058,7 @@ def save_content_html_to_cache(content_html, cache_file="cache.json"):
 # # substring = data_input_table["links"]["simple"][elem_number]["name"]
 # substring = data_input_table["links"]["simple"][elem_number]["price"]
 # # substring = data_input_table["links"]["simple"][elem_number]["oldPrice"]
-# # substring = data_input_table["links"]["simple"][elem_number]["brand"]
+# substring = data_input_table["links"]["simple"][elem_number]["brand"]
 # # substring = data_input_table["links"]["simple"][elem_number]["article"]
 # # substring = data_input_table["links"]["simple"][elem_number]["imageLink"]
 # # substring = "/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
@@ -1079,21 +1079,21 @@ def save_content_html_to_cache(content_html, cache_file="cache.json"):
 
 
 
-# # region Обр. всех sel
+# region Обр. всех sel
 
-# fill_selectors_for_items(
-#     data_input_table,
-#     get_css_selector_from_text_value_element
-# )
+fill_selectors_for_items(
+    data_input_table,
+    get_css_selector_from_text_value_element
+)
 
-# print_json(data_input_table["links"]["simple"])
+print_json(data_input_table["links"]["simple"])
 
-# result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
+result_select_best_selectors = select_best_selectors(data_input_table["links"]["simple"], content_html)
 
-# print("")
-# print("")
-# print("✅ Итоговые селекторы:")
-# print_json(result_select_best_selectors["result_selectors"])
+print("")
+print("")
+print("✅ Итоговые селекторы:")
+print_json(result_select_best_selectors["result_selectors"])
 
 
 
@@ -1296,8 +1296,8 @@ def result_file_JS(result_selectors, host):
 
 
 
-# result_file_JS(result_selectors, "https://megapteka.ru/basket")
-result_file_JS(result_selectors, "https://www.perekrestok.ru/cat/")
+# # result_file_JS(result_selectors, "https://megapteka.ru/basket")
+# result_file_JS(result_selectors, "https://www.perekrestok.ru/cat/")
 
 
 
