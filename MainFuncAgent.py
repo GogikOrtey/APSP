@@ -6,26 +6,6 @@ from addedFunc import get_html
 from addedFunc import find_contexts
 from gen_data_input_table import data_input_table # Входные данные вынес отдельно
 
-# # Библиотеки
-# from typing import Callable, Dict, List, Any, Iterable, Tuple 
-# from collections import Counter, defaultdict
-# from datetime import datetime, timedelta
-# from addedFunc import ErrorHandler
-# from difflib import SequenceMatcher
-# from urllib.parse import urlparse
-# from lxml import html as html_lx
-# from bs4 import BeautifulSoup
-# from datetime import datetime
-# from string import Template
-# from pprint import pprint
-# import itertools
-# import requests
-# import json
-# import time
-# import re
-# import os
-
-
 # Подключение всех библиотек
 from import_all_libraries import * 
 
@@ -594,23 +574,7 @@ def fill_selectors_for_items(input_items, get_css_selector_from_text_value_eleme
     for item in items:
         # Если нет поля _selectors — создаём
         selectors = {}
-        # html = get_html(item["link"])
-
-        # TODO удалить эти комментарии
-        # # # Храню html в отдельном массиве
-        # # new_item = {
-        # #     "link": item["link"],
-        # #     "html_content": html,
-        # #     "timestamp": 
-        # # }
-        # # content_html["simple"].append(new_item)
-
-        # # Текущая дата и время
-        # now = datetime.now()
-        # # Читаемый формат даты и времени
-        # data_time_str = now.strftime("%d.%m.%Y %H:%M")
-        # # Unix timestamp (целое число секунд с 1970-01-01)
-        # timestamp_int = int(time.mktime(now.timetuple()))
+        # html = get_html(item["link"]) # Получение html страницы напрямую, без кеша
 
         # Получаю страницу либо из кеша, либо запросом
         # Кешем, если она младше 18 часов
@@ -1332,7 +1296,8 @@ def result_file_JS(result_selectors, host):
 
 
 
-result_file_JS(result_selectors, "https://megapteka.ru/basket")
+# result_file_JS(result_selectors, "https://megapteka.ru/basket")
+result_file_JS(result_selectors, "https://www.perekrestok.ru/cat/")
 
 
 
@@ -1380,6 +1345,9 @@ result_file_JS(result_selectors, "https://megapteka.ru/basket")
     Это уже в конце, после всех остальных сортировок
 
     И добавить вывод всех найденных селекторов, в виде массива, уже отсортированные, что бы я видел что их чего выбирается
+
+    Эта проблема кажется на 7м сайте была замечена, когда APSP собирает селекторы из
+    блока "Просмотренное", потому что там данные совпадают, и селекторы короче
 """
 
 
@@ -1415,7 +1383,7 @@ result_file_JS(result_selectors, "https://megapteka.ru/basket")
     Проверять нужно на всех имеющихся страницах, на итоговом селекторе, для каждого поля
 
 
-
+Нужно вынести generate_parsePage в отдельный файл
 
 7й сайт не очень отрабатывает
 Тестировать на других сайтах

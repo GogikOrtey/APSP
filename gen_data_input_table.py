@@ -21,55 +21,55 @@
 #     "search_requests": []
 # }
 
-# Сайт 1
-data_input_table = {
-    "host": "",
-    "links": {
-        "simple": [
-            {
-                "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
-                "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
-                "price": "10 320",
-                "brand": "Аntika",
-                "stock": "В наличии",
-                "imageLink": ""
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
-                "name": "Опора ППРС D25 в Екатеринбурге",
-                "price": "5",
-                "brand": "",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
-                "name": "Заглушка (D20) в Екатеринбурге",
-                "price": "4",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/krestovina/35188/",
-                "name": "Крестовина 20 ППРС в Екатеринбурге",
-                "price": "16",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
-            },
-            {
-                "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
-                "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
-                "price": "102",
-                "brand": "MeerPlast",
-                "stock": "В наличии",
-                "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Сайт 1
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://vodomirural.ru/catalog/vanny_stalnye_i_aksessuary_k_nim/33951/",
+#                 "name": "Ванна сталь 1600х700х400мм antika белый в комплекте с ножками ВИЗ в Екатеринбурге",
+#                 "price": "10 320",
+#                 "brand": "Аntika",
+#                 "stock": "В наличии",
+#                 "imageLink": ""
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/opora_klipsa/35508/",
+#                 "name": "Опора ППРС D25 в Екатеринбурге",
+#                 "price": "5",
+#                 "brand": "",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/168/16809d1e998be5e9c79c5d78e3e2f659.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/zaglushka/35457/",
+#                 "name": "Заглушка (D20) в Екатеринбурге",
+#                 "price": "4",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/246/246a504d1f7b2f5b10645bb86c8060c3.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/krestovina/35188/",
+#                 "name": "Крестовина 20 ППРС в Екатеринбурге",
+#                 "price": "16",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/39f/39f1c40fccd66173cf21a1b847baa335.webp"
+#             },
+#             {
+#                 "link": "https://vodomirural.ru/catalog/mufta_kombinirovannaya_amerikanka_razemnaya_vn_rez/32506/",
+#                 "name": "Муфта комб. раз. ППРС (вн. рез.) 20-1/2 в Екатеринбурге",
+#                 "price": "102",
+#                 "brand": "MeerPlast",
+#                 "stock": "В наличии",
+#                 "imageLink": "https://vodomirural.ru/upload/resize_cache/webp/iblock/1b4/1b42d7577c23ed7541f61b721e4fa018.webp"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -236,42 +236,42 @@ data_input_table = {
 # }
 
 
-# # Сайт 7
-# data_input_table = {
-#     "host": "",
-#     "links": {
-#         "simple": [
-#             {
-#                 "link": "https://plitburg.ru/catalog/plitka/e_5020_mr_600x600x9_rock_seryy_svetlyy_matovyy_kg_60x60_dako/",
-#                 "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-5020 Rock",
-#                 "price": "1 729 ₽ / м2",
-#                 "oldPrice": "1 820 ₽",
-#                 "article": "E-5020/MR/600x600x9",
-#                 "brand": "DAKO",
-#                 "InStock_trigger": "В наличии",
-#                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
-#             },
-#             {
-#                 "link": "https://plitburg.ru/catalog/plitka/e_3032_mr_600x600x9_vita_seryy_matovyy_kg_60x60_dako/",
-#                 "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-3032 Vita",
-#                 "price": "1 729 ₽ / м2",
-#                 "oldPrice": "1 820 ₽",
-#                 "article": "E-3032/MR/600x600x9",
-#                 "brand": "DAKO",
-#                 "InStock_trigger": "В наличии",
-#                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/c1b/p1e31vas9p6qew6ssb9pfy0afbns6he5.webp"
-#             },
-#             {
-#                 "link": "https://plitburg.ru/catalog/plitka/dd602320r_pro_matriks_temno_seryy_obreznoy_keramogranit_60x60_kerama_marazzi/",
-#                 "name": "DD602320R Про Матрикс темно-серый обрезной керамогранит 60x60, Kerama Marazzi",
-#                 "price": "2 345 ₽ / м2",
-#                 "oldPrice": "",
-#                 "article": "DD602320R",
-#                 "brand": "Kerama Marazzi",
-#                 "OutOfStock_trigger": "Под заказ: 3-5 дней",
-#                 "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/ce2/r000qg0trz32gftjt8wy57g4kns4uv80.webp"
-#             }
-#         ]
-#     },
-#     "search_requests": []
-# }
+# Сайт 7
+data_input_table = {
+    "host": "",
+    "links": {
+        "simple": [
+            {
+                "link": "https://plitburg.ru/catalog/plitka/e_5020_mr_600x600x9_rock_seryy_svetlyy_matovyy_kg_60x60_dako/",
+                "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-5020 Rock",
+                "price": "1 729 ₽ / м2",
+                "oldPrice": "1 820 ₽",
+                "article": "E-5020/MR/600x600x9",
+                "brand": "DAKO",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/81e/yypuhdwg8uf7jtktf65opgzc4wthjo6w.webp"
+            },
+            {
+                "link": "https://plitburg.ru/catalog/plitka/e_3032_mr_600x600x9_vita_seryy_matovyy_kg_60x60_dako/",
+                "name": "Керамогранит серый матовый 60х60 Dako (Дако) E-3032 Vita",
+                "price": "1 729 ₽ / м2",
+                "oldPrice": "1 820 ₽",
+                "article": "E-3032/MR/600x600x9",
+                "brand": "DAKO",
+                "InStock_trigger": "В наличии",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/c1b/p1e31vas9p6qew6ssb9pfy0afbns6he5.webp"
+            },
+            {
+                "link": "https://plitburg.ru/catalog/plitka/dd602320r_pro_matriks_temno_seryy_obreznoy_keramogranit_60x60_kerama_marazzi/",
+                "name": "DD602320R Про Матрикс темно-серый обрезной керамогранит 60x60, Kerama Marazzi",
+                "price": "2 345 ₽ / м2",
+                "oldPrice": "",
+                "article": "DD602320R",
+                "brand": "Kerama Marazzi",
+                "OutOfStock_trigger": "Под заказ: 3-5 дней",
+                "imageLink": "https://plitburg.ru/upload/dev2fun.imagecompress/webp/iblock/ce2/r000qg0trz32gftjt8wy57g4kns4uv80.webp"
+            }
+        ]
+    },
+    "search_requests": []
+}
