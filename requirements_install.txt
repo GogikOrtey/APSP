@@ -1,9 +1,0 @@
-Для установки библиотек:
-
-python -m venv .venv
-.venv/bin/activate          # (или .venv\Scripts\activate на Windows)
-pip install -r requirements.txt
-
-Для сохранения библоитек:
-
-pipreqs .
