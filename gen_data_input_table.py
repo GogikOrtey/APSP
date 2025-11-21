@@ -147,35 +147,35 @@
 
 
 
-# Данные с сайта 4
-data_input_table = {
-    "host": "",
-    "links": {
-        "simple": [
-            {
-                "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
-                "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
-                "price": "99 800 ₽",
-                "oldPrice": "109 780 ₽",
-                "article": "13455",
-                "brand": "Baxi",
-                "OutOfStock_trigger": "Предзаказ",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
-            },
-            {
-                "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
-                "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
-                "price": "195 000 ₽",
-                "oldPrice": "238 150 ₽",
-                "article": "38354",
-                "brand": "Baxi",
-                "InStock_trigger": "В наличии",
-                "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
-            }
-        ]
-    },
-    "search_requests": []
-}
+# # Данные с сайта 4
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://kotel-nasos.ru/nastennyy-gazovyy-kotel-28-kvt-baxi-duo-tec-compact-28-ga/",
+#                 "name": "Настенный конденсационный газовый котел 28 кВт Baxi DUO-TEC COMPACT 28",
+#                 "price": "99 800 ₽",
+#                 "oldPrice": "109 780 ₽",
+#                 "article": "13455",
+#                 "brand": "Baxi",
+#                 "OutOfStock_trigger": "Предзаказ",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/18/99/29918/images/143135/143135.970.png"
+#             },
+#             {
+#                 "link": "https://kotel-nasos.ru/napolnyy-gazovyy-kotel-60-kvt-baxi-slim-1-620in-9e/",
+#                 "name": "Напольный газовый котел 60 кВт Baxi SLIM 1.620 iN 9E",
+#                 "price": "195 000 ₽",
+#                 "oldPrice": "238 150 ₽",
+#                 "article": "38354",
+#                 "brand": "Baxi",
+#                 "InStock_trigger": "В наличии",
+#                 "imageLink": "https://kotel-nasos.ru/wa-data/public/shop/products/17/01/30117/images/53793/53793.970.jpg"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
 
 
 
@@ -279,3 +279,23 @@ data_input_table = {
 
 
 
+# Сайт 8
+data_input_table = {
+    "host": "",
+    "links": {
+        "simple": [
+            {
+                "link": "https://hb-shop.by/katalog/lico/ochishhenie/micellyarnaya-voda/voda-micellyarnaya-ochischayuschaya-na-osnove-termalnoy-vody-dlya-chuvstvit-kozhi-i-kontura-glaz-250-ml.html",
+                "name": "Очищающая мицеллярная вода Uriage Eau Thermale для чувствительной кожи, 250 мл",
+                "price": "43.24 руб.",
+                "oldPrice": "",
+                "article": "009327",
+                "brand": "Uriage",
+                "InStock_trigger": "В наличии",
+                "OutOfStock_trigger": "",
+                "imageLink": "https://hb-shop.by/assets/images/catalog/39028_GUID_35670443-5253-11ef-8443-000c29025319.webp"
+            }
+        ]
+    },
+    "search_requests": []
+}
