@@ -279,21 +279,55 @@
 
 
 
-# Сайт 8
+# # Сайт 8
+# data_input_table = {
+#     "host": "",
+#     "links": {
+#         "simple": [
+#             {
+#                 "link": "https://hb-shop.by/katalog/lico/ochishhenie/micellyarnaya-voda/voda-micellyarnaya-ochischayuschaya-na-osnove-termalnoy-vody-dlya-chuvstvit-kozhi-i-kontura-glaz-250-ml.html",
+#                 "name": "Очищающая мицеллярная вода Uriage Eau Thermale для чувствительной кожи, 250 мл",
+#                 "price": "43.24 руб.",
+#                 "oldPrice": "",
+#                 "article": "009327",
+#                 "brand": "Uriage",
+#                 "InStock_trigger": "В наличии",
+#                 "OutOfStock_trigger": "",
+#                 "imageLink": "https://hb-shop.by/assets/images/catalog/39028_GUID_35670443-5253-11ef-8443-000c29025319.webp"
+#             },
+#             {
+#                 "link": "https://hb-shop.by/katalog/lico/kremy-dlya-lica/krem-sebium-gidra-sebium-hydra-40-ml.html",
+#                 "name": "Флюид ультраувлажняющий Биодерма Себиум / Bioderma Sebium Hydra, 40 мл",
+#                 "price": "42.74 руб.",
+#                 "oldPrice": "",
+#                 "article": "840421",
+#                 "brand": "Bioderma",
+#                 "InStock_trigger": "В наличии",
+#                 "OutOfStock_trigger": "",
+#                 "imageLink": "https://hb-shop.by/assets/images/catalog/УТ-00021136_GUID_cff010bf-bba5-11ee-8421-000c29025319.webp"
+#             }
+#         ]
+#     },
+#     "search_requests": []
+# }
+
+
+
+# Сайт 9
 data_input_table = {
     "host": "",
     "links": {
         "simple": [
             {
-                "link": "https://hb-shop.by/katalog/lico/ochishhenie/micellyarnaya-voda/voda-micellyarnaya-ochischayuschaya-na-osnove-termalnoy-vody-dlya-chuvstvit-kozhi-i-kontura-glaz-250-ml.html",
-                "name": "Очищающая мицеллярная вода Uriage Eau Thermale для чувствительной кожи, 250 мл",
-                "price": "43.24 руб.",
+                "link": "https://lalafo.kg/bishkek/ads/zenskie-sandalii-na-platforme-id-45797023",
+                "name": "Представляем женские сандалии на платформе черного цвета, выполненные",
+                "price": "400 KGS",
                 "oldPrice": "",
-                "article": "009327",
+                "article": "",
                 "brand": "Uriage",
-                "InStock_trigger": "В наличии",
+                "InStock_trigger": "",
                 "OutOfStock_trigger": "",
-                "imageLink": "https://hb-shop.by/assets/images/catalog/39028_GUID_35670443-5253-11ef-8443-000c29025319.webp"
+                "imageLink": "https://img5.lalafo.com/i/posters/original_webp/9b/4b/3d/zenskie-sandalii-na-platforme-id-45797023-849266007.webp"
             }
         ]
     },
